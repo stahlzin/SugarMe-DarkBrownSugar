@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme;
+package br.com.mateus.sugarme.Presenter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,9 +15,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.mateus.sugarme.View.CadastroActivity;
-import br.com.mateus.sugarme.View.MedicoActivity;
-import br.com.mateus.sugarme.View.PacienteActivity;
+import br.com.mateus.sugarme.Presenter.CadastroActivity;
+import br.com.mateus.sugarme.Presenter.MedicoActivity;
+import br.com.mateus.sugarme.Presenter.PacienteActivity;
 
 public class MainController {
 

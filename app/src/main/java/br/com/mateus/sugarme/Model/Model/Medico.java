@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Model.Users;
+package br.com.mateus.sugarme.Model.Model;
 
 import java.io.Serializable;
 

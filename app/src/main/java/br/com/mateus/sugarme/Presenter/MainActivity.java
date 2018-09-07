@@ -1,8 +1,10 @@
-package br.com.mateus.sugarme;
+package br.com.mateus.sugarme.Presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import br.com.mateus.sugarme.R;
 
 public class MainActivity extends AppCompatActivity {
     MainController mainController;

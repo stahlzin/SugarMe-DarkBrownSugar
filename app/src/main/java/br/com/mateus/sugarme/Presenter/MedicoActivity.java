@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.View;
+package br.com.mateus.sugarme.Presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import br.com.mateus.sugarme.Controller.MedicoController;
-import br.com.mateus.sugarme.MainActivity;
-import br.com.mateus.sugarme.Model.Users.Medico;
+import br.com.mateus.sugarme.SupervisingController.MedicoController;
+import br.com.mateus.sugarme.Model.Model.Medico;
 import br.com.mateus.sugarme.R;
 
 public class MedicoActivity extends AppCompatActivity {

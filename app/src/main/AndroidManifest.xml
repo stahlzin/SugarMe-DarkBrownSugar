@@ -9,17 +9,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Presenter.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.PacienteActivity" />
-        <activity android:name=".View.CadastroActivity" />
-        <activity android:name=".View.MedicoActivity" />
-        <activity android:name=".View.EditarMedicoActivity"></activity>
+        <activity android:name=".Presenter.PacienteActivity" />
+        <activity android:name=".Presenter.CadastroActivity" />
+        <activity android:name=".Presenter.MedicoActivity" />
+        <activity android:name=".Presenter.EditarMedicoActivity" />
+        <activity
+            android:name=".Presenter.DiaryActivity"
+            android:label="@string/title_activity_diary"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Presenter.ResultsActivity"
+            android:label="@string/title_activity_results" />
+        <activity
+            android:name=".Presenter.MedicalInfoActivity"
+            android:label="@string/title_activity_medical_info" />
+        <activity
+            android:name=".Presenter.ComplicationActivity"
+            android:label="@string/title_activity_complication"></activity>
     </application>
 
 </manifest>

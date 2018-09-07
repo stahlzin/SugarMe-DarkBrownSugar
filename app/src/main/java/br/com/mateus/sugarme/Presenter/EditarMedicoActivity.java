@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.View;
+package br.com.mateus.sugarme.Presenter;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

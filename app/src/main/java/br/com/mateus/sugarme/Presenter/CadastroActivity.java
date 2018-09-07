@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.View;
+package br.com.mateus.sugarme.Presenter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,13 +14,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import br.com.mateus.sugarme.Controller.MedicoController;
-import br.com.mateus.sugarme.Controller.PacienteController;
-import br.com.mateus.sugarme.MainActivity;
-import br.com.mateus.sugarme.Model.Users.Medico;
-import br.com.mateus.sugarme.Model.Users.MedicoDAO;
-import br.com.mateus.sugarme.Model.Users.Paciente;
-import br.com.mateus.sugarme.Model.Users.PacienteDAO;
+import br.com.mateus.sugarme.SupervisingController.MedicoController;
+import br.com.mateus.sugarme.SupervisingController.PacienteController;
+import br.com.mateus.sugarme.Model.Model.Medico;
+import br.com.mateus.sugarme.Model.Model.MedicoDAO;
+import br.com.mateus.sugarme.Model.Model.Paciente;
+import br.com.mateus.sugarme.Model.Model.PacienteDAO;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Utils.MaskEditUtil;
 

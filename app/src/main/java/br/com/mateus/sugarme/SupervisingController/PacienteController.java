@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Controller;
+package br.com.mateus.sugarme.SupervisingController;
 
 import android.app.Activity;
 import android.widget.Toast;
@@ -7,8 +7,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import br.com.mateus.sugarme.Model.Users.Paciente;
-import br.com.mateus.sugarme.Model.Users.PacienteDAO;
+import br.com.mateus.sugarme.Model.Model.Paciente;
+import br.com.mateus.sugarme.Model.Model.PacienteDAO;
 
 public class PacienteController {
 

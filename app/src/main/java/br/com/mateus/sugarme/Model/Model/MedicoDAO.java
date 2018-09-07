@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Model.Users;
+package br.com.mateus.sugarme.Model.Model;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,62 +13,52 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 
-import br.com.mateus.sugarme.View.CadastroActivity;
+import br.com.mateus.sugarme.Presenter.CadastroActivity;
 
-public class PacienteDAO {
+public class MedicoDAO {
     DatabaseReference mDatabase;
     private FirebaseAuth firebaseAuth;
     private String userId;
-    private Paciente paciente;
     private DatabaseReference databaseReference;
+    private Medico medico;
 
-
-    public PacienteDAO() {
-    }
 
     //Inserir ou Atualizar
-    public void inserir(Paciente paciente){
-        firebaseAuth = FirebaseAuth.getInstance();
-        userId = firebaseAuth.getCurrentUser().getUid();
+    public void inserir(Medico medico){
+        getUserId();
         mDatabase =  FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child("pacientes").child(userId).setValue(paciente);
+        mDatabase.child("users").child("medicos").child(userId).setValue(medico);
     }
 
     //Excluir
     public void excluir(){
         getUserId();
         mDatabase =  FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child("pacientes").child(userId).removeValue();
+        mDatabase.child("users").child("medicos").child(userId).removeValue();
         logout();
     }
 
-    //Pegar Id Usuario
-    public void getUserId(){
-        firebaseAuth = FirebaseAuth.getInstance();
-        userId = firebaseAuth.getCurrentUser().getUid();
-    }
-
     //Logout
-    public void logout() {
+    public void logout(){
         FirebaseAuth.getInstance().signOut();
     }
 
 
-    //Consultar paciente e ir para a tela de edição
-    public void consultaPaciente(final Activity activity) {
-        paciente = new Paciente();
+    //Consultar medico e ir para a tela de edição
+    public void consultaMedico(final Activity activity) {
+        medico = new Medico();
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("pacientes").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child("medicos").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                paciente = dataSnapshot.getValue(Paciente.class);
+                medico = dataSnapshot.getValue(Medico.class);
                 //Trocar de Activity
                 Intent intent = new Intent(activity, CadastroActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("radio","editarPaciente");
-                intent.putExtra("paciente", (Serializable) paciente);
+                intent.putExtra("radio","editarMedico");
+                intent.putExtra("medico", (Serializable) medico);
                 activity.startActivity(intent);
             }
 
@@ -79,5 +69,9 @@ public class PacienteDAO {
         });
     }
 
-
+    //Pegar Id Usuario
+    public void getUserId(){
+        firebaseAuth = FirebaseAuth.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
+    }
 }
