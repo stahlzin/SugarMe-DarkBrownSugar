@@ -34,4 +34,11 @@
     <string name="title_activity_results">ResultsActivity</string>
     <string name="title_activity_medical_info">MedicalInfoActivity</string>
     <string name="title_activity_complication">ComplicationActivity</string>
+    <string name="mediaGlicemica">Média glicêmica(mg/dl):</string>
+    <string name="peso">Peso(kg):</string>
+    <string name="altura">Altura(cm):</string>
+    <string name="informacoesMedicas">Informações Médicas</string>
+    <string name="tipoDiabetes">Tipo Diabetes:</string>
+    <string name="tipo1">Tipo 1</string>
+    <string name="tipo2">Tipo 2</string>
 </resources>

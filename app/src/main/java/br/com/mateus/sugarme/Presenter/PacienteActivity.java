@@ -13,6 +13,7 @@ public class PacienteActivity extends AppCompatActivity {
     private PacienteController pacienteController;
     private Button buttonLogoutPaciente;
     private Button buttonEditarPaciente;
+    private Button buttonInformacoesMedicas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class PacienteActivity extends AppCompatActivity {
 
         buttonLogoutPaciente = (Button) findViewById(R.id.buttonLogoutPaciente);
         buttonEditarPaciente = (Button) findViewById(R.id.buttonEditarPaciente);
+        buttonInformacoesMedicas = (Button) findViewById(R.id.buttonInformacoesMedicas);
 
         //Logout Paciente
         buttonLogoutPaciente.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +42,16 @@ public class PacienteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pacienteController.recebePaciente(PacienteActivity.this);
+            }
+        });
+
+        buttonInformacoesMedicas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Informações medicas
+                Intent intent = new Intent(PacienteActivity.this, MedicalInfoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PacienteActivity.this.startActivity(intent);
             }
         });
 
