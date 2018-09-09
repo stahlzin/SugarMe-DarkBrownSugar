@@ -31,7 +31,7 @@ public class PacienteDAO {
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
         mDatabase =  FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child("pacientes").child(userId).setValue(paciente);
+        mDatabase.child("users").child("pacientes").child(userId).child("dados").setValue(paciente);
     }
 
     //Excluir
@@ -60,7 +60,7 @@ public class PacienteDAO {
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("pacientes").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child("pacientes").child(userId).child("dados").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 paciente = dataSnapshot.getValue(Paciente.class);

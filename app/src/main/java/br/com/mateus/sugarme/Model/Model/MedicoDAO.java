@@ -27,7 +27,7 @@ public class MedicoDAO {
     public void inserir(Medico medico){
         getUserId();
         mDatabase =  FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child("medicos").child(userId).setValue(medico);
+        mDatabase.child("users").child("medicos").child(userId).child("dados").setValue(medico);
     }
 
     //Excluir
@@ -50,7 +50,7 @@ public class MedicoDAO {
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("medicos").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child("medicos").child(userId).child("dados").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 medico = dataSnapshot.getValue(Medico.class);
