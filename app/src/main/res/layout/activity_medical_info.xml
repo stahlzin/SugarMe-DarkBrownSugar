@@ -21,21 +21,6 @@
     </android.support.design.widget.AppBarLayout>
 
 
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_x="317dp"
-        android:layout_y="502dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
-
-
-
     <!--Texto da activity - Informações Médicas-->
     <TextView
         android:id="@+id/textViewCadastro"
@@ -112,13 +97,13 @@
         android:baselineAligned="false">
 
         <RadioButton
-            android:id="@+id/radioButtonTipo2"
+            android:id="@+id/radioButtonTipo1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tipo1" />
 
         <RadioButton
-            android:id="@+id/radioButtonTipo1"
+            android:id="@+id/radioButtonTipo2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
@@ -131,9 +116,20 @@
         android:id="@+id/buttonSalvarInfoMedica"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="150dp"
+        android:layout_x="250dp"
         android:layout_y="409dp"
         android:text="@string/salvar" />
+
+    <!--Botao Voltar-->
+    <Button
+        android:id="@+id/buttonVoltarMedicalInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="50dp"
+        android:layout_y="409dp"
+        android:text="@string/voltar" />
+
+
 
 
 </AbsoluteLayout>

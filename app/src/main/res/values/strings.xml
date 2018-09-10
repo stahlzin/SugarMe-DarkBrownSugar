@@ -41,4 +41,5 @@
     <string name="tipoDiabetes">Tipo Diabetes:</string>
     <string name="tipo1">Tipo 1</string>
     <string name="tipo2">Tipo 2</string>
+    <string name="voltar">Voltar</string>
 </resources>

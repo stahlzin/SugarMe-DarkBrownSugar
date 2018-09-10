@@ -1,8 +1,20 @@
 package br.com.mateus.sugarme.Model.Model;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.Serializable;
+
+import br.com.mateus.sugarme.Presenter.CadastroActivity;
+import br.com.mateus.sugarme.Presenter.MedicalInfoActivity;
 
 public class MedicalInfoDAO {
     private DatabaseReference mDatabase;
@@ -23,5 +35,31 @@ public class MedicalInfoDAO {
     public void getUserId(){
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
+    }
+
+
+    //Consultar medico e ir para a tela de edição
+    public void consultaInfoMedica(final Activity activity) {
+        medicalInfo = new MedicalInfo();
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child("pacientes").child(userId).child("InfoMedicas").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
+                //Trocar de Activity
+                Intent intent = new Intent(activity, MedicalInfoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("radio","editarInfo");
+                intent.putExtra("info", (Serializable) medicalInfo);
+                activity.startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

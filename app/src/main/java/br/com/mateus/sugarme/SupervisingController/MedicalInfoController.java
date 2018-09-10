@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.widget.Toast;
 
 import br.com.mateus.sugarme.Model.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.Model.MedicalInfoDAO;
+
 
 public class MedicalInfoController {
+    private MedicalInfoDAO medicalInfoDAO = new MedicalInfoDAO();
 
     public boolean isDadosOk(MedicalInfo medicalInfo, Activity activity){
         if(!medicalInfo.getMediaGlicemica().isEmpty()){
@@ -30,5 +33,10 @@ public class MedicalInfoController {
             Toast.makeText(activity, "Média glicêmica inválida!", Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+
+    public void recebeInfoMedica(Activity activity) {
+        medicalInfoDAO.consultaInfoMedica(activity);
     }
 }

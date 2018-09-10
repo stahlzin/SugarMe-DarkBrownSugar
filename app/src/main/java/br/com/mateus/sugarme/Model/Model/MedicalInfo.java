@@ -1,6 +1,8 @@
 package br.com.mateus.sugarme.Model.Model;
 
-public class MedicalInfo {
+import java.io.Serializable;
+
+public class MedicalInfo implements Serializable{
     private String mediaGlicemica;
     private String peso;
     private String altura;
