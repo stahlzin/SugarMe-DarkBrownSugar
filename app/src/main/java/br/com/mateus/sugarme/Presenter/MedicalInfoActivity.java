@@ -79,14 +79,11 @@ public class MedicalInfoActivity extends Activity {
         //Parametros do PutExtra
         Intent it = getIntent();
         if(it != null && it.getExtras() != null){
-            if(it.getStringExtra("radio").equals("editarInfo")) {
+            if(it.getStringExtra("edit").equals("editarInfo")) {
                 MedicalInfo medicalInfo = (MedicalInfo) it.getSerializableExtra("info");
                 this.setMedicalInfo(medicalInfo);
             }
         }
-
-
-
 
     } //Fim do OnCreate
 

@@ -51,7 +51,7 @@ public class MedicalInfoDAO {
                 //Trocar de Activity
                 Intent intent = new Intent(activity, MedicalInfoActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("radio","editarInfo");
+                intent.putExtra("edit","editarInfo");
                 intent.putExtra("info", (Serializable) medicalInfo);
                 activity.startActivity(intent);
             }
