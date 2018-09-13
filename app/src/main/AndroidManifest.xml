@@ -19,7 +19,6 @@
         <activity android:name=".Presenter.PacienteActivity" />
         <activity android:name=".Presenter.CadastroActivity" />
         <activity android:name=".Presenter.MedicoActivity" />
-        <activity android:name=".Presenter.EditarMedicoActivity" />
         <activity
             android:name=".Presenter.DiaryActivity"
             android:label="@string/title_activity_diary"
