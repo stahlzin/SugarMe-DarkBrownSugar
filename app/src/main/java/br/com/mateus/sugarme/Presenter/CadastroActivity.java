@@ -180,6 +180,23 @@ public class CadastroActivity extends AppCompatActivity {
 
     }//Fim do onCreate --------------
 
+    //onBackPressed
+    @Override
+    public void onBackPressed() {
+        if(radioButtonMedico.isChecked()){
+            //Voltar a tela inicial
+            Intent intent = new Intent(CadastroActivity.this, MedicoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            CadastroActivity.this.startActivity(intent);
+        }
+        else if(radioButtonPaciente.isChecked()){
+            //Voltar a tela inicial
+            Intent intent = new Intent(CadastroActivity.this, PacienteActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            CadastroActivity.this.startActivity(intent);
+        }
+    }
+
     private void setMedico(Medico medico){
         this.radioButtonMedico.setChecked(true);
         this.radioButtonMedico.setEnabled(false);

@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         mainController = new MainController();
 
        if(mainController.verificaLogin()){
-           mainController.verificaTipoUsuario(this);
+           mainController.verificaTipoUsuario(MainActivity.this);
        }
        else{
            mainController.fazerLogin(this);

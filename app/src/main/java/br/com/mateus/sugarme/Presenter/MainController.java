@@ -20,6 +20,7 @@ import br.com.mateus.sugarme.Presenter.MedicoActivity;
 import br.com.mateus.sugarme.Presenter.PacienteActivity;
 
 public class MainController {
+    private int temLogin = 0; //Usada nos Listeners
 
     public MainController() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -65,6 +66,7 @@ public class MainController {
                         Intent intent = new Intent(activity, PacienteActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         activity.startActivity(intent);
+                        temLogin =1;
                 }
             }
             @Override
@@ -80,9 +82,10 @@ public class MainController {
                     Intent intent = new Intent(activity, MedicoActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
+                    temLogin =1;
                 }
                 //Ainda nao possui tipo de usuario
-                else{
+                else if(temLogin == 0){
                     Intent intent = new Intent(activity, CadastroActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);

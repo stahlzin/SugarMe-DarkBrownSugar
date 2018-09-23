@@ -88,6 +88,13 @@ public class MedicalInfoActivity extends Activity {
     } //Fim do OnCreate
 
 
+    //OnBackPressed
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(MedicalInfoActivity.this, PacienteActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        MedicalInfoActivity.this.startActivity(intent);
+    }
     private MedicalInfo preencheInfoMedica(){
         MedicalInfo medicalInfo;
         if(radioButtonTipo1.isChecked()) {
