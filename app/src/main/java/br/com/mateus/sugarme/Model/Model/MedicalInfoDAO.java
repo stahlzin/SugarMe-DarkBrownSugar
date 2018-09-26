@@ -47,13 +47,21 @@ public class MedicalInfoDAO {
         databaseReference.child("users").child("pacientes").child(userId).child("InfoMedicas").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
-                //Trocar de Activity
-                Intent intent = new Intent(activity, MedicalInfoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("edit","editarInfo");
-                intent.putExtra("info", (Serializable) medicalInfo);
-                activity.startActivity(intent);
+                if (dataSnapshot.exists()){
+                    medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
+                    //Trocar de Activity
+                    Intent intent = new Intent(activity, MedicalInfoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("edit","editarInfo");
+                    intent.putExtra("info", (Serializable) medicalInfo);
+                    activity.startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(activity, MedicalInfoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    activity.startActivity(intent);
+                }
+
             }
 
             @Override
