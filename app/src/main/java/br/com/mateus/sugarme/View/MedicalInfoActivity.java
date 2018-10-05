@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
 import br.com.mateus.sugarme.Model.MedicalInfoDAO;
+import br.com.mateus.sugarme.PacienteActivity;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Presenter.MedicalInfoController;
 

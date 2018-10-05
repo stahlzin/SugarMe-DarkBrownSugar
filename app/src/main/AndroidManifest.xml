@@ -31,7 +31,11 @@
             android:label="@string/title_activity_medical_info" />
         <activity
             android:name=".View.ComplicationActivity"
-            android:label="@string/title_activity_complication"></activity>
+            android:label="@string/title_activity_complication" />
+        <activity
+            android:name=".PacienteActivity"
+            android:label="@string/title_activity_paciente"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

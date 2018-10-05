@@ -1,0 +1,12 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_perfil" type="drawable">@drawable/ic_person_black_24dp</item>
+    <item name="ic_menu_diario" type="drawable">@drawable/ic_event_note_black_24dp</item>
+    <item name="ic_menu_intercor" type="drawable">@drawable/ic_airline_seat_flat_black_24dp</item>
+    <item name="ic_menu_medicacao" type="drawable">@drawable/ic_local_hospital_black_24dp</item>
+    <item name="ic_menu_exames" type="drawable">@drawable/ic_format_align_justify_black_24dp</item>
+    <item name="ic_menu_agenda" type="drawable">@drawable/ic_event_black_24dp</item>
+    <item name="ic_menu_relatorio" type="drawable">@drawable/ic_import_export_black_24dp</item>
+    <item name="ic_menu_chat" type="drawable">@drawable/ic_chat_black_24dp</item>
+    <item name="ic_menu_vincular" type="drawable">@drawable/ic_group_add_black_24dp</item>
+    <item name="ic_menu_sair" type="drawable">@drawable/ic_power_settings_new_black_24dp</item>
+</resources>

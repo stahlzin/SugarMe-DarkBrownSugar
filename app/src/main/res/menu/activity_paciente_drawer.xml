@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/nav_gp1"
+           android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/ic_menu_perfil"
+            android:title="Perfil" />
+        <item
+            android:id="@+id/nav_diario"
+            android:icon="@drawable/ic_menu_diario"
+            android:title="Diário Glicêmico" />
+        <item
+            android:id="@+id/nav_exames"
+            android:icon="@drawable/ic_menu_exames"
+            android:title="Exames Realizados" />
+        <item
+            android:id="@+id/nav_intercor"
+            android:icon="@drawable/ic_menu_intercor"
+            android:title="Intercorrências" />
+        <item
+            android:id="@+id/nav_medicacao"
+            android:icon="@drawable/ic_menu_medicacao"
+            android:title="Medicação" />
+        <item
+            android:id="@+id/nav_agenda"
+            android:icon="@drawable/ic_menu_agenda"
+            android:title="Agenda" />
+        <item
+            android:id="@+id/nav_relatorio"
+            android:icon="@drawable/ic_menu_relatorio"
+            android:title="Relatorio" />
+    </group>
+
+    <group android:id="@+id/nav_gp2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_menu_chat"
+            android:title="Chat" />
+        <item
+            android:id="@+id/nav_vincular"
+            android:icon="@drawable/ic_menu_vincular"
+            android:title="Ache seu médico" />
+    </group>
+
+    <group android:id="@+id/nav_gp3"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_sair"
+            android:icon="@drawable/ic_menu_sair"
+            android:title="Sair" />
+    </group>
+</menu>
