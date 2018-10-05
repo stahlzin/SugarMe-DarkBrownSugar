@@ -1,21 +1,29 @@
-package br.com.mateus.sugarme.Model.Model;
+package br.com.mateus.sugarme.Model;
 
 import java.io.Serializable;
 
-public class Paciente implements Serializable {
+public class Medico implements Serializable {
     private String nome;
     private String telefone;
     private String dtNascimento;
     private String cpf;
+    private String crm;
+    private String especialidade;
+    private String uf;
 
-    public Paciente(String nome, String telefone, String dtNascimento, String cpf) {
+
+
+    public Medico(String nome, String telefone, String dtNascimento, String cpf, String crm, String especialidade, String uf) {
         this.nome = nome;
         this.telefone = telefone;
         this.dtNascimento = dtNascimento;
         this.cpf = cpf;
+        this.crm = crm;
+        this.uf = uf;
+        this.especialidade = especialidade;
     }
 
-    public Paciente() {
+    public Medico() {
     }
 
 
@@ -51,5 +59,27 @@ public class Paciente implements Serializable {
         this.cpf = cpf;
     }
 
+    public String getCrm() {
+        return crm;
+    }
 
+    public void setCrm(String crm) {
+        this.crm = crm;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public String getEspecialidade() {
+        return especialidade;
+    }
+
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
+    }
 }

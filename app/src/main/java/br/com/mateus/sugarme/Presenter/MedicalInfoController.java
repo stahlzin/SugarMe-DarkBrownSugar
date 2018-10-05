@@ -1,10 +1,10 @@
-package br.com.mateus.sugarme.SupervisingController;
+package br.com.mateus.sugarme.Presenter;
 
 import android.app.Activity;
 import android.widget.Toast;
 
-import br.com.mateus.sugarme.Model.Model.MedicalInfo;
-import br.com.mateus.sugarme.Model.Model.MedicalInfoDAO;
+import br.com.mateus.sugarme.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.MedicalInfoDAO;
 
 
 public class MedicalInfoController {

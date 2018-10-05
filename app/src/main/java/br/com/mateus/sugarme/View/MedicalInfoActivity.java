@@ -1,7 +1,6 @@
-package br.com.mateus.sugarme.Presenter;
+package br.com.mateus.sugarme.View;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.design.widget.TextInputEditText;
@@ -10,14 +9,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import br.com.mateus.sugarme.Model.Model.MedicalInfo;
-import br.com.mateus.sugarme.Model.Model.MedicalInfoDAO;
-import br.com.mateus.sugarme.Model.Model.Medico;
-import br.com.mateus.sugarme.Model.Model.Paciente;
+import br.com.mateus.sugarme.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.MedicalInfoDAO;
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.SupervisingController.MedicalInfoController;
+import br.com.mateus.sugarme.Presenter.MedicalInfoController;
 
 public class MedicalInfoActivity extends Activity {
 

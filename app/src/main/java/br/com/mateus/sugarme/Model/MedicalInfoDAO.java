@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Model.Model;
+package br.com.mateus.sugarme.Model;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,8 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 
-import br.com.mateus.sugarme.Presenter.CadastroActivity;
-import br.com.mateus.sugarme.Presenter.MedicalInfoActivity;
+import br.com.mateus.sugarme.View.MedicalInfoActivity;
 
 public class MedicalInfoDAO {
     private DatabaseReference mDatabase;
