@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import br.com.mateus.sugarme.PacienteActivity;
 import br.com.mateus.sugarme.Presenter.MedicoController;
 import br.com.mateus.sugarme.Presenter.PacienteController;
 import br.com.mateus.sugarme.Model.Medico;

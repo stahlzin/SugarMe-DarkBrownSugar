@@ -17,24 +17,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.PacienteActivity" />
         <activity android:name=".View.CadastroActivity" />
         <activity android:name=".View.MedicoActivity" />
         <activity
-            android:name=".View.DiaryActivity"
-            android:label="@string/title_activity_diary"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".View.ResultsActivity"
-            android:label="@string/title_activity_results" />
-        <activity
             android:name=".View.MedicalInfoActivity"
-            android:label="@string/title_activity_medical_info" />
+            android:label="@string/title_activity_medical_info"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".View.ComplicationActivity"
-            android:label="@string/title_activity_complication" />
-        <activity
-            android:name=".PacienteActivity"
+            android:name=".View.PacienteActivity"
             android:label="@string/title_activity_paciente"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
