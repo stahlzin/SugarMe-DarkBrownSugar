@@ -13,6 +13,6 @@
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:gravity="center"
-        android:text="Gráfico, Ultima medica, Acesso rapido Diario e Agenda "/>
+        android:text="Gráfico, Ultima medida, Acesso rapido Diario e Agenda "/>
 
 </android.support.constraint.ConstraintLayout>
