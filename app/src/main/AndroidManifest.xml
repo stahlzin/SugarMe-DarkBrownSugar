@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.MainActivity"
+        <activity
+            android:name=".View.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,11 +23,13 @@
         <activity
             android:name=".View.MedicalInfoActivity"
             android:label="@string/title_activity_medical_info"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".View.PacienteActivity"
             android:label="@string/title_activity_paciente"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".View.IntercorrenciaActivity" />
+        <activity android:name=".View.IntercorrenciaInfo"></activity>
     </application>
 
 </manifest>
