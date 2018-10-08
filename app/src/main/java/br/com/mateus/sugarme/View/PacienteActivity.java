@@ -10,10 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Presenter.PacienteController;
 import br.com.mateus.sugarme.Presenter.MedicalInfoController;
-import br.com.mateus.sugarme.R;
 
 public class PacienteActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

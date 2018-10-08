@@ -33,6 +33,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="9da69f" />
                                       <entry key="foregroundImage" value="C:\Users\fstah\Documents\AndroidStudioProjects\SugarMe-DarkBrownSugar\app\src\main\res\drawable\logo.png" />
                                     </map>
                                   </option>
