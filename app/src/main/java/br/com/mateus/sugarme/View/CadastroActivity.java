@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +44,7 @@ public class CadastroActivity extends AppCompatActivity {
     private Button buttonCadastrar;
     private Button buttonExcluir;
     private Button buttonEditar;
-
+    private RadioGroup textRadioGroupMedico_paciente;
 
     private PacienteDAO pacienteDAO;
     private MedicoDAO medicoDAO;
@@ -53,6 +55,8 @@ public class CadastroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
+
+        getSupportActionBar().setTitle(R.string.app_name_Cadastro);     //Titulo para ser exibido na sua Action Bar em frente à seta
 
         //FindViewById dos objetos
         radioButtonPaciente = (RadioButton) findViewById(R.id.radioButtonPaciente);
@@ -69,14 +73,27 @@ public class CadastroActivity extends AppCompatActivity {
         buttonExcluir = (Button) findViewById(R.id.buttonExcluir);
         textViewCadastro = (TextView) findViewById(R.id.textViewCadastro);
 
+        textRadioGroupMedico_paciente = (RadioGroup) findViewById(R.id.textRadioGroupMedico_paciente);
+
+        textInputCrm.setVisibility(View.GONE);
+        spinnerUf.setVisibility(View.GONE);
+        textInputEspecialidade.setVisibility(View.GONE);
+
 
         // Desabilitar CRM
         radioButtonPaciente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textInputCrm.setEnabled(false);
+                textInputCrm.setVisibility(View.INVISIBLE);
                 spinnerUf.setEnabled(false);
                 textInputEspecialidade.setEnabled(false);
+                spinnerUf.setVisibility(View.INVISIBLE);
+                textInputEspecialidade.setVisibility(View.INVISIBLE);
+                textInputCrm.setVisibility(View.GONE);
+                spinnerUf.setVisibility(View.GONE);
+                textInputEspecialidade.setVisibility(View.GONE);
+
             }
         });
 
@@ -85,8 +102,12 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textInputCrm.setEnabled(true);
+                textInputCrm.setVisibility(View.VISIBLE);
                 spinnerUf.setEnabled(true);
                 textInputEspecialidade.setEnabled(true);
+                spinnerUf.setVisibility(View.VISIBLE);
+                textInputEspecialidade.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -174,6 +195,14 @@ public class CadastroActivity extends AppCompatActivity {
             else if(it.getStringExtra("radio").equals("editarPaciente")){
                 Paciente paciente = (Paciente) it.getSerializableExtra("paciente");
                 this.setPaciente(paciente);
+            }
+            if(it.getStringExtra("tipo").equals("editar")){
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
+                getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
+                textRadioGroupMedico_paciente.setVisibility(View.INVISIBLE);
+                textRadioGroupMedico_paciente.setVisibility(View.GONE);
+                textViewCadastro.setVisibility(View.INVISIBLE);
+                textViewCadastro.setVisibility(View.GONE);
             }
         }
 
@@ -294,5 +323,17 @@ public class CadastroActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
+        switch (item.getItemId()) {
+            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
+                Intent intent = new Intent(CadastroActivity.this, PerfilActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                CadastroActivity.this.startActivity(intent);
+                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                break;
+            default:break;
+        }
+        return true;
+    }
 }

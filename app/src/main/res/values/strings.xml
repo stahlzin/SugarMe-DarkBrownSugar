@@ -62,7 +62,7 @@
     <string name="pressaoAlta">Pressão Alta</string>
     <string name="obesidade">Obesidade</string>
     <string name="triglicerideos">Triglicerídeos</string>
-    <string name="sedentarismo">sedentarismo</string>
+    <string name="sedentarismo">Sedentarismo</string>
 
 
     <string name="voltar">Voltar</string>
@@ -164,4 +164,8 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_perfil">PerfilActivity</string>
+    <string name="app_name_Perfil">Perfil</string>
+    <string name="editarCadastro">Editar Cadastro</string>
+    <string name="app_name_Cadastro">Edição do Cadastro</string>
 </resources>

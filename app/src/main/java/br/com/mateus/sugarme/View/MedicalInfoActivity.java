@@ -2,15 +2,18 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
+
+import br.com.mateus.sugarme.Presenter.PacienteController;
 import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
@@ -36,11 +39,11 @@ public class MedicalInfoActivity extends AppCompatActivity {
     private CheckBox checkBox8;//triglicerideos
     private CheckBox checkBox9;//sedentarismo
 
-    private Button buttonSalvar;
     private RadioButton radioButtonTipo1;
     private RadioButton radioButtonTipo2;
     private RadioButton radioButtonTipo3;
 
+    private TextView textViewEditarCadastro;
 
     private MedicalInfoController medicalInfoController;
     private MedicalInfoDAO medicalInfoDAO;
@@ -61,7 +64,6 @@ public class MedicalInfoActivity extends AppCompatActivity {
         textInputDataNascimento = (TextInputEditText) findViewById(R.id.textInputDataNascimento);
         textInputPeso = (TextInputEditText) findViewById(R.id.textInputPeso);
         textInputAltura = (TextInputEditText) findViewById(R.id.textInputAltura);
-        buttonSalvar = (Button) findViewById(R.id.buttonSalvarInfoMedica);
         radioButtonTipo1 = (RadioButton) findViewById(R.id.radioButtonTipo1);
         radioButtonTipo2 = (RadioButton) findViewById(R.id.radioButtonTipo2);
         radioButtonTipo3 = (RadioButton) findViewById(R.id.radioButtonTipo3);
@@ -79,20 +81,31 @@ public class MedicalInfoActivity extends AppCompatActivity {
         checkBox8 = (CheckBox) findViewById(R.id.checkBox8);
         checkBox9 = (CheckBox) findViewById(R.id.checkBox9);
 
+        textViewEditarCadastro = (TextView) findViewById(R.id.textViewEditarCadastro);
+
         //Botão Salvar
-        buttonSalvar.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 MedicalInfo medicalInfo = preencheInfoMedica();
                 medicalInfoController = new MedicalInfoController();
                 if(medicalInfoController.isDadosOk(medicalInfo, MedicalInfoActivity.this)){
                     medicalInfoDAO = new MedicalInfoDAO();
                     medicalInfoDAO.inserir(medicalInfo);
                     Toast.makeText(MedicalInfoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MedicalInfoActivity.this, PacienteActivity.class);
+                    Intent intent = new Intent(MedicalInfoActivity.this, PerfilActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     MedicalInfoActivity.this.startActivity(intent);
                 }
+            }
+        });
+
+        textViewEditarCadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PacienteController pacienteController = new PacienteController();
+                pacienteController.recebePaciente(MedicalInfoActivity.this);
             }
         });
 
@@ -111,7 +124,7 @@ public class MedicalInfoActivity extends AppCompatActivity {
     //OnBackPressed
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(MedicalInfoActivity.this, PacienteActivity.class);
+        Intent intent = new Intent(MedicalInfoActivity.this, PerfilActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         MedicalInfoActivity.this.startActivity(intent);
     }
@@ -212,7 +225,7 @@ public class MedicalInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(MedicalInfoActivity.this, PacienteActivity.class);
+                Intent intent = new Intent(MedicalInfoActivity.this, PerfilActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 MedicalInfoActivity.this.startActivity(intent);
                 finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem

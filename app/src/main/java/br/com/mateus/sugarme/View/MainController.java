@@ -83,7 +83,6 @@ public class MainController {
                 //Ainda nao possui tipo de usuario
                 else if(temLogin == 0){
                     Intent intent = new Intent(activity, CadastroActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
                 }
             }

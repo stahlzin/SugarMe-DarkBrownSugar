@@ -78,8 +78,11 @@ public class PacienteActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            MedicalInfoController medicalInfoController = new MedicalInfoController();
-            medicalInfoController.recebeInfoMedica(PacienteActivity.this);
+            //MedicalInfoController medicalInfoController = new MedicalInfoController();
+            //medicalInfoController.recebeInfoMedica(PacienteActivity.this);
+            Intent intent = new Intent(PacienteActivity.this, PerfilActivity.class);
+            PacienteActivity.this.startActivity(intent);
+
         } else if (id == R.id.nav_diario) {
 
         } else if (id == R.id.nav_exames) {
