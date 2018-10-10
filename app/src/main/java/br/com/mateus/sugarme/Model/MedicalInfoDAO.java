@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.Serializable;
 
 import br.com.mateus.sugarme.View.MedicalInfoActivity;
+import br.com.mateus.sugarme.View.PerfilActivity;
 
 public class MedicalInfoDAO {
     private DatabaseReference mDatabase;
@@ -21,6 +22,7 @@ public class MedicalInfoDAO {
     private String userId;
     private DatabaseReference databaseReference;
     private MedicalInfo medicalInfo;
+    private Paciente paciente;
 
 
     //Inserir ou Atualizar
@@ -68,5 +70,29 @@ public class MedicalInfoDAO {
 
             }
         });
+    }
+
+    //Consultar perfil do paciente
+    public void buscaPaciente(final Activity activity) {
+        paciente = new Paciente();
+        medicalInfo = new MedicalInfo();
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child("pacientes").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                paciente = dataSnapshot.getValue(Paciente.class);
+                medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

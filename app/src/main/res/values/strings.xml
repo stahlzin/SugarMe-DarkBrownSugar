@@ -21,7 +21,7 @@
     <string name="editar">Editar</string>
     <string name="excluir">Excluir</string>
     <string name="dataInvalida">Data inválida!</string>
-    <string name="confirmarExclusao">Confirmar Exclusão?</string>
+    <string name="confirmarExclusao">Confirma a EXCLUSÃO do seu cadastro?</string>
     <string name="sim">Sim</string>
     <string name="nao">Nao</string>
     <string name="tituloExclusao">Exclusao</string>
@@ -168,4 +168,11 @@
     <string name="app_name_Perfil">Perfil</string>
     <string name="editarCadastro">Editar Cadastro</string>
     <string name="app_name_Cadastro">Edição do Cadastro</string>
+    <string name="action_editar_perfil">Editar Perfil</string>
+    <string name="action_gerenciar_cadastro">Gerenciar Cadastro</string>
+    <string name="app_name_CadastroInicial">Complete seu Cadastro</string>
+    <string name="perfil_tipo_diabetes">Diabetes Tipo X</string>
+    <string name="perfil_data">XX/XX/XXXX</string>
+    <string name="perfil_tratamento">Tratamento feito com:</string>
+    <string name="perfil_inicio">Início do tratamento</string>
 </resources>

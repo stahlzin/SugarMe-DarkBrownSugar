@@ -5,10 +5,13 @@ import android.widget.Toast;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
 import br.com.mateus.sugarme.Model.MedicalInfoDAO;
+import br.com.mateus.sugarme.Model.Paciente;
+import br.com.mateus.sugarme.Model.PacienteDAO;
 
 
 public class MedicalInfoController {
     private MedicalInfoDAO medicalInfoDAO = new MedicalInfoDAO();
+    private PacienteDAO pacienteDAO = new PacienteDAO();
 
     public boolean isDadosOk(MedicalInfo medicalInfo, Activity activity){
 
@@ -36,4 +39,10 @@ public class MedicalInfoController {
     public void recebeInfoMedica(Activity activity) {
         medicalInfoDAO.consultaInfoMedica(activity);
     }
+
+    public void getPerfil (Activity activity){
+        medicalInfoDAO.buscaPaciente(activity);
+    }
 }
+
+

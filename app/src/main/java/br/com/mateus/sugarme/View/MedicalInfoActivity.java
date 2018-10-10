@@ -81,7 +81,6 @@ public class MedicalInfoActivity extends AppCompatActivity {
         checkBox8 = (CheckBox) findViewById(R.id.checkBox8);
         checkBox9 = (CheckBox) findViewById(R.id.checkBox9);
 
-        textViewEditarCadastro = (TextView) findViewById(R.id.textViewEditarCadastro);
 
         //Botão Salvar
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -100,15 +99,6 @@ public class MedicalInfoActivity extends AppCompatActivity {
                 }
             }
         });
-
-        textViewEditarCadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PacienteController pacienteController = new PacienteController();
-                pacienteController.recebePaciente(MedicalInfoActivity.this);
-            }
-        });
-
 
         //Parametros do PutExtra
         Intent it = getIntent();

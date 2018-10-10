@@ -27,23 +27,23 @@ public class PacienteDAO {
     }
 
     //Inserir ou Atualizar
-    public void inserir(Paciente paciente){
+    public void inserir(Paciente paciente) {
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
-        mDatabase =  FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").child("pacientes").child(userId).child("dados").setValue(paciente);
     }
 
     //Excluir
-    public void excluir(){
+    public void excluir() {
         getUserId();
-        mDatabase =  FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").child("pacientes").child(userId).removeValue();
         logout();
     }
 
     //Pegar Id Usuario
-    public void getUserId(){
+    public void getUserId() {
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
     }
@@ -67,7 +67,7 @@ public class PacienteDAO {
                 //Trocar de Activity
                 Intent intent = new Intent(activity, CadastroActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("radio","editarPaciente");
+                intent.putExtra("radio", "editarPaciente");
                 intent.putExtra("paciente", (Serializable) paciente);
                 intent.putExtra("tipo", "editar");
                 activity.startActivity(intent);
@@ -79,6 +79,8 @@ public class PacienteDAO {
             }
         });
     }
-
-
 }
+
+
+
+

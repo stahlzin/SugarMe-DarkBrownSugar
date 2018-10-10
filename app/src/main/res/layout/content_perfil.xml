@@ -1,11 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".View.PerfilActivity"
     tools:showIn="@layout/activity_perfil">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/fotoPefilImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:srcCompat="@drawable/ic_person_outline_black_24dp" />
+
+    <TextView
+        android:id="@+id/nomePerfilTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:text="@string/nome"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@color/colorSoftOrangeBackground"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:id="@+id/dataNasPerfilTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:text="@string/perfil_data"
+        android:layout_gravity="center"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tipoPerfilTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:text="@string/perfil_tipo_diabetes"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tratamentoPerfilTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:text="@string/perfil_tratamento"
+        android:layout_gravity="center"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/inicioPerfilTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:text="@string/perfil_inicio"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+</LinearLayout>
