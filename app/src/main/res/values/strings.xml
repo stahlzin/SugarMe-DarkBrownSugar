@@ -175,4 +175,14 @@
     <string name="perfil_data">XX/XX/XXXX</string>
     <string name="perfil_tratamento">Tratamento feito com:</string>
     <string name="perfil_inicio">Início do tratamento</string>
+    <string name="dtIntercorrencia">Data da intercorrência:</string>
+    <string name="anotacoes">Anotações:</string>
+    <string name="sintomas">Sintomas:</string>
+    <string name="faltaAr">Falta de Ar</string>
+    <string name="tontura">Tontura</string>
+    <string name="PressaoBaixa">Pressão baixa</string>
+    <string name="hipoglicemia">Hipoglicemia</string>
+    <string name="hiperglicemia">Hiperglicemia</string>
+    <string name="nauseaVomito">Náusea e Vômito</string>
+    <string name="sedeExcessiva">Sede Excessiva</string>
 </resources>

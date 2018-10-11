@@ -1,9 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".View.IntercorrenciaInfo">
 
-</android.support.constraint.ConstraintLayout>
+
+    <!--DtIntercorrencia-->
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="Intercorrência" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="118dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="@string/sintomas" />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/textInputDtIntercorrencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/dtIntercorrencia"
+            android:inputType="number" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:background="@color/colorSoftOrangeBackground">
+        <!-- Linha 2 com 2 colunas -->
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxHipoglicemia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/hipoglicemia" />
+
+            <CheckBox
+                android:id="@+id/checkBoxHiperglicemia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hiperglicemia"
+                android:padding="10dp"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxNausea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nauseaVomito"
+                android:padding="10dp"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxSede"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sedeExcessiva"
+                android:padding="10dp"
+                android:layout_weight="1"/>
+        </TableRow>
+    </TableLayout>
+
+    <!--Anotacao-->
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/textInputAnotacoes"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:hint="@string/anotacoes" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSalvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        app:srcCompat="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/salvar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Salvar" />
+
+</LinearLayout>

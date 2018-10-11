@@ -87,6 +87,9 @@ public class PacienteActivity extends AppCompatActivity
         } else if (id == R.id.nav_exames) {
 
         } else if (id == R.id.nav_intercor) {
+            Intent intent = new Intent(PacienteActivity.this, IntercorrenciaInfo.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
 
         } else if (id == R.id.nav_medicacao) {
 

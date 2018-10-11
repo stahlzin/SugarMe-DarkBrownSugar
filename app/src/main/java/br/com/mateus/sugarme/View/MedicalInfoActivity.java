@@ -81,7 +81,6 @@ public class MedicalInfoActivity extends AppCompatActivity {
         checkBox8 = (CheckBox) findViewById(R.id.checkBox8);
         checkBox9 = (CheckBox) findViewById(R.id.checkBox9);
 
-
         //Botão Salvar
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
