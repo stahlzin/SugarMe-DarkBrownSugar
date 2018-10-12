@@ -22,7 +22,6 @@ import br.com.mateus.sugarme.Presenter.MedicalInfoController;
 
 public class MedicalInfoActivity extends AppCompatActivity {
 
-    private TextInputEditText textInputDataNascimento;
     private TextInputEditText textInputPeso;
     private TextInputEditText textInputAltura;
 
@@ -61,7 +60,6 @@ public class MedicalInfoActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name_edPerfil);     //Titulo para ser exibido na sua Action Bar em frente à seta
 
         //FindViewById dos objetos
-        textInputDataNascimento = (TextInputEditText) findViewById(R.id.textInputDataNascimento);
         textInputPeso = (TextInputEditText) findViewById(R.id.textInputPeso);
         textInputAltura = (TextInputEditText) findViewById(R.id.textInputAltura);
         radioButtonTipo1 = (RadioButton) findViewById(R.id.radioButtonTipo1);
@@ -121,8 +119,7 @@ public class MedicalInfoActivity extends AppCompatActivity {
    private MedicalInfo preencheInfoMedica(){
         MedicalInfo medicalInfo;
         if(radioButtonTipo1.isChecked()) {
-            medicalInfo = new MedicalInfo(textInputDataNascimento.getText().toString(),
-            textInputPeso.getText().toString(),
+            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
             textInputAltura.getText().toString(), "1", textAnoDescoberta.getText().toString(),
             textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
@@ -132,8 +129,7 @@ public class MedicalInfoActivity extends AppCompatActivity {
             return medicalInfo;
         }
         else if(radioButtonTipo2.isChecked()){
-            medicalInfo = new MedicalInfo(textInputDataNascimento.getText().toString(),
-                    textInputPeso.getText().toString(),
+            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "2", textAnoDescoberta.getText().toString(),
                     textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
@@ -143,8 +139,7 @@ public class MedicalInfoActivity extends AppCompatActivity {
             return medicalInfo;
         }
         else if(radioButtonTipo3.isChecked()){
-            medicalInfo = new MedicalInfo(textInputDataNascimento.getText().toString(),
-                    textInputPeso.getText().toString(),
+            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "3", textAnoDescoberta.getText().toString(),
                     textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
@@ -154,8 +149,7 @@ public class MedicalInfoActivity extends AppCompatActivity {
             return medicalInfo;
         }
         else{
-            medicalInfo = new MedicalInfo(textInputDataNascimento.getText().toString(),
-                    textInputPeso.getText().toString(),
+            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "", textAnoDescoberta.getText().toString(),
                     textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
@@ -169,7 +163,6 @@ public class MedicalInfoActivity extends AppCompatActivity {
 
     //Preenchendo os TextInput, RadioButton e CheckBox
     public void setMedicalInfo(MedicalInfo medicalInfo) {
-        this.textInputDataNascimento.setText(medicalInfo.getDataNascimento());
         this.textInputPeso.setText(medicalInfo.getPeso());
         this.textInputAltura.setText(medicalInfo.getAltura());
         if(medicalInfo.getTipoDiabetes().equals("1")){

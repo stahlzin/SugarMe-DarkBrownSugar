@@ -19,6 +19,7 @@ import br.com.mateus.sugarme.Model.PacienteDAO;
 import br.com.mateus.sugarme.Presenter.MedicalInfoController;
 import br.com.mateus.sugarme.Presenter.PacienteController;
 import br.com.mateus.sugarme.R;
+import br.com.mateus.sugarme.Utils.GlobalClass;
 
 public class PerfilActivity extends AppCompatActivity {
 
@@ -53,11 +54,9 @@ public class PerfilActivity extends AppCompatActivity {
         tratamentoPerfilTextView = (TextView) findViewById(R.id.tratamentoPerfilTextView);
         inicioPerfilTextView = (TextView) findViewById(R.id.inicioPerfilTextView);
 
-
     }
 
     public void setPerfil(Paciente paciente, MedicalInfo medicalInfo) {
-        this.dataNasPerfilTextView.setText(medicalInfo.getDataNascimento());
         this.nomePerfilTextView.setText(paciente.getNome());
         this.tipoPerfilTextView.setText(medicalInfo.getTipoDiabetes());
         this.tratamentoPerfilTextView.setText(medicalInfo.getInsulina());

@@ -3,7 +3,6 @@ package br.com.mateus.sugarme.Model;
 import java.io.Serializable;
 
 public class MedicalInfo implements Serializable{
-    private String dataNascimento;
     private String peso;
     private String altura;
 
@@ -26,8 +25,7 @@ public class MedicalInfo implements Serializable{
     public MedicalInfo() {
     }
 
-    public MedicalInfo(String dataNascimento, String peso, String altura, String tipoDiabetes, String anoDescoberta, String anoInicioTratamento, int medicacao, int alimentar, int insulina, int esporte, int colesterol, int pressaoAlta, int obesidade, int triglicerídeos, int sedentarismo) {
-        this.dataNascimento = dataNascimento;
+    public MedicalInfo(String peso, String altura, String tipoDiabetes, String anoDescoberta, String anoInicioTratamento, int medicacao, int alimentar, int insulina, int esporte, int colesterol, int pressaoAlta, int obesidade, int triglicerídeos, int sedentarismo) {
         this.peso = peso;
         this.altura = altura;
         this.tipoDiabetes = tipoDiabetes;
@@ -42,15 +40,6 @@ public class MedicalInfo implements Serializable{
         this.obesidade = obesidade;
         this.triglicerídeos = triglicerídeos;
         this.sedentarismo = sedentarismo;
-    }
-
-
-    public String getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(String dataNascimento) {
-        this.dataNascimento = dataNascimento;
     }
 
     public String getPeso() {

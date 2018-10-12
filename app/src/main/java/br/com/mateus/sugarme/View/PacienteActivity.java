@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import br.com.mateus.sugarme.Utils.GlobalClass;
+
 import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Presenter.PacienteController;
@@ -20,6 +23,9 @@ public class PacienteActivity extends AppCompatActivity
 
     //para deslogar
     PacienteController pacienteController = new PacienteController();
+
+    private TextView nomePacienteTextView;
+    private TextView tipoDMTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,10 @@ public class PacienteActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        nomePacienteTextView = (TextView) findViewById(R.id.nomePacienteTextView);
+        tipoDMTextView = (TextView) findViewById(R.id.tipoDMTextView);
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
