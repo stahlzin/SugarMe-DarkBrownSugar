@@ -34,6 +34,10 @@
         <activity
             android:name=".View.PerfilActivity"
             android:label="@string/title_activity_perfil"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".View.DiarioGlicemicoActivity"
+            android:label="@string/title_activity_diario_glicemico"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

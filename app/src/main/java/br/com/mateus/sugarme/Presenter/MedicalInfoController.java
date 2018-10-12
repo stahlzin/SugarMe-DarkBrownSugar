@@ -11,7 +11,6 @@ import br.com.mateus.sugarme.Model.PacienteDAO;
 
 public class MedicalInfoController {
     private MedicalInfoDAO medicalInfoDAO = new MedicalInfoDAO();
-    private PacienteDAO pacienteDAO = new PacienteDAO();
 
     public boolean isDadosOk(MedicalInfo medicalInfo, Activity activity){
 
@@ -41,7 +40,7 @@ public class MedicalInfoController {
     }
 
     public void getPerfil (Activity activity){
-        medicalInfoDAO.buscaPaciente(activity);
+        medicalInfoDAO.buscaPerfil(activity);
     }
 }
 

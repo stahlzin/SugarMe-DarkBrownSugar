@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import br.com.mateus.sugarme.Model.Paciente;
+import br.com.mateus.sugarme.Model.PacienteDAO;
 import br.com.mateus.sugarme.Utils.GlobalClass;
 
 import br.com.mateus.sugarme.R;
@@ -42,7 +45,7 @@ public class PacienteActivity extends AppCompatActivity
 
         nomePacienteTextView = (TextView) findViewById(R.id.nomePacienteTextView);
         tipoDMTextView = (TextView) findViewById(R.id.tipoDMTextView);
-
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -88,11 +91,13 @@ public class PacienteActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            Intent intent = new Intent(PacienteActivity.this, PerfilActivity.class);
+            MedicalInfoController medicalInfoController = new MedicalInfoController();
+            medicalInfoController.getPerfil(PacienteActivity.this);
+        } else if (id == R.id.nav_diario) {
+            Intent intent = new Intent(PacienteActivity.this, DiarioGlicemicoActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
 
-        } else if (id == R.id.nav_diario) {
 
         } else if (id == R.id.nav_exames) {
 

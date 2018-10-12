@@ -113,4 +113,6 @@ public class PacienteController {
     public void recebePaciente(Activity activity) {
         pacienteDAO.consultaPaciente(activity);
     }
+
+
 }

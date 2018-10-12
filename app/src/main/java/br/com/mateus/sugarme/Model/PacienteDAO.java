@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.Serializable;
 
 import br.com.mateus.sugarme.View.CadastroActivity;
+import br.com.mateus.sugarme.View.PacienteActivity;
 
 public class PacienteDAO {
     DatabaseReference mDatabase;
@@ -79,6 +80,8 @@ public class PacienteDAO {
             }
         });
     }
+
+
 }
 
 

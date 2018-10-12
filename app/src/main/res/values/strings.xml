@@ -43,7 +43,7 @@
     <string name="dataNascimento">Data de Nascimento:</string>
     <string name="altura">Altura(cm):</string>
     <string name="informacoesMedicas">Informações Médicas</string>
-    <string name="tipoDiabetes">Tipo Diabetes:</string>
+    <string name="tipoDiabetes">Tipo Diabetes</string>
     <string name="tipo1">Tipo 1</string>
     <string name="tipo2">Tipo 2</string>
     <string name="gestacional">Gestacional</string>
@@ -185,4 +185,11 @@
     <string name="hiperglicemia">Hiperglicemia</string>
     <string name="nauseaVomito">Náusea e Vômito</string>
     <string name="sedeExcessiva">Sede Excessiva</string>
+    <string name="title_activity_diario_glicemico">DiarioGlicemicoActivity</string>
+    <string name="diario_ultimaleitura">Últimas Leituras</string>
+    <string name="diario_historico">Consultar histórico</string>
+    <string name="diario_registrar">Registrar Leitura</string>
+    <string name="diarioEscala">mg/dl</string>
+    <string name="diarioSampleLeitura">90</string>
+    <string name="app_name_Diario">Diário Glicêmico</string>
 </resources>

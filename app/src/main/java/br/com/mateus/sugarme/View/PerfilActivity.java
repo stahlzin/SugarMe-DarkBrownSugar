@@ -54,13 +54,23 @@ public class PerfilActivity extends AppCompatActivity {
         tratamentoPerfilTextView = (TextView) findViewById(R.id.tratamentoPerfilTextView);
         inicioPerfilTextView = (TextView) findViewById(R.id.inicioPerfilTextView);
 
+
+
+        //Parametros do PutExtra
+        Intent it = getIntent();
+        if(it != null && it.getExtras() != null) {
+            MedicalInfo medicalInfo = (MedicalInfo) it.getSerializableExtra("info");
+            this.setPerfil(medicalInfo);
+        }
+
     }
 
-    public void setPerfil(Paciente paciente, MedicalInfo medicalInfo) {
-        this.nomePerfilTextView.setText(paciente.getNome());
-        this.tipoPerfilTextView.setText(medicalInfo.getTipoDiabetes());
-        this.tratamentoPerfilTextView.setText(medicalInfo.getInsulina());
-        this.inicioPerfilTextView.setText(medicalInfo.getAnoInicioTratamento());
+    public void setPerfil(MedicalInfo medicalInfo) {
+        //Ajustar a escrita
+
+        this.tipoPerfilTextView.setText("Tipo Diabetes: " + medicalInfo.getTipoDiabetes());
+        //this.tratamentoPerfilTextView.setText(medicalInfo.getInsulina());
+        this.inicioPerfilTextView.setText("Ano do Início do Tratamento: " + medicalInfo.getAnoInicioTratamento());
 
     }
 

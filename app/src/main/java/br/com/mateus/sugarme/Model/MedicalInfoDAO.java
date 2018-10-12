@@ -72,19 +72,28 @@ public class MedicalInfoDAO {
         });
     }
 
-    //Consultar perfil do paciente
-    public void buscaPaciente(final Activity activity) {
-        paciente = new Paciente();
+    //Consultar medico e ir para a tela de edição
+    public void buscaPerfil(final Activity activity) {
         medicalInfo = new MedicalInfo();
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("pacientes").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child("pacientes").child(userId).child("InfoMedicas").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                paciente = dataSnapshot.getValue(Paciente.class);
-                medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
-
+                if (dataSnapshot.exists()){
+                    medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
+                    //Trocar de Activity
+                    Intent intent = new Intent(activity, PerfilActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("info", (Serializable) medicalInfo);
+                    activity.startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(activity, PerfilActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    activity.startActivity(intent);
+                }
 
             }
 
@@ -93,6 +102,7 @@ public class MedicalInfoDAO {
 
             }
         });
-
     }
+
+
 }
