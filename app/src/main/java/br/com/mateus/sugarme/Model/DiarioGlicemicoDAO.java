@@ -18,7 +18,7 @@ public class DiarioGlicemicoDAO {
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child("pacientes").child(userId).child("diario").setValue(diarioGlicemico);
+        mDatabase.child("users").child("pacientes").child(userId).child("diario").push().setValue(diarioGlicemico);
     }
 
     //Pegar Id Usuario

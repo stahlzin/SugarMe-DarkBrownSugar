@@ -1,5 +1,7 @@
 package br.com.mateus.sugarme.Model;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 public class DiarioGlicemico implements Serializable {
