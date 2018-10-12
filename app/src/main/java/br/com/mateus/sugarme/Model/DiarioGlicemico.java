@@ -1,6 +1,8 @@
 package br.com.mateus.sugarme.Model;
 
-public class DiarioGlicemico {
+import java.io.Serializable;
+
+public class DiarioGlicemico implements Serializable {
     private int glicemia;
     private String data;
     private String hora;

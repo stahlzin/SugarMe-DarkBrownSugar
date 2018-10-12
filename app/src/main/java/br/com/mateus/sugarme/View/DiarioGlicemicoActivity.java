@@ -10,7 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import br.com.mateus.sugarme.Model.DiarioGlicemico;
+import br.com.mateus.sugarme.Model.DiarioGlicemicoDAO;
+import br.com.mateus.sugarme.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.MedicalInfoDAO;
+import br.com.mateus.sugarme.Presenter.MedicalInfoController;
 import br.com.mateus.sugarme.R;
 
 public class DiarioGlicemicoActivity extends AppCompatActivity {
@@ -53,18 +59,29 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DiarioGlicemico diarioGlicemico = registraLogDiario();
+                DiarioGlicemicoDAO diarioGlicemicoDAO = new DiarioGlicemicoDAO();
+                diarioGlicemicoDAO.inserir(diarioGlicemico);
+                Toast.makeText(DiarioGlicemicoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
 
-            }
-        });
+                }
+            });
 
-        diarioHistorioTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
+
+    private DiarioGlicemico registraLogDiario (){
+        DiarioGlicemico diarioGlicemico;
+
+        diarioGlicemico = new DiarioGlicemico();
+        diarioGlicemico.setGlicemia(Integer.parseInt(String.valueOf(glicemiaDiarioEditText.getText().toString())));
+        diarioGlicemico.setData(dataDiarioTextView.getText().toString());
+        diarioGlicemico.setHora(horaDiarioTextView.getText().toString());
+        diarioGlicemico.setCategoria("Indefinido");
+        diarioGlicemico.setGliTimestamp("Real Timestamp");
+
+        return diarioGlicemico;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
