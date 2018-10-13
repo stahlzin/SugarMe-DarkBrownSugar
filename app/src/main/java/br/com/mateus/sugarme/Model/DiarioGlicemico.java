@@ -5,11 +5,34 @@ import com.google.firebase.database.Exclude;
 import java.io.Serializable;
 
 public class DiarioGlicemico implements Serializable {
+    private String diarioId;
     private int glicemia;
     private String data;
     private String hora;
     private String categoria;
     private String gliTimestamp;
+
+
+    public DiarioGlicemico() {
+    }
+
+    public DiarioGlicemico(String diarioId, int glicemia, String data, String hora, String categoria, String gliTimestamp) {
+        this.diarioId = diarioId;
+        this.glicemia = glicemia;
+        this.data = data;
+        this.hora = hora;
+        this.categoria = categoria;
+        this.gliTimestamp = gliTimestamp;
+    }
+
+    @Exclude
+    public String getDiarioId() {
+        return diarioId;
+    }
+
+    public void setDiarioId(String diarioId) {
+        this.diarioId = diarioId;
+    }
 
     public int getGlicemia() {
         return glicemia;

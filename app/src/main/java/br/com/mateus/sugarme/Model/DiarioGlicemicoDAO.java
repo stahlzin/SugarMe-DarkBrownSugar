@@ -20,6 +20,7 @@ public class DiarioGlicemicoDAO {
     private DiarioGlicemico diarioGlicemico;
     private DatabaseReference databaseReference;
     private List<DiarioGlicemico> diarioGlicemicoList;
+    private String diarioId;
 
     public DiarioGlicemicoDAO (){}
 
@@ -59,6 +60,14 @@ public class DiarioGlicemicoDAO {
         });
         return diarioGlicemicoList;
     }
+
+    //Excluir
+    public void excluir(String diarioId) {
+        getUserId();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").child("pacientes").child(userId).child("diario").child(diarioId).removeValue();
+    }
+
 
 
 }

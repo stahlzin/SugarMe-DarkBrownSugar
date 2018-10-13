@@ -195,4 +195,6 @@
     <string name="nauseaDesmaio">Desmaio</string>
     <string name="internacao">Internação</string>
     <string name="erro_firebase">Deu ruim Hermano</string>
+    <string name="app_name_Historico_Diario">Histórico de medições</string>
+    <string name="deletarItemHistorico">Deseja deletar o item?</string>
 </resources>

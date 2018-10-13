@@ -51,7 +51,6 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
     private EditText dataDiarioTextView;
     private EditText horaDiarioTextView;
     private List<DiarioGlicemico> diarioGlicemicoList;
-    DatabaseReference mDatabase;
     private FirebaseAuth firebaseAuth;
     private String userId;
     private DiarioGlicemico diarioGlicemico;
@@ -72,10 +71,23 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         horaDiarioTextView = (EditText) findViewById(R.id.horaDiarioTextView);
         dataDiarioTextView.addTextChangedListener(MaskEditUtil.mask(dataDiarioTextView, MaskEditUtil.FORMAT_DATE));
         setValoresPadroes();
+        diarioHistorioTextView = (TextView) findViewById(R.id.diarioHistorioTextView);
 
         ultimaLeituratextView = (TextView) findViewById(R.id.UltimaLeituratextView);
         penultimaLeituratextView = (TextView) findViewById(R.id.PenultimaLeituratextView);
         anteLeituratextView = (TextView) findViewById(R.id.AnteLeituratextView);
+
+
+        diarioHistorioTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DiarioGlicemicoActivity.this, HistoricoDiarioActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+            }
+        });
+
 
         ultimaLeituratextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -179,6 +191,7 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
                 diarioGlicemicoList.clear();
                 for (DataSnapshot json : dataSnapshot.getChildren()) {
                     DiarioGlicemico todos = json.getValue(DiarioGlicemico.class);
+                    todos.setDiarioId(json.getKey());
                     diarioGlicemicoList.add(todos);
                 }
                 setValuesOfDiarioGlicemicoList(diarioGlicemicoList);
