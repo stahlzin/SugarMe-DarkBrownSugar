@@ -194,4 +194,5 @@
     <string name="app_name_Diario">Diário Glicêmico</string>
     <string name="nauseaDesmaio">Desmaio</string>
     <string name="internacao">Internação</string>
+    <string name="erro_firebase">Deu ruim Hermano</string>
 </resources>

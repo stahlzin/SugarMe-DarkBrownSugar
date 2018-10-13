@@ -26,6 +26,7 @@
         android:text="@string/nome"
         android:layout_gravity="center"
         android:gravity="center"
+        android:textStyle="bold"
         android:background="@color/colorSoftOrangeBackground"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -35,6 +36,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/nav_header_vertical_spacing"
         android:text="@string/perfil_data"
+        android:textStyle="bold"
         android:layout_gravity="center"
         android:gravity="center" />
 
@@ -45,7 +47,17 @@
         android:padding="@dimen/nav_header_vertical_spacing"
         android:text="@string/perfil_tipo_diabetes"
         android:layout_gravity="center"
+        android:textStyle="bold"
         android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:text="@string/perfil_tratamento"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tratamentoPerfilTextView"
@@ -61,6 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/nav_header_vertical_spacing"
+        android:textStyle="bold"
         android:text="@string/perfil_inicio"
         android:layout_gravity="center"
         android:gravity="center"/>

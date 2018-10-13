@@ -2,6 +2,7 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,8 +11,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.mateus.sugarme.Model.MedicalInfo;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Model.PacienteDAO;
 import br.com.mateus.sugarme.Utils.GlobalClass;
@@ -26,9 +40,9 @@ public class PacienteActivity extends AppCompatActivity
 
     //para deslogar
     PacienteController pacienteController = new PacienteController();
-
     private TextView nomePacienteTextView;
-    private TextView tipoDMTextView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +57,24 @@ public class PacienteActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        nomePacienteTextView = (TextView) findViewById(R.id.nomePacienteTextView);
-        tipoDMTextView = (TextView) findViewById(R.id.tipoDMTextView);
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        nomePacienteTextView = (TextView) headerView.findViewById(R.id.nomePacienteTextView);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Parametros do PutExtra
+        Intent it = getIntent();
+        if(it != null && it.getExtras() != null){
+                Paciente gPaciente = (Paciente) it.getSerializableExtra("paciente");
+                this.setPacienteAsGlobal(gPaciente);
+        }
+    }
+
+    private void setPacienteAsGlobal(Paciente gPaciente) {
+        this.nomePacienteTextView.setText(gPaciente.getNome());
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        globalVariable.setDataNascUser(gPaciente.getDtNascimento());
+        globalVariable.setNomeUser(gPaciente.getNome());
     }
 
     @Override
@@ -112,13 +137,13 @@ public class PacienteActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_relatorio) {
 
-        }else if (id == R.id.nav_chat) {
+        } else if (id == R.id.nav_chat) {
 
-        }else if (id == R.id.nav_vincular) {
+        } else if (id == R.id.nav_vincular) {
 
-        }else if (id == R.id.nav_exames) {
+        } else if (id == R.id.nav_exames) {
 
-        }else if (id == R.id.nav_sair) {
+        } else if (id == R.id.nav_sair) {
             pacienteController.logout();
             Intent intent = new Intent(PacienteActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -130,4 +155,5 @@ public class PacienteActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

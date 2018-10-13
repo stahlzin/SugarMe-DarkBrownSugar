@@ -1,6 +1,5 @@
 package br.com.mateus.sugarme.View;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,11 +15,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Model.PacienteDAO;
-import br.com.mateus.sugarme.Utils.GlobalClass;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+import br.com.mateus.sugarme.Presenter.PacienteController;
 
 public class MainController {
     private int temLogin = 0; //Usada nos Listeners
@@ -62,16 +58,25 @@ public class MainController {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         //Ver se é paciente
-        databaseReference.child("users").child("pacientes").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users");
+        databaseReference.child("pacientes");
+        databaseReference.child(userId);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                        Intent intent = new Intent(activity, PacienteActivity.class);
+                if (dataSnapshot.exists()) {
+                        /*Intent intent = new Intent(activity, PacienteActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        activity.startActivity(intent);
-                        temLogin = -1;
+                        intent.putExtra("flag", "1");
+                        activity.startActivity(intent);*/
+                    temLogin = -1;
+                    //PacienteDAO pacienteDAO = new PacienteDAO();
+                    //pacienteDAO.buscaPacienteToGlobal(activity);
+                    PacienteController pacienteController = new PacienteController();
+                    pacienteController.buscaPaciente(activity);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }

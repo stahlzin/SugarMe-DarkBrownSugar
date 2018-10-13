@@ -114,5 +114,8 @@ public class PacienteController {
         pacienteDAO.consultaPaciente(activity);
     }
 
+    public void buscaPaciente(Activity activity) {
+        pacienteDAO.buscaPacienteToGlobal(activity);
+    }
 
 }

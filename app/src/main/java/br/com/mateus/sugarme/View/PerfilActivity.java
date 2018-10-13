@@ -67,10 +67,35 @@ public class PerfilActivity extends AppCompatActivity {
 
     public void setPerfil(MedicalInfo medicalInfo) {
         //Ajustar a escrita
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        this.nomePerfilTextView.setText(globalVariable.getNomeUser());
+        this.dataNasPerfilTextView.setText(globalVariable.getDataNascUser());
 
-        this.tipoPerfilTextView.setText("Tipo Diabetes: " + medicalInfo.getTipoDiabetes());
-        //this.tratamentoPerfilTextView.setText(medicalInfo.getInsulina());
-        this.inicioPerfilTextView.setText("Ano do Início do Tratamento: " + medicalInfo.getAnoInicioTratamento());
+        String tipoDiabetes = medicalInfo.getTipoDiabetes();
+        String infoTipo;
+        switch (tipoDiabetes){
+            case ("1"): infoTipo = "1"; break;
+            case ("2"): infoTipo = "2";break;
+            case ("3"): infoTipo = "Gestacional"; break;
+            default: infoTipo = ""; break;
+        }
+        this.tipoPerfilTextView.setText("Diabetes Tipo: " + infoTipo);
+        this.inicioPerfilTextView.setText("Tratamento iniciou em: " + medicalInfo.getAnoInicioTratamento());
+
+        StringBuilder perfilTratamento = new StringBuilder("");
+        if(medicalInfo.getMedicacao() == 1){
+            perfilTratamento.append("Medicação\n");
+        }
+        if(medicalInfo.getInsulina() == 1){
+            perfilTratamento.append("Insulina\n");
+        }
+        if(medicalInfo.getAlimentar() == 1){
+            perfilTratamento.append("Dieta Restritiva\n");
+        }
+        if(medicalInfo.getEsporte() == 1){
+            perfilTratamento.append("Prática de Atividades Físicas\n");
+        }
+        this.tratamentoPerfilTextView.setText(perfilTratamento);
 
     }
 
