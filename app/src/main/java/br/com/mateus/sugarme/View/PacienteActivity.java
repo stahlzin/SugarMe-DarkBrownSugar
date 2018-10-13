@@ -70,6 +70,13 @@ public class PacienteActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        this.nomePacienteTextView.setText(globalVariable.getNomeUser());
+    }
+
     private void setPacienteAsGlobal(Paciente gPaciente) {
         this.nomePacienteTextView.setText(gPaciente.getNome());
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();

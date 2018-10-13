@@ -6,6 +6,8 @@
     <color name="colorAccentOver">#cddc39</color>
     <color name="colorSoftOrangeBackground">#fff3e0</color>
     <color name="colorSoftBlueGreyBackground">#eceff1</color>
-
     <color name="colorLink">#42a5f5</color>
+    <color name="colorNormal">#b3e5fc</color>
+    <color name="colorHiper">#f44336</color>
+    <color name="colorHipo">#ffcdd2</color>
 </resources>
