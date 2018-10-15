@@ -13,12 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
-import br.com.mateus.sugarme.Presenter.PacienteController;
+import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
 import br.com.mateus.sugarme.Model.MedicalInfoDAO;
-import br.com.mateus.sugarme.Presenter.MedicalInfoController;
+import br.com.mateus.sugarme.Presenter.MedicalInfoPresenter;
 
 public class MedicalInfoActivity extends AppCompatActivity {
 
@@ -44,7 +44,7 @@ public class MedicalInfoActivity extends AppCompatActivity {
 
     private TextView textViewEditarCadastro;
 
-    private MedicalInfoController medicalInfoController;
+    private MedicalInfoPresenter medicalInfoPresenter;
     private MedicalInfoDAO medicalInfoDAO;
 
     @Override
@@ -85,12 +85,12 @@ public class MedicalInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MedicalInfo medicalInfo = preencheInfoMedica();
-                medicalInfoController = new MedicalInfoController();
-                if(medicalInfoController.isDadosOk(medicalInfo, MedicalInfoActivity.this)){
+                medicalInfoPresenter = new MedicalInfoPresenter();
+                if(medicalInfoPresenter.isDadosOk(medicalInfo, MedicalInfoActivity.this)){
                     medicalInfoDAO = new MedicalInfoDAO();
                     medicalInfoDAO.inserir(medicalInfo);
                     Toast.makeText(MedicalInfoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MedicalInfoActivity.this, PerfilActivity.class);
+                    Intent intent = new Intent(MedicalInfoActivity.this, PacienteActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     MedicalInfoActivity.this.startActivity(intent);
                 }
@@ -119,42 +119,40 @@ public class MedicalInfoActivity extends AppCompatActivity {
    private MedicalInfo preencheInfoMedica(){
         MedicalInfo medicalInfo;
         if(radioButtonTipo1.isChecked()) {
+            //int medicacao, int alimentar, int insulina, int esporte,
+            // int colesterol, int pressaoAlta, int obesidade, int triglicerídeos, int sedentarismo
             medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
             textInputAltura.getText().toString(), "1", textAnoDescoberta.getText().toString(),
-            textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
+            textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
-                    checkBox4.isChecked() ? 1 : 0, checkBox5.isChecked() ? 1 : 0,
-                    checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
+                    checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
             return medicalInfo;
         }
         else if(radioButtonTipo2.isChecked()){
             medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "2", textAnoDescoberta.getText().toString(),
-                    textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
+                    textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
-                    checkBox4.isChecked() ? 1 : 0, checkBox5.isChecked() ? 1 : 0,
-                    checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
+                    checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
             return medicalInfo;
         }
         else if(radioButtonTipo3.isChecked()){
             medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "3", textAnoDescoberta.getText().toString(),
-                    textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
+                    textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
-                    checkBox4.isChecked() ? 1 : 0, checkBox5.isChecked() ? 1 : 0,
-                    checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
+                    checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
             return medicalInfo;
         }
         else{
             medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "", textAnoDescoberta.getText().toString(),
-                    textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0,
+                    textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
-                    checkBox4.isChecked() ? 1 : 0, checkBox5.isChecked() ? 1 : 0,
-                    checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
+                    checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
             return medicalInfo;
         }
@@ -177,13 +175,13 @@ public class MedicalInfoActivity extends AppCompatActivity {
             this.checkBox1.setChecked(true);
         }
         if(medicalInfo.getAlimentar()==1){
-            this.checkBox2.setChecked(true);
+            this.checkBox4.setChecked(true);
         }
         if(medicalInfo.getInsulina()==1){
-            this.checkBox3.setChecked(true);
+            this.checkBox2.setChecked(true);
         }
         if(medicalInfo.getEsporte()==1){
-            this.checkBox4.setChecked(true);
+            this.checkBox3.setChecked(true);
         }
         if(medicalInfo.getColesterol()==1){
             this.checkBox5.setChecked(true);

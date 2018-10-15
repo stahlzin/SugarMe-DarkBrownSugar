@@ -10,12 +10,12 @@ import java.text.SimpleDateFormat;
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.Model.MedicoDAO;
 
-public class MedicoController {
+public class MedicoPresenter {
 
     private MedicoDAO medicoDAO = new MedicoDAO();
     private Medico medico;
     private static final int[] pesoCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
-    public MedicoController() {
+    public MedicoPresenter() {
     }
 
     public boolean isDadosOk(Medico medico, final Activity activity){

@@ -8,24 +8,24 @@ import br.com.mateus.sugarme.R;
 
 
 public class MainActivity extends AppCompatActivity {
-    MainController mainController;
+    MainPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainController = new MainController();
+        mainPresenter = new MainPresenter();
 
         //Maximixar a tela
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-       if(mainController.verificaLogin()){
-           mainController.verificaTipoUsuario(MainActivity.this);
+       if(mainPresenter.verificaLogin()){
+           mainPresenter.verificaTipoUsuario(MainActivity.this);
        }
        else{
-           mainController.fazerLogin(this);
+           mainPresenter.fazerLogin(this);
        }
 
 
@@ -34,6 +34,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mainController.onLoginResult(this, requestCode);
+        mainPresenter.onLoginResult(this, requestCode);
     }
 }

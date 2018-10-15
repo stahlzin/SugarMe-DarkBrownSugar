@@ -15,13 +15,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.mateus.sugarme.Model.PacienteDAO;
-import br.com.mateus.sugarme.Presenter.PacienteController;
+import br.com.mateus.sugarme.Presenter.PacientePresenter;
 
-public class MainController {
+public class MainPresenter {
     private int temLogin = 0; //Usada nos Listeners
 
-    public MainController() {
+    public MainPresenter() {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
@@ -72,8 +71,8 @@ public class MainController {
                     temLogin = -1;
                     //PacienteDAO pacienteDAO = new PacienteDAO();
                     //pacienteDAO.buscaPacienteToGlobal(activity);
-                    PacienteController pacienteController = new PacienteController();
-                    pacienteController.buscaPaciente(activity);
+                    PacientePresenter pacientePresenter = new PacientePresenter();
+                    pacientePresenter.buscaPaciente(activity);
                 }
             }
 

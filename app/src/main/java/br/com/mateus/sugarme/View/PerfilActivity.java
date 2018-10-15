@@ -2,22 +2,18 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
 import br.com.mateus.sugarme.Model.MedicalInfoDAO;
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.Model.PacienteDAO;
-import br.com.mateus.sugarme.Presenter.MedicalInfoController;
-import br.com.mateus.sugarme.Presenter.PacienteController;
+import br.com.mateus.sugarme.Presenter.MedicalInfoPresenter;
+import br.com.mateus.sugarme.Presenter.PacientePresenter;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Utils.GlobalClass;
 
@@ -31,9 +27,10 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView tratamentoPerfilTextView;
     private TextView inicioPerfilTextView;
 
-    private MedicalInfoController medicalInfoController;
+    private MedicalInfoPresenter medicalInfoPresenter;
     private MedicalInfoDAO medicalInfoDAO;
     private Paciente paciente;
+    private MedicalInfo medicalInfo;
 
 
     @Override
@@ -59,10 +56,21 @@ public class PerfilActivity extends AppCompatActivity {
         //Parametros do PutExtra
         Intent it = getIntent();
         if(it != null && it.getExtras() != null) {
-            MedicalInfo medicalInfo = (MedicalInfo) it.getSerializableExtra("info");
+            medicalInfo = (MedicalInfo) it.getSerializableExtra("info");
             this.setPerfil(medicalInfo);
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        this.nomePerfilTextView.setText(globalVariable.getNomeUser());
+        this.dataNasPerfilTextView.setText(globalVariable.getDataNascUser());
+        this.inicioPerfilTextView.setText(globalVariable.getInicioTratamento());
+        this.tratamentoPerfilTextView.setText(globalVariable.getTratamento());
+        this.tipoPerfilTextView.setText(globalVariable.getTipoDiabetes());
     }
 
     public void setPerfil(MedicalInfo medicalInfo) {
@@ -70,6 +78,7 @@ public class PerfilActivity extends AppCompatActivity {
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
         this.nomePerfilTextView.setText(globalVariable.getNomeUser());
         this.dataNasPerfilTextView.setText(globalVariable.getDataNascUser());
+
 
         String tipoDiabetes = medicalInfo.getTipoDiabetes();
         String infoTipo;
@@ -97,6 +106,10 @@ public class PerfilActivity extends AppCompatActivity {
         }
         this.tratamentoPerfilTextView.setText(perfilTratamento);
 
+        globalVariable.setInicioTratamento(this.inicioPerfilTextView.getText().toString());
+        globalVariable.setTipoDiabetes(this.tipoPerfilTextView.getText().toString());
+        globalVariable.setTratamento(this.tratamentoPerfilTextView.getText().toString());
+
     }
 
     @Override
@@ -115,13 +128,13 @@ public class PerfilActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_editar_perfil) {
-            MedicalInfoController medicalInfoController = new MedicalInfoController();
-            medicalInfoController.recebeInfoMedica(PerfilActivity.this);
+            MedicalInfoPresenter medicalInfoPresenter = new MedicalInfoPresenter();
+            medicalInfoPresenter.recebeInfoMedica(PerfilActivity.this);
             return true;
         }
         if (id == R.id.action_gerenciar_cadastro) {
-            PacienteController pacienteController = new PacienteController();
-            pacienteController.recebePaciente(PerfilActivity.this);
+            PacientePresenter pacientePresenter = new PacientePresenter();
+            pacientePresenter.recebePaciente(PerfilActivity.this);
             return true;
         }
         if (id== android.R.id.home) {

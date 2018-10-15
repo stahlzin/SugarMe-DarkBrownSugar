@@ -2,7 +2,6 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,33 +12,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import br.com.mateus.sugarme.Model.MedicalInfo;
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.Model.PacienteDAO;
 import br.com.mateus.sugarme.Utils.GlobalClass;
 
 import br.com.mateus.sugarme.R;
 
-import br.com.mateus.sugarme.Presenter.PacienteController;
-import br.com.mateus.sugarme.Presenter.MedicalInfoController;
+import br.com.mateus.sugarme.Presenter.PacientePresenter;
+import br.com.mateus.sugarme.Presenter.MedicalInfoPresenter;
 
 public class PacienteActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //para deslogar
-    PacienteController pacienteController = new PacienteController();
+    PacientePresenter pacientePresenter = new PacientePresenter();
     private TextView nomePacienteTextView;
 
 
@@ -123,8 +109,8 @@ public class PacienteActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            MedicalInfoController medicalInfoController = new MedicalInfoController();
-            medicalInfoController.getPerfil(PacienteActivity.this);
+            MedicalInfoPresenter medicalInfoPresenter = new MedicalInfoPresenter();
+            medicalInfoPresenter.getPerfil(PacienteActivity.this);
         } else if (id == R.id.nav_diario) {
             Intent intent = new Intent(PacienteActivity.this, DiarioGlicemicoActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -151,7 +137,7 @@ public class PacienteActivity extends AppCompatActivity
         } else if (id == R.id.nav_exames) {
 
         } else if (id == R.id.nav_sair) {
-            pacienteController.logout();
+            pacientePresenter.logout();
             Intent intent = new Intent(PacienteActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PacienteActivity.this.startActivity(intent);

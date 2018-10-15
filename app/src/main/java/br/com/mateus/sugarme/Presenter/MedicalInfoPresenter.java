@@ -9,7 +9,7 @@ import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Model.PacienteDAO;
 
 
-public class MedicalInfoController {
+public class MedicalInfoPresenter {
     private MedicalInfoDAO medicalInfoDAO = new MedicalInfoDAO();
 
     public boolean isDadosOk(MedicalInfo medicalInfo, Activity activity){

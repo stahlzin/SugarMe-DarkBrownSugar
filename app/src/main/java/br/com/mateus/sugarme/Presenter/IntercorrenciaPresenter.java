@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 import br.com.mateus.sugarme.Model.Intercorrencia;
 
-public class IntercorrenciaController {
+public class IntercorrenciaPresenter {
 
     public boolean isDadosOk(Intercorrencia intercorrencia, Activity activity) {
             if(!intercorrencia.getDataIntercorrencia().isEmpty()){

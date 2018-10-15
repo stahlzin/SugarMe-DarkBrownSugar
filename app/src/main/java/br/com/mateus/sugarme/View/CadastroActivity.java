@@ -16,8 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import br.com.mateus.sugarme.Presenter.MedicoController;
-import br.com.mateus.sugarme.Presenter.PacienteController;
+import br.com.mateus.sugarme.Presenter.MedicoPresenter;
+import br.com.mateus.sugarme.Presenter.PacientePresenter;
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.Model.MedicoDAO;
 import br.com.mateus.sugarme.Model.Paciente;
@@ -155,12 +155,12 @@ public class CadastroActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         if(radioButtonMedico.isChecked()){
-                            MedicoController medicoController = new MedicoController();
-                            medicoController.exluir();
+                            MedicoPresenter medicoPresenter = new MedicoPresenter();
+                            medicoPresenter.exluir();
                         }
                         else if(radioButtonPaciente.isChecked()){
-                            PacienteController pacienteController = new PacienteController();
-                            pacienteController.exluir();
+                            PacientePresenter pacientePresenter = new PacientePresenter();
+                            pacientePresenter.exluir();
                         }
 
                         //Voltar a tela inicial
@@ -295,8 +295,8 @@ public class CadastroActivity extends AppCompatActivity {
         //Medico Selecionado
         if(radioButtonMedico.isChecked()){
             Medico medico = preencheMedico();
-            MedicoController medicoController = new MedicoController();
-            if(medicoController.isDadosOk(medico, CadastroActivity.this)){
+            MedicoPresenter medicoPresenter = new MedicoPresenter();
+            if(medicoPresenter.isDadosOk(medico, CadastroActivity.this)){
                 medicoDAO = new MedicoDAO();
                 medicoDAO.inserir(medico);
                 Toast.makeText(CadastroActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
@@ -309,8 +309,8 @@ public class CadastroActivity extends AppCompatActivity {
         //Paciente Selecionado
         else if(radioButtonPaciente.isChecked()){
             Paciente paciente = preenchePaciente();
-            PacienteController pacienteController = new PacienteController();
-            if(pacienteController.isDadosOk(paciente, CadastroActivity.this)){
+            PacientePresenter pacientePresenter = new PacientePresenter();
+            if(pacientePresenter.isDadosOk(paciente, CadastroActivity.this)){
                 pacienteDAO = new PacienteDAO();
                 pacienteDAO.inserir(paciente);
                 Toast.makeText(CadastroActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();

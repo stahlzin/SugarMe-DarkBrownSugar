@@ -10,12 +10,12 @@ import java.text.SimpleDateFormat;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Model.PacienteDAO;
 
-public class PacienteController {
+public class PacientePresenter {
 
     private PacienteDAO pacienteDAO = new PacienteDAO();
     private static final int[] pesoCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
 
-    public PacienteController() {
+    public PacientePresenter() {
     }
 
 
