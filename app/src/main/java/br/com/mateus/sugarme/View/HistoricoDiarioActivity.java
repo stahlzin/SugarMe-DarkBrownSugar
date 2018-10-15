@@ -131,6 +131,21 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
 
             Context context = getContext();
             viewHolder.glicemiaTextView.setText(String.valueOf(dgc.getGlicemia()));
+            int valor = tryParseInt(viewHolder.glicemiaTextView.getText().toString());
+            int color = changeColor(valor);
+            switch (color){
+                case -2:
+                    viewHolder.glicemiaTextView.setBackgroundResource(R.color.colorHiper);
+                    break;
+                case -1:
+                    viewHolder.glicemiaTextView.setBackgroundResource(R.color.colorHipo);
+                    break;
+                case 0:
+                    viewHolder.glicemiaTextView.setBackgroundResource(R.color.colorNormal);
+                    break;
+            }
+
+
             viewHolder.categoriaTextView.setText(dgc.getCategoria());
             viewHolder.dataTextView.setText(dgc.getData());
             viewHolder.horaTextView.setText(dgc.getHora());
@@ -140,6 +155,15 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
 
     }
 
+    private static int changeColor(int valor) {
+        if (valor <= 70) {
+            return -1;
+        }
+        if (valor >= 200) {
+            return -2;
+        }
+        return 0;
+    }
 
     private void configuraObserverShortClick(){
         diarioHistoricoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

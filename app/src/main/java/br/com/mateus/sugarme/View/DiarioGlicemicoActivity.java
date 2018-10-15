@@ -290,7 +290,7 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         diarioGlicemico.setData(dataDiarioTextView.getText().toString());
         diarioGlicemico.setHora(horaDiarioTextView.getText().toString());
         diarioGlicemico.setCategoria(createCategoria(diarioGlicemico));
-        diarioGlicemico.setGliTimestamp(tryParseDatetoTimeStamp(dataDiarioTextView.getText().toString(), horaDiarioTextView.getText().toString()).toString());
+        diarioGlicemico.setGliTimestamp(tryParseDatetoTimeStamp(dataDiarioTextView.getText().toString(), horaDiarioTextView.getText().toString()));
         return diarioGlicemico;
     }
 

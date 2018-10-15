@@ -197,4 +197,11 @@
     <string name="erro_firebase">Deu ruim Hermano</string>
     <string name="app_name_Historico_Diario">Histórico de medições</string>
     <string name="deletarItemHistorico">Deseja deletar o item?</string>
+    <string name="app_name_Add_Inter">Adicionar Intercorrência</string>
+    <string name="title_activity_intercorrencia">IntercorrenciaActivity</string>
+    <string name="app_name_Intercorrencia">Registros de Intercorrências</string>
+    <string name="sintomasInter">Sintomas:</string>
+    <string name="anotacoesInter">Anotações:</string>
+    <string name="DataRegistroInter">Data:</string>
+    <string name="horaRegistroInter">Hora:</string>
 </resources>

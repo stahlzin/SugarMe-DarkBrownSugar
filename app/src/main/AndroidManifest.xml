@@ -29,8 +29,9 @@
             android:name=".View.PacienteActivity"
             android:label="@string/title_activity_paciente"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".View.IntercorrenciaActivity" />
-        <activity android:name=".View.IntercorrenciaInfo" />
+        <activity
+            android:name=".View.IntercorrenciaAddActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".View.PerfilActivity"
             android:label="@string/title_activity_perfil"
@@ -39,7 +40,12 @@
             android:name=".View.DiarioGlicemicoActivity"
             android:label="@string/title_activity_diario_glicemico"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".View.HistoricoDiarioActivity"
+        <activity
+            android:name=".View.HistoricoDiarioActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".View.IntercorrenciaActivity"
+            android:label="@string/title_activity_intercorrencia"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

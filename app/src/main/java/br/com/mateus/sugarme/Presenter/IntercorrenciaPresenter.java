@@ -12,7 +12,9 @@ public class IntercorrenciaPresenter {
                 if(intercorrencia.getHiperglicemia() ==1 ||
                         intercorrencia.getHipoglicemia() ==1 ||
                         intercorrencia.getSedeExcessiva() == 1 ||
-                        intercorrencia.getNausea() == 1){
+                        intercorrencia.getNausea() == 1 ||
+                        intercorrencia.getDesmaio() == 1 ||
+                        intercorrencia.getInternacao() == 1){
                     if(!intercorrencia.getAnotacoes().isEmpty()){
                         return true;
                     }
