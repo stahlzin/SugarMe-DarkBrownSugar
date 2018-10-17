@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:layout_gravity="center"
+            android:inputType="number"
             android:hint="@string/dataExame" />
     </android.support.design.widget.TextInputLayout>
 
@@ -50,7 +51,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/addfloatingActionButton"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:clickable="true"
@@ -67,13 +68,30 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="TextView" />
+        android:text="@string/exameStatusNeg" />
 
-    <Button
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginTop="60dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="@dimen/fab_margin">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/descricaoExameTextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_gravity="center"
+            android:hint="@string/descricaoExame" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <Button
+        android:layout_margin="@dimen/fab_margin"
         android:id="@+id/uploadExameButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

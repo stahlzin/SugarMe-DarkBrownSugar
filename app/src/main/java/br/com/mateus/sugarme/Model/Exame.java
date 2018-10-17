@@ -1,6 +1,8 @@
 package br.com.mateus.sugarme.Model;
 
-public class Exames {
+import com.google.firebase.database.Exclude;
+
+public class Exame {
 
     private String idExame;
     private String dataExame;
@@ -9,9 +11,9 @@ public class Exames {
     private String exameTimestamp;
 
 
-    public Exames (){}
+    public Exame(){}
 
-    public Exames(String idExame, String dataExame, String urlExame, String descricaoExame, String exameTimestamp) {
+    public Exame(String idExame, String dataExame, String urlExame, String descricaoExame, String exameTimestamp) {
         this.idExame = idExame;
         this.dataExame = dataExame;
         this.urlExame = urlExame;
@@ -19,6 +21,7 @@ public class Exames {
         this.exameTimestamp = exameTimestamp;
     }
 
+    @Exclude
     public String getIdExame() {
         return idExame;
     }
