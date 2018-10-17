@@ -212,4 +212,6 @@
     <string name="app_name_AddExame">Adicionar Exame</string>
     <string name="exameStatusNeg">Nenhum arquivo selecionado</string>
     <string name="descricaoExame">Descrição:</string>
+    <string name="downloadItemExame">Salvar arquivo</string>
+    <string name="deleteItemExame">Deletar exame</string>
 </resources>

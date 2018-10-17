@@ -9,9 +9,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/pdf_icon" />
 
     <GridLayout
@@ -25,10 +23,11 @@
 
         <TextView
             android:id="@+id/dataExameTextView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
             android:layout_row="0"
+            android:layout_columnWeight="1"
             android:textAppearance="@android:style/TextAppearance.Medium"
             android:text="TextView" />
 
@@ -40,6 +39,7 @@
             android:layout_column="0"
             android:layout_row="1"
             android:text="TextView" />
+
     </GridLayout>
 
 </LinearLayout>
