@@ -46,7 +46,13 @@
         <activity
             android:name=".View.IntercorrenciaActivity"
             android:label="@string/title_activity_intercorrencia"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".View.ExameActivity"
+            android:label="@string/title_activity_exame"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".View.ExameAddActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

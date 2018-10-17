@@ -204,4 +204,10 @@
     <string name="anotacoesInter">Anotações:</string>
     <string name="DataRegistroInter">Data:</string>
     <string name="horaRegistroInter">Hora:</string>
+    <string name="title_activity_exame">ExameActivity</string>
+    <string name="dataExame">Data da realização do Exame</string>
+    <string name="adicionarExame">Adicionar um arquivo PDF</string>
+    <string name="salvarExame">Salvar Exame</string>
+    <string name="app_name_Exame">Exames</string>
+    <string name="app_name_AddExame">Adicionar Exame</string>
 </resources>
