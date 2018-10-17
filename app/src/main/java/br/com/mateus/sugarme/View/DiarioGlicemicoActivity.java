@@ -28,6 +28,7 @@ import java.util.List;
 
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.DiarioGlicemicoDAO;
+import br.com.mateus.sugarme.Model.Intercorrencia;
 import br.com.mateus.sugarme.Presenter.DiarioGlicemicoPresenter;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Utils.MaskEditUtil;

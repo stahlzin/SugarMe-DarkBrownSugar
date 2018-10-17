@@ -64,10 +64,12 @@ public class PacienteActivity extends AppCompatActivity
     }
 
     private void setPacienteAsGlobal(Paciente gPaciente) {
-        this.nomePacienteTextView.setText(gPaciente.getNome());
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
-        globalVariable.setDataNascUser(gPaciente.getDtNascimento());
-        globalVariable.setNomeUser(gPaciente.getNome());
+        if(gPaciente != null) {
+            this.nomePacienteTextView.setText(gPaciente.getNome());
+            final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+            globalVariable.setDataNascUser(gPaciente.getDtNascimento());
+            globalVariable.setNomeUser(gPaciente.getNome());
+        }
     }
 
     @Override

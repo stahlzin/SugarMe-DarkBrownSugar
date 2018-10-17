@@ -116,12 +116,7 @@ public class IntercorrenciaActivity extends AppCompatActivity {
         private static class ViewHolder {
             TextView dataInterTextView;
             TextView horaInterTextView;
-            TextView hiperInterTextView;
-            TextView hipoInterTextView;
-            TextView sedeInterTextView;
-            TextView nauseaInterTextView;
-            TextView desmaioInterTextView;
-            TextView internacaoInterTextView;
+            TextView sintomasInterTextView;
             TextView anotacoesInterTextView;
         }
 
@@ -136,12 +131,7 @@ public class IntercorrenciaActivity extends AppCompatActivity {
 
                 viewHolder.dataInterTextView = (TextView) convertView.findViewById(R.id.dataInterTextView);
                 viewHolder.horaInterTextView = (TextView) convertView.findViewById(R.id.horaInterTextView);
-                viewHolder.hiperInterTextView = (TextView) convertView.findViewById(R.id.hiperInterTextView);
-                viewHolder.hipoInterTextView  = (TextView) convertView.findViewById(R.id.hipoInterTextView);
-                viewHolder.sedeInterTextView = (TextView) convertView.findViewById(R.id.sedeInterTextView);
-                viewHolder.nauseaInterTextView = (TextView) convertView.findViewById(R.id.nauseaInterTextView);
-                viewHolder.desmaioInterTextView = (TextView) convertView.findViewById(R.id.desmaioInterTextView);
-                viewHolder.internacaoInterTextView  = (TextView) convertView.findViewById(R.id.internacaoInterTextView);
+                viewHolder.sintomasInterTextView = (TextView) convertView.findViewById(R.id.sintomasInterTextView);
                 viewHolder.anotacoesInterTextView = (TextView) convertView.findViewById(R.id.anotacoesInterTextView);
                 convertView.setTag(viewHolder);
             }
@@ -153,48 +143,28 @@ public class IntercorrenciaActivity extends AppCompatActivity {
             viewHolder.dataInterTextView.setText(dgc.getDataIntercorrencia());
             viewHolder.horaInterTextView.setText(dgc.getHoraIntercorrencia());
             viewHolder.anotacoesInterTextView.setText(dgc.getAnotacoes());
-
-            if (dgc.getHiperglicemia() == 1){
-                viewHolder.hiperInterTextView.setText("Hiperglicemia");
-            }else{
-                viewHolder.hiperInterTextView.setText("");
-                viewHolder.hiperInterTextView.setBackgroundResource(R.color.colorBlank);
+            StringBuilder sintomas = new StringBuilder();
+            if(dgc.getHipoglicemia() == 1){
+                sintomas.append("Hipoglicemia\n");
+            }
+            if(dgc.getHiperglicemia() == 1){
+                sintomas.append("Hiperglicemia\n");
+            }
+            if(dgc.getSedeExcessiva() == 1){
+                sintomas.append("Sede Excessiva\n");
+            }
+            if(dgc.getNausea() == 1){
+                sintomas.append("Náusea e vômito\n");
+            }
+            if(dgc.getDesmaio() == 1){
+                sintomas.append("Desmaio\n");
+            }
+            if(dgc.getInternacao() == 1){
+                sintomas.append("Internação\n");
             }
 
-            if (dgc.getHipoglicemia() == 1){
-                viewHolder.hipoInterTextView.setText("Hipoglicemia");
-            }else{
-                viewHolder.hipoInterTextView.setText("");
-                viewHolder.hipoInterTextView.setBackgroundResource(R.color.colorBlank);
-            }
+            viewHolder.sintomasInterTextView.setText(sintomas);
 
-            if (dgc.getSedeExcessiva() == 1){
-                viewHolder.sedeInterTextView.setText("Sede Excessiva");
-            }else{
-                viewHolder.sedeInterTextView.setText("");
-                viewHolder.sedeInterTextView.setBackgroundResource(R.color.colorBlank);
-            }
-
-            if (dgc.getNausea() == 1){
-                viewHolder.nauseaInterTextView.setText("Naúsea e vômito");
-            }else{
-                viewHolder.nauseaInterTextView.setText("");
-                viewHolder.nauseaInterTextView.setBackgroundResource(R.color.colorBlank);
-            }
-
-            if (dgc.getDesmaio() == 1){
-                viewHolder.desmaioInterTextView.setText("Desmaio");
-            }else{
-                viewHolder.desmaioInterTextView.setText("");
-                viewHolder.desmaioInterTextView.setBackgroundResource(R.color.colorBlank);
-            }
-
-            if (dgc.getInternacao() == 1){
-                viewHolder.internacaoInterTextView.setText("Internação");
-            }else{
-                viewHolder.internacaoInterTextView.setText("");
-                viewHolder.internacaoInterTextView.setBackgroundResource(R.color.colorBlank);
-            }
             return convertView;
         }
 

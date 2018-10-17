@@ -16,11 +16,15 @@ public class IntercorrenciaPresenter {
                         intercorrencia.getDesmaio() == 1 ||
                         intercorrencia.getInternacao() == 1){
                     if(!intercorrencia.getAnotacoes().isEmpty()){
-                        return true;
+                        if(intercorrencia.getHiperglicemia() != intercorrencia.getHipoglicemia()){
+                            return true;
+                        }else{
+                            Toast.makeText(activity, "Hipoglicemia e Hiperglicemia não podem ser registradas juntas!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     //Anotacao vazia
                     else{
-                        Toast.makeText(activity, "Adicione uma anotação(Ex: horário)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Adicione uma anotação", Toast.LENGTH_SHORT).show();
                     }
                 }
                 //Nenhum sintoma selecionado

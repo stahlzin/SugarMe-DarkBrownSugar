@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/fotoPefilImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:padding="@dimen/nav_header_vertical_spacing"
         android:layout_gravity="center"
         android:gravity="center"

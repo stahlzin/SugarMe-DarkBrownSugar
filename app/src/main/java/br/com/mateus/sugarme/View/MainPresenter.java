@@ -57,10 +57,7 @@ public class MainPresenter {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         //Ver se é paciente
-        databaseReference.child("users");
-        databaseReference.child("pacientes");
-        databaseReference.child(userId);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child("pacientes").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -68,7 +65,7 @@ public class MainPresenter {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra("flag", "1");
                         activity.startActivity(intent);*/
-                    temLogin = -1;
+                    temLogin = 1;
                     //PacienteDAO pacienteDAO = new PacienteDAO();
                     //pacienteDAO.buscaPacienteToGlobal(activity);
                     PacientePresenter pacientePresenter = new PacientePresenter();
