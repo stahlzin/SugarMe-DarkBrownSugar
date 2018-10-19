@@ -214,4 +214,7 @@
     <string name="descricaoExame">Descrição:</string>
     <string name="downloadItemExame">Salvar arquivo</string>
     <string name="deleteItemExame">Deletar exame</string>
+    <string name="title_activity_vinculo">VinculoActivity</string>
+    <string name="app_name_Vinculo">Seus médicos</string>
+    <string name="app_name_VinculoAdd">Adicione um novo médico</string>
 </resources>
