@@ -217,4 +217,6 @@
     <string name="title_activity_vinculo">VinculoActivity</string>
     <string name="app_name_Vinculo">Seus médicos</string>
     <string name="app_name_VinculoAdd">Adicione um novo médico</string>
+    <string name="vinculoDigCRM">Digite o CRM do seu médico</string>
+    <string name="title_activity_vinculo_add">VinculoAddActivity</string>
 </resources>

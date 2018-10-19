@@ -61,7 +61,9 @@
             android:name=".View.VinculoActivity"
             android:label="@string/title_activity_vinculo"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".View.VinculoAddActivity"
+        <activity
+            android:name=".View.VinculoAddActivity"
+            android:label="@string/title_activity_vinculo_add"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
