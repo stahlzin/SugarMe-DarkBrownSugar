@@ -26,7 +26,9 @@ public class MedicoDAO {
     //Inserir ou Atualizar
     public void inserir(Medico medico){
         getUserId();
+        Crm crm = new Crm(medico.getCrm());
         mDatabase =  FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").child("medicos").child(userId).setValue(crm);
         mDatabase.child("users").child("medicos").child(userId).child("dados").setValue(medico);
     }
 

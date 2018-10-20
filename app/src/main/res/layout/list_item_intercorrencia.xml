@@ -11,7 +11,10 @@
         android:columnCount="2"
         android:layout_weight="1"
         android:rowCount="6"
-        android:useDefaultMargins="true">
+        android:useDefaultMargins="true"
+        android:background="@color/colorSoftOrangeBackground"
+        android:layout_margin="@dimen/fab_margin"
+        android:elevation="10dp">
 
         <TextView
             android:layout_width="wrap_content"

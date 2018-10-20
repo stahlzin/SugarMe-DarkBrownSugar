@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.mateus.sugarme">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".Utils.GlobalClass"
@@ -54,8 +54,17 @@
             android:name=".View.ExameActivity"
             android:label="@string/title_activity_exame"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".View.ExameAddActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".View.ExameAddActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".View.VinculoActivity"
+            android:label="@string/title_activity_vinculo"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".View.VinculoAddActivity"
+            android:label="@string/title_activity_vinculo_add"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
