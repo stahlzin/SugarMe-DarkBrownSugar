@@ -137,6 +137,9 @@ public class PacienteActivity extends AppCompatActivity
         } else if (id == R.id.nav_relatorio) {
 
         } else if (id == R.id.nav_chat) {
+            Intent intent = new Intent(PacienteActivity.this, ChatActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
 
         } else if (id == R.id.nav_vincular) {
             Intent intent = new Intent(PacienteActivity.this, VinculoActivity.class);

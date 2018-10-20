@@ -65,7 +65,7 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
         buttonSalvar = (FloatingActionButton) findViewById(R.id.fabSalvar);
 
         //Máscara da data
-//        textInputDtIntercorrencia.addTextChangedListener(MaskEditUtil.mask(textInputDtIntercorrencia, MaskEditUtil.FORMAT_DATE_));
+//       textInputDtIntercorrencia.addTextChangedListener(MaskEditUtil.mask(textInputDtIntercorrencia, MaskEditUtil.FORMAT_DATE_));
 
         //Salvar
         buttonSalvar.setOnClickListener(new View.OnClickListener() {
