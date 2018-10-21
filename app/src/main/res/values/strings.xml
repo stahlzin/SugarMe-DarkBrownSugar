@@ -220,5 +220,10 @@
     <string name="vinculoDigCRM">Digite o CRM do seu médico</string>
     <string name="title_activity_vinculo_add">VinculoAddActivity</string>
     <string name="title_activity_chat">activityChat</string>
+    <string name="retornoBuscaMedicoVazio">Nenhum médico encontrado</string>
+    <string name="vincularMedico">Deseja incluir esse Médico ao seus Médicos vinculados?</string>
+    <string name="naoVincular">Não</string>
+    <string name="simVincular">Sim</string>
+    <string name="sucessoVinculo">Médico vinculado com sucesso!</string>
 
 </resources>

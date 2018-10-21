@@ -1,8 +1,11 @@
 package br.com.mateus.sugarme.Model;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 public class Medico implements Serializable {
+    private  String idMedico;
     private String nome;
     private String telefone;
     private String dtNascimento;
@@ -26,6 +29,10 @@ public class Medico implements Serializable {
     public Medico() {
     }
 
+    @Exclude
+    public  String getIdMedico (){ return idMedico;}
+
+    public void setIdMedico (String idMedico) {this.idMedico = idMedico;}
 
     public String getNome() {
         return nome;

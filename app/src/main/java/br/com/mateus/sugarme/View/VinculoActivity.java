@@ -1,17 +1,46 @@
 package br.com.mateus.sugarme.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
 
 public class VinculoActivity extends AppCompatActivity {
+
+    private ListView medicoDisplayListView;
+    private List<Medico> medicoList = new ArrayList<>();
+    private List<String> idMedicosList = new ArrayList<>();
+    private MedicoArrayAdapter medicoArrayAdapter;
+    private ListView medicoBuscaListView;
+    private FirebaseAuth firebaseAuth;
+    private String userId;
+    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReferenceMedico;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +62,109 @@ public class VinculoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        medicoDisplayListView = (ListView) findViewById(R.id.medicoDisplayListView);
+        medicoArrayAdapter = new MedicoArrayAdapter(this, medicoList);
+        medicoDisplayListView.setAdapter(medicoArrayAdapter);
+
+    }
+
+    public void getUserId() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //getUserId();
+        setListUptade();
+        /*
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child("pacientes").child(userId).child("vinculos").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                idMedicosList.clear();
+
+                for (DataSnapshot json : dataSnapshot.getChildren()) {
+                    String id = (String) json.child("idMedico").getValue();
+                    idMedicosList.add(id);
+                }
+                setListUptade();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });/*/
+    }
+
+    private void setListUptade() {
+        //for(int i=0; i<idMedicosList.size(); i++){
+            String idMed = "8Eooab5VeNZmJeXJEnMjEswBoUs2";
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("medicos").child(idMed).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                medicoList.clear();
+                for (DataSnapshot json : dataSnapshot.getChildren()) {
+                    Medico todos = json.child("dados").getValue(Medico.class);
+                    //todos.setIdMedico(json.getKey());
+                    medicoList.add(todos);
+                }
+                Toast.makeText(VinculoActivity.this, String.valueOf(medicoList.size()),Toast.LENGTH_LONG).show();
+                /*if(medicoList.size()==0){
+                    Toast.makeText(VinculoActivity.this, R.string.retornoBuscaMedicoVazio, Toast.LENGTH_LONG).show();
+                    medicoArrayAdapter.notifyDataSetChanged();
+                }else{
+                    medicoArrayAdapter.notifyDataSetChanged();
+                }*/
+            }
+
+            @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+    }
+
+    public static class MedicoArrayAdapter extends ArrayAdapter<Medico> {
+        public MedicoArrayAdapter(Context context, List<Medico> forecast) {
+            super(context, -1, forecast);
+        }
+
+        private static class ViewHolder {
+            TextView nomeMedicoTextView;
+            TextView especialidadeMedicoTextView;
+            TextView crmMedicoTextView;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Medico dgc = getItem(position);
+            MedicoArrayAdapter.ViewHolder viewHolder;
+            if (convertView == null) {
+                viewHolder = new MedicoArrayAdapter.ViewHolder();
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                convertView = inflater.inflate(R.layout.list_busca_medico, parent, false);
+                viewHolder.nomeMedicoTextView = (TextView) convertView.findViewById(R.id.nomeMedicoTextView);
+                viewHolder.especialidadeMedicoTextView = (TextView) convertView.findViewById(R.id.especialidadeMedicoTextView);
+                viewHolder.crmMedicoTextView = (TextView) convertView.findViewById(R.id.crmMedicoTextView);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (MedicoArrayAdapter.ViewHolder) convertView.getTag();
+            }
+
+            Context context = getContext();
+            viewHolder.nomeMedicoTextView.setText(String.valueOf(dgc.getNome()));
+            viewHolder.especialidadeMedicoTextView.setText(dgc.getEspecialidade());
+            viewHolder.crmMedicoTextView.setText(dgc.getCrm());
+            return convertView;
+
+        }
     }
 
 

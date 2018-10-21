@@ -1,18 +1,21 @@
 package br.com.mateus.sugarme.View;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
+import br.com.mateus.sugarme.Model.DiarioGlicemicoDAO;
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
 
@@ -71,8 +75,8 @@ public class VinculoAddActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String crm = buscaMedicoInputEditText.getText().toString();
-                //preencheMedicoListView(crm);
+                String crmBusca = buscaMedicoInputEditText.getText().toString();
+                preencheMedicoListView(crmBusca);
             }
         });
 
@@ -80,27 +84,60 @@ public class VinculoAddActivity extends AppCompatActivity {
     }
 
     private void configuraObserverShortClick() {
+        medicoBuscaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder dbuilder = new AlertDialog.Builder(VinculoAddActivity.this);
+                dbuilder.setTitle(R.string.vincularMedico);
+                dbuilder.setPositiveButton(getString(R.string.simVincular), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Medico medico = medicoList.get(position);
+                        setVinculosEntrePacienteEMedico(medico);
+                        Toast.makeText(VinculoAddActivity.this, R.string.sucessoVinculo, Toast.LENGTH_SHORT).show();
+                        paginaAnterior();
+                    }
+                }).setNegativeButton(getString(R.string.naoVincular), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+                dbuilder.show();
+            }
+        });
     }
 
-    //private void preencheMedicoListView(String crm) {
+    public void getUserId() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
+    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void setVinculosEntrePacienteEMedico(Medico medico) {
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).child("idMedico").setValue(medico.getIdMedico());
+        databaseReference.child("users").child("medicos").child(medico.getIdMedico()).child("vinculos").child(userId).child("idPaciente").setValue(userId);
+    }
 
-
+    private void preencheMedicoListView(String crmBusca) {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("medicos").orderByChild("crm").equalTo("3654").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("users").child("medicos").orderByChild("dados/crm").equalTo(crmBusca).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 medicoList.clear();
                 for (DataSnapshot json : dataSnapshot.getChildren()) {
-                    Medico todos = json.getValue(Medico.class);
+                    Medico todos = json.child("dados").getValue(Medico.class);
+                    todos.setIdMedico(json.getKey());
                     medicoList.add(todos);
                 }
-                Toast.makeText(VinculoAddActivity.this, String.valueOf(medicoList.size()), Toast.LENGTH_SHORT).show();
-                medicoArrayAdapter.notifyDataSetChanged();
+                if(medicoList.size()==0){
+                    Toast.makeText(VinculoAddActivity.this, R.string.retornoBuscaMedicoVazio, Toast.LENGTH_LONG).show();
+                    medicoArrayAdapter.notifyDataSetChanged();
+                }else{
+                    medicoArrayAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -147,20 +184,21 @@ public class VinculoAddActivity extends AppCompatActivity {
         }
     }
 
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(VinculoAddActivity.this, VinculoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                VinculoAddActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                paginaAnterior();
                 break;
             default:break;
         }
         return true;
+    }
+
+    public void paginaAnterior(){
+        Intent intent = new Intent(VinculoAddActivity.this, VinculoActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        VinculoAddActivity.this.startActivity(intent);
+        finishAffinity();
     }
 }
