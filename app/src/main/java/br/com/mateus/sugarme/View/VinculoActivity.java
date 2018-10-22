@@ -1,17 +1,20 @@
 package br.com.mateus.sugarme.View;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,6 +37,7 @@ public class VinculoActivity extends AppCompatActivity {
 
     private ListView medicoDisplayListView;
     private List<Medico> medicoList = new ArrayList<>();
+    private List<Medico> todosMedicosList = new ArrayList<>();
     private List<String> idMedicosList = new ArrayList<>();
     private MedicoArrayAdapter medicoArrayAdapter;
     private ListView medicoBuscaListView;
@@ -67,6 +71,40 @@ public class VinculoActivity extends AppCompatActivity {
         medicoArrayAdapter = new MedicoArrayAdapter(this, medicoList);
         medicoDisplayListView.setAdapter(medicoArrayAdapter);
 
+        configuraObserverShortClick();
+
+    }
+
+    private void configuraObserverShortClick() {
+        medicoDisplayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder dbuilder = new AlertDialog.Builder(VinculoActivity.this);
+                dbuilder.setTitle(R.string.desvincularMedico);
+                dbuilder.setPositiveButton(getString(R.string.simVincular), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Medico medico = medicoList.get(position);
+                        setDesvinculo(medico);
+                        Toast.makeText(VinculoActivity.this, R.string.sucessoDesvinculo, Toast.LENGTH_SHORT).show();
+                        getListaVinculos();
+                    }
+                }).setNegativeButton(getString(R.string.naoVincular), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+                dbuilder.show();
+            }
+        });
+    }
+
+    private void setDesvinculo(Medico medico) {
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("medicos").child(medico.getIdMedico()).child("vinculos").child(userId).removeValue();
+        databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).removeValue();
     }
 
     public void getUserId() {
@@ -78,9 +116,11 @@ public class VinculoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //getUserId();
-        setListUptade();
-        /*
+        getUserId();
+        getListaVinculos();
+    }
+
+    private void getListaVinculos (){
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child("users").child("pacientes").child(userId).child("vinculos").addValueEventListener(new ValueEventListener() {
@@ -92,36 +132,45 @@ public class VinculoActivity extends AppCompatActivity {
                     String id = (String) json.child("idMedico").getValue();
                     idMedicosList.add(id);
                 }
-                setListUptade();
+                if(!idMedicosList.isEmpty()){
+                    setListUptade();
+                }else{
+                    medicoList.clear();
+                    medicoArrayAdapter.notifyDataSetChanged();
+                    Toast.makeText(VinculoActivity.this, R.string.semVinculoMedico, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });/*/
+        });
     }
 
     private void setListUptade() {
-        //for(int i=0; i<idMedicosList.size(); i++){
-            String idMed = "8Eooab5VeNZmJeXJEnMjEswBoUs2";
             databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("users").child("medicos").child(idMed).addValueEventListener(new ValueEventListener() {
+
+            databaseReference.child("users").child("medicos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 medicoList.clear();
+                todosMedicosList.clear();
                 for (DataSnapshot json : dataSnapshot.getChildren()) {
                     Medico todos = json.child("dados").getValue(Medico.class);
-                    //todos.setIdMedico(json.getKey());
-                    medicoList.add(todos);
+                    todos.setIdMedico(json.getKey());
+                    todosMedicosList.add(todos);
                 }
-                Toast.makeText(VinculoActivity.this, String.valueOf(medicoList.size()),Toast.LENGTH_LONG).show();
-                /*if(medicoList.size()==0){
-                    Toast.makeText(VinculoActivity.this, R.string.retornoBuscaMedicoVazio, Toast.LENGTH_LONG).show();
-                    medicoArrayAdapter.notifyDataSetChanged();
-                }else{
-                    medicoArrayAdapter.notifyDataSetChanged();
-                }*/
+
+                for (int i = 0; i < todosMedicosList.size(); i++){
+                    for (int j = 0; j < idMedicosList.size(); j++){
+                        if(todosMedicosList.get(i).getIdMedico().equals(idMedicosList.get(j))){
+                            Medico add = todosMedicosList.get(i);
+                            medicoList.add(add);
+                        }
+                    }
+                }
+                medicoArrayAdapter.notifyDataSetChanged();
             }
 
             @Override

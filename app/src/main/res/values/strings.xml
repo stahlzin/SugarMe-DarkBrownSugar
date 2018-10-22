@@ -225,5 +225,8 @@
     <string name="naoVincular">Não</string>
     <string name="simVincular">Sim</string>
     <string name="sucessoVinculo">Médico vinculado com sucesso!</string>
+    <string name="semVinculoMedico">Nenhum médico vinculado</string>
+    <string name="desvincularMedico">Deseja terminar o vínculo com esse médico?</string>
+    <string name="sucessoDesvinculo">Vinculo desfeito!</string>
 
 </resources>
