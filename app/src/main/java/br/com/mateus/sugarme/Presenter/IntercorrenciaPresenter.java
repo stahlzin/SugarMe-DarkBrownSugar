@@ -14,7 +14,11 @@ public class IntercorrenciaPresenter {
                         intercorrencia.getSedeExcessiva() == 1 ||
                         intercorrencia.getNausea() == 1 ||
                         intercorrencia.getDesmaio() == 1 ||
-                        intercorrencia.getInternacao() == 1){
+                        intercorrencia.getInternacao() == 1 ||
+                        intercorrencia.getCaimbra() == 1 ||
+                        intercorrencia.getCansaso() == 1 ||
+                        intercorrencia.getVisão() == 1 ||
+                        intercorrencia.getMiccao() == 1){
                     if(!intercorrencia.getAnotacoes().isEmpty()){
                         if(intercorrencia.getHiperglicemia() != intercorrencia.getHipoglicemia()){
                             return true;

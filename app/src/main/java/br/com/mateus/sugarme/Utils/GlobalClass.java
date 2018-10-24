@@ -10,6 +10,24 @@ public class GlobalClass extends Application{
     private String tipoDiabetes;
     private String tratamento;
     private String inicioTratamento;
+    private int hiperglicemiaPadrao;
+    private int hipoglicemiaPadrao;
+
+    public int getHiperglicemiaPadrao() {
+        return hiperglicemiaPadrao;
+    }
+
+    public void setHiperglicemiaPadrao(int hiperglicemiaPadrao) {
+        this.hiperglicemiaPadrao = 200;
+    }
+
+    public int getHipoglicemiaPadrao() {
+        return hipoglicemiaPadrao;
+    }
+
+    public void setHipoglicemiaPadrao(int hipoglicemiaPadrao) {
+        this.hipoglicemiaPadrao = 70;
+    }
 
     public String getNomeUser() {
         return nomeUser;

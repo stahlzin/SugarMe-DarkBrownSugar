@@ -1,5 +1,9 @@
 package br.com.mateus.sugarme.View;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,8 +33,10 @@ import java.util.List;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.DiarioGlicemicoDAO;
 import br.com.mateus.sugarme.Model.Intercorrencia;
+import br.com.mateus.sugarme.Model.IntercorrenciaDAO;
 import br.com.mateus.sugarme.Presenter.DiarioGlicemicoPresenter;
 import br.com.mateus.sugarme.R;
+import br.com.mateus.sugarme.Utils.GlobalClass;
 import br.com.mateus.sugarme.Utils.MaskEditUtil;
 
 import static br.com.mateus.sugarme.Utils.CoverterFactory.tryParseDatetoTimeStamp;
@@ -50,6 +56,8 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
     private String userId;
     private DiarioGlicemico diarioGlicemico;
     private DatabaseReference databaseReference;
+    private AlertDialog alerta;
+    private IntercorrenciaDAO intercorrenciaDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,15 +236,24 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
                 if(diarioGlicemicoPresenter.isDadosOk(diarioGlicemico, DiarioGlicemicoActivity.this)){
                     DiarioGlicemicoDAO diarioGlicemicoDAO = new DiarioGlicemicoDAO();
                     diarioGlicemicoDAO.inserir(diarioGlicemico);
-                    Toast.makeText(DiarioGlicemicoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DiarioGlicemicoActivity.this, PacienteActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    DiarioGlicemicoActivity.this.startActivity(intent);
-                }
 
+                    if(diarioGlicemico.getCategoria().equals("Hiperglicemia")){
+                        confirmarIntercorrencia(diarioGlicemico);
+                    }else if(diarioGlicemico.getCategoria().equals("Hipoglicemia")){
+                        confirmarIntercorrencia(diarioGlicemico);
+                    }else {
+                        sucessoAdd();
+                    }
+                }
                 }
             });
+    }
 
+    private void sucessoAdd() {
+        Toast.makeText(DiarioGlicemicoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(DiarioGlicemicoActivity.this, PacienteActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        DiarioGlicemicoActivity.this.startActivity(intent);
     }
 
     public void getUserId() {
@@ -309,13 +326,14 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
     }
 
     private String createCategoria(DiarioGlicemico diarioGlicemico){
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
         String anw = "Normal";
         int comp = tryParseInt(glicemiaDiarioEditText.getText().toString());
 
-        if (comp <= 70){
+        if (comp <= globalVariable.getHipoglicemiaPadrao()){
             anw = "Hipoglicemia";
         }
-        if (comp >= 200){
+        if (comp >= globalVariable.getHiperglicemiaPadrao()){
             anw = "Hiperglicemia";
         }
 
@@ -336,4 +354,51 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         return true;
     }
 
+    private void confirmarIntercorrencia(final DiarioGlicemico diarioGlicemico) {
+        CharSequence[] charSequences = new CharSequence[]{"Cansaço", "Câimbra","Náusea e Vômito", "Sede Excessiva", "Visão Embaçada", "Micção Excessiva", "Desmaio", "Internação"};
+        final boolean[] checados = new boolean[charSequences.length];
+        final String status = diarioGlicemico.getCategoria();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Você tem algum sintoma associado à " + status + "?");
+        builder.setMultiChoiceItems(charSequences, checados, new DialogInterface.OnMultiChoiceClickListener() {
+            public void onClick(DialogInterface arg0, int arg1, boolean arg2) {
+                checados[arg1] = arg2;
+            }
+        });
+
+        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intercorrencia intercorrencia = new Intercorrencia();
+                intercorrencia.setDataIntercorrencia(diarioGlicemico.getData());
+                intercorrencia.setHoraIntercorrencia(diarioGlicemico.getHora());
+                intercorrencia.setAnotacoes("Gerada automaticamente");
+                if(status.equals("Hiperglicemia")){
+                    intercorrencia.setHiperglicemia(1);
+                    intercorrencia.setHipoglicemia(0);
+                }else{
+                    intercorrencia.setHiperglicemia(0);
+                    intercorrencia.setHipoglicemia(1);
+                }
+                intercorrencia.setCansaso((checados[0]) ? 1 : 0);
+                intercorrencia.setCaimbra((checados[1]) ? 1 : 0);
+                intercorrencia.setNausea((checados[2]) ? 1 : 0);
+                intercorrencia.setSedeExcessiva((checados[3]) ? 1 : 0);
+                intercorrencia.setVisão((checados[4]) ? 1 : 0);
+                intercorrencia.setMiccao((checados[5]) ? 1 : 0);
+                intercorrencia.setDesmaio((checados[6]) ? 1 : 0);
+                intercorrencia.setInternacao((checados[7]) ? 1 : 0);
+                intercorrencia.setInterTimestamp(diarioGlicemico.getGliTimestamp());
+
+                intercorrenciaDAO = new IntercorrenciaDAO();
+                intercorrenciaDAO.inserir(intercorrencia);
+
+
+                sucessoAdd();
+            }
+        });
+
+        alerta = builder.create();
+        alerta.show();
+    }
 }

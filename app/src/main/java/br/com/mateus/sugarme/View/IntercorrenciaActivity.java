@@ -162,6 +162,18 @@ public class IntercorrenciaActivity extends AppCompatActivity {
             if(dgc.getInternacao() == 1){
                 sintomas.append("Internação\n");
             }
+            if(dgc.getMiccao() == 1){
+                sintomas.append("Micção Excessiva\n");
+            }
+            if(dgc.getVisão() == 1){
+                sintomas.append("Visão embaçada\n");
+            }
+            if(dgc.getCansaso() == 1){
+                sintomas.append("Cansaço excessivo\n");
+            }
+            if(dgc.getCaimbra() == 1){
+                sintomas.append("Câimbra\n");
+            }
 
             viewHolder.sintomasInterTextView.setText(sintomas);
 

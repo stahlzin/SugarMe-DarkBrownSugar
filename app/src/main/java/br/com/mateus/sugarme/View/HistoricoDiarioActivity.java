@@ -65,6 +65,7 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
         configuraObserverShortClick();
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -188,7 +189,7 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(HistoricoDiarioActivity.this, DiarioGlicemicoActivity.class);
+                Intent intent = new Intent(HistoricoDiarioActivity.this, PacienteActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 HistoricoDiarioActivity.this.startActivity(intent);
                 finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem

@@ -88,6 +88,28 @@
             android:gravity="center_horizontal">
 
             <CheckBox
+                android:id="@+id/checkBoxCansaco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cansaco"
+                android:padding="10dp"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxCaimbra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/caimbra"
+                android:padding="10dp"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+
+            <CheckBox
                 android:id="@+id/checkBoxNausea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,6 +125,28 @@
                 android:padding="10dp"
                 android:layout_weight="1"/>
         </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxVisao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/visao"
+                android:padding="10dp"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxMiccao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/miccao"
+                android:padding="10dp"
+                android:layout_weight="1"/>
+        </TableRow>
+
         <TableRow
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"

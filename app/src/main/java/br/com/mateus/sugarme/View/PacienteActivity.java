@@ -2,6 +2,7 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,8 +12,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Utils.GlobalClass;
 
@@ -27,7 +41,17 @@ public class PacienteActivity extends AppCompatActivity
     //para deslogar
     PacientePresenter pacientePresenter = new PacientePresenter();
     private TextView nomePacienteTextView;
-
+    private Button novaEntradaButton;
+    private TextView valorUltimaTextView;
+    private TextView statusUltimaTextView;
+    private TextView dataUltimaTextView;
+    private TextView horaUltimaTextView;
+    private GridLayout ultimaLeituraGridLayout;
+    private List<DiarioGlicemico> diarioGlicemicoList;
+    private FirebaseAuth firebaseAuth;
+    private String userId;
+    private DiarioGlicemico diarioGlicemico;
+    private DatabaseReference databaseReference;
 
 
     @Override
@@ -36,6 +60,14 @@ public class PacienteActivity extends AppCompatActivity
         setContentView(R.layout.activity_paciente);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.app_name_PacienteAct);
+
+        novaEntradaButton = (Button) findViewById(R.id.novaEntradaButton);
+        valorUltimaTextView = (TextView) findViewById(R.id.valorUltimaTextView);
+        statusUltimaTextView = (TextView) findViewById(R.id.statusUltimaTextView);
+        dataUltimaTextView = (TextView) findViewById(R.id.dataUltimaTextView);
+        horaUltimaTextView = (TextView) findViewById(R.id.horaUltimaTextView);
+        ultimaLeituraGridLayout = (GridLayout) findViewById(R.id.ultimaLeituraGridLayout);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,6 +80,24 @@ public class PacienteActivity extends AppCompatActivity
         nomePacienteTextView = (TextView) headerView.findViewById(R.id.nomePacienteTextView);
         navigationView.setNavigationItemSelectedListener(this);
 
+        novaEntradaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PacienteActivity.this, DiarioGlicemicoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+        ultimaLeituraGridLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PacienteActivity.this, HistoricoDiarioActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
         //Parametros do PutExtra
         Intent it = getIntent();
         if(it != null && it.getExtras() != null){
@@ -56,11 +106,54 @@ public class PacienteActivity extends AppCompatActivity
         }
     }
 
+    public void getUserId() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
         this.nomePacienteTextView.setText(globalVariable.getNomeUser());
+
+        diarioGlicemicoList = new ArrayList<DiarioGlicemico>();
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child("pacientes").child(userId).child("diario").orderByChild("gliTimestamp").limitToLast(1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                diarioGlicemicoList.clear();
+                for (DataSnapshot json : dataSnapshot.getChildren()) {
+                    DiarioGlicemico todos = json.getValue(DiarioGlicemico.class);
+                    todos.setDiarioId(json.getKey());
+                    diarioGlicemicoList.add(todos);
+                }
+                setValuesOfDiarioGlicemicoLast(diarioGlicemicoList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void setValuesOfDiarioGlicemicoLast(List<DiarioGlicemico> diarioGlicemicoList) {
+
+        if(diarioGlicemicoList.size() != 0){
+                valorUltimaTextView.setText(String.valueOf(diarioGlicemicoList.get(0).getGlicemia()));
+                statusUltimaTextView.setText(diarioGlicemicoList.get(0).getCategoria());
+                dataUltimaTextView.setText(diarioGlicemicoList.get(0).getData());
+                horaUltimaTextView.setText(diarioGlicemicoList.get(0).getHora());
+        }else{
+            valorUltimaTextView.setText("");
+            statusUltimaTextView.setText("");
+            dataUltimaTextView.setText("");
+            horaUltimaTextView.setText("");
+        }
     }
 
     private void setPacienteAsGlobal(Paciente gPaciente) {

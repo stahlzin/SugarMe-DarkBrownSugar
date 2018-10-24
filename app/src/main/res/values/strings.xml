@@ -228,5 +228,11 @@
     <string name="semVinculoMedico">Nenhum médico vinculado</string>
     <string name="desvincularMedico">Deseja terminar o vínculo com esse médico?</string>
     <string name="sucessoDesvinculo">Vinculo desfeito!</string>
+    <string name="app_name_PacienteAct">SugarMe</string>
+    <string name="novaEntrada">NOVA ENTRADA</string>
+    <string name="cansaco">Cansaço</string>
+    <string name="caimbra">Câimbra</string>
+    <string name="visao">Visão embaçada</string>
+    <string name="miccao">Micção excessiva</string>
 
 </resources>

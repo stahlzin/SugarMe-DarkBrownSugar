@@ -34,6 +34,10 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
     private CheckBox checkBoxHiper;//hiperglicemia
     private CheckBox checkBoxDesmaio;//desmaio
     private CheckBox checkBoxInternacao; //internação
+    private CheckBox checkBoxCansaco;
+    private CheckBox checkBoxCaimbra;
+    private CheckBox checkBoxVisao;
+    private CheckBox checkBoxMiccao;
     private FloatingActionButton buttonSalvar;
 
 
@@ -62,6 +66,10 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
         checkBoxHiper = (CheckBox) findViewById(R.id.checkBoxHiperglicemia);
         checkBoxDesmaio = (CheckBox) findViewById(R.id.checkBoxDesmaio);
         checkBoxInternacao = (CheckBox) findViewById(R.id.checkBoxInternacao);
+        checkBoxVisao = (CheckBox) findViewById(R.id.checkBoxVisao);
+        checkBoxMiccao = (CheckBox) findViewById(R.id.checkBoxMiccao);
+        checkBoxCaimbra = (CheckBox) findViewById(R.id.checkBoxCaimbra);
+        checkBoxCansaco = (CheckBox) findViewById(R.id.checkBoxCansaco);
         buttonSalvar = (FloatingActionButton) findViewById(R.id.fabSalvar);
 
         //Máscara da data
@@ -99,6 +107,10 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
         intercorrencia.setInternacao(checkBoxInternacao.isChecked() ? 1 : 0);
         intercorrencia.setNausea(checkBoxNausea.isChecked() ? 1 : 0);
         intercorrencia.setSedeExcessiva(checkBoxSede.isChecked() ? 1 : 0);
+        intercorrencia.setCaimbra(checkBoxCaimbra.isChecked()? 1:0);
+        intercorrencia.setCansaso(checkBoxCansaco.isChecked()?1:0);
+        intercorrencia.setVisão(checkBoxVisao.isChecked() ? 1:0);
+        intercorrencia.setMiccao(checkBoxMiccao.isChecked() ? 1:0);
         intercorrencia.setInterTimestamp(tryParseDatetoTimeStamp(textInputDtIntercorrencia.getText().toString(), textInputHrIntercorrencia.getText().toString()));
         return  intercorrencia;
     }
@@ -113,7 +125,6 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
         String horaFormatada = formataHora.format(hora);
         textInputDtIntercorrencia.setText(dataFormatada);
         textInputHrIntercorrencia.setText(horaFormatada);
-
     }
 
 

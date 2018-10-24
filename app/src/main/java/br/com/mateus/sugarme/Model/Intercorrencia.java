@@ -13,13 +13,17 @@ public class Intercorrencia {
     private int nausea;
     private int desmaio;
     private int internacao;
+    private int caimbra;
+    private int cansaso;
+    private int visão;
+    private int miccao;
     private String interTimestamp;
 
     public Intercorrencia() {
 
     }
 
-    public Intercorrencia(String id, String dataIntercorrencia, String horaIntercorrencia, String anotacoes, int hiperglicemia, int hipoglicemia, int sedeExcessiva, int nausea, int desmaio, int internacao, String interTimestamp) {
+    public Intercorrencia(String id, String dataIntercorrencia, String horaIntercorrencia, String anotacoes, int hiperglicemia, int hipoglicemia, int sedeExcessiva, int nausea, int desmaio, int internacao, int caimbra, int cansaso, int visão, int miccao, String interTimestamp) {
         this.id = id;
         this.dataIntercorrencia = dataIntercorrencia;
         this.horaIntercorrencia = horaIntercorrencia;
@@ -30,7 +34,43 @@ public class Intercorrencia {
         this.nausea = nausea;
         this.desmaio = desmaio;
         this.internacao = internacao;
+        this.caimbra = caimbra;
+        this.cansaso = cansaso;
+        this.visão = visão;
+        this.miccao = miccao;
         this.interTimestamp = interTimestamp;
+    }
+
+    public int getCaimbra() {
+        return caimbra;
+    }
+
+    public void setCaimbra(int caimbra) {
+        this.caimbra = caimbra;
+    }
+
+    public int getCansaso() {
+        return cansaso;
+    }
+
+    public void setCansaso(int cansaso) {
+        this.cansaso = cansaso;
+    }
+
+    public int getVisão() {
+        return visão;
+    }
+
+    public void setVisão(int visão) {
+        this.visão = visão;
+    }
+
+    public int getMiccao() {
+        return miccao;
+    }
+
+    public void setMiccao(int miccao) {
+        this.miccao = miccao;
     }
 
     @Exclude
