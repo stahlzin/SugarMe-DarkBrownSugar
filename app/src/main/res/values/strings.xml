@@ -234,5 +234,7 @@
     <string name="caimbra">Câimbra</string>
     <string name="visao">Visão embaçada</string>
     <string name="miccao">Micção excessiva</string>
+    <string name="ultimaleitura">Última Leitura</string>
+    <string name="grafico">Gráfico do Índice Glicêmico</string>
 
 </resources>

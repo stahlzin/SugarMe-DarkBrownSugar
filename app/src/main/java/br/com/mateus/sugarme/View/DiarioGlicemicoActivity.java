@@ -326,14 +326,13 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
     }
 
     private String createCategoria(DiarioGlicemico diarioGlicemico){
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
         String anw = "Normal";
         int comp = tryParseInt(glicemiaDiarioEditText.getText().toString());
 
-        if (comp <= globalVariable.getHipoglicemiaPadrao()){
+        if (comp <= 70){
             anw = "Hipoglicemia";
         }
-        if (comp >= globalVariable.getHiperglicemiaPadrao()){
+        if (comp >= 200){
             anw = "Hiperglicemia";
         }
 

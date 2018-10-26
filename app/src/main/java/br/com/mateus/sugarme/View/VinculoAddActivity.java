@@ -118,6 +118,7 @@ public class VinculoAddActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).child("idMedico").setValue(medico.getIdMedico());
         databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).child("aceitaChat").setValue("sim");
+        databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).child("compartilharDiario").setValue("sim");
         databaseReference.child("users").child("medicos").child(medico.getIdMedico()).child("vinculos").child(userId).child("idPaciente").setValue(userId);
         databaseReference.child("users").child("medicos").child(medico.getIdMedico()).child("vinculos").child(userId).child("aceitaChat").setValue("sim");
     }
