@@ -153,7 +153,7 @@
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="500dp"
             android:columnCount="1"
             android:rowCount="1"
             android:useDefaultMargins="true"
@@ -163,7 +163,12 @@
             android:layout_marginBottom="@dimen/fab_margin"
             android:layout_marginTop="0dp"
             android:elevation="10dp">
-        </GridLayout>
 
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </GridLayout>
     </LinearLayout>
 </ScrollView>

@@ -1,6 +1,8 @@
 package br.com.mateus.sugarme.View;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,12 +18,23 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.IMarker;
+import com.github.mikephil.charting.components.MarkerView;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.utils.MPPointF;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +65,7 @@ public class PacienteActivity extends AppCompatActivity
     private String userId;
     private DiarioGlicemico diarioGlicemico;
     private DatabaseReference databaseReference;
+    private LineChart chart;
 
 
     @Override
@@ -68,6 +82,8 @@ public class PacienteActivity extends AppCompatActivity
         dataUltimaTextView = (TextView) findViewById(R.id.dataUltimaTextView);
         horaUltimaTextView = (TextView) findViewById(R.id.horaUltimaTextView);
         ultimaLeituraGridLayout = (GridLayout) findViewById(R.id.ultimaLeituraGridLayout);
+        chart = (LineChart) findViewById(R.id.chart);
+        chart.getDescription().setEnabled(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -98,12 +114,15 @@ public class PacienteActivity extends AppCompatActivity
             }
         });
 
+        setData();
+
         //Parametros do PutExtra
         Intent it = getIntent();
-        if(it != null && it.getExtras() != null){
-                Paciente gPaciente = (Paciente) it.getSerializableExtra("paciente");
-                this.setPacienteAsGlobal(gPaciente);
+        if (it != null && it.getExtras() != null) {
+            Paciente gPaciente = (Paciente) it.getSerializableExtra("paciente");
+            this.setPacienteAsGlobal(gPaciente);
         }
+
     }
 
     public void getUserId() {
@@ -254,4 +273,100 @@ public class PacienteActivity extends AppCompatActivity
         return true;
     }
 
+
+    private void setData() {
+        //definição de valores (trazer do firebase)
+        List<Entry> values = new ArrayList<Entry>();
+
+            values.add(new Entry(1, 90 ));
+            values.add(new Entry(2,150));
+
+            values.add(new Entry(3, 95 ));
+            values.add(new Entry(4,168));
+
+            values.add(new Entry(5, 189 ));
+            values.add(new Entry(6,35));
+
+            values.add(new Entry(7, 30 ));
+            values.add(new Entry(8,300));
+
+
+            values.add(new Entry(9, 90 ));
+            values.add(new Entry(10,150));
+
+            values.add(new Entry(11, 95 ));
+            values.add(new Entry(12,168));
+
+            values.add(new Entry(13, 189 ));
+            values.add(new Entry(14,35));
+
+            values.add(new Entry(15, 30 ));
+
+        LineDataSet dataSet = new LineDataSet(values, "15 últimas leituras");
+        LineData lineData = new LineData(dataSet);
+
+        //formatando eixos
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawLabels(false);
+        xAxis.setDrawGridLines(false);
+        xAxis.setAxisMinimum(1);
+        xAxis.setAxisMaximum(15);
+
+        YAxis yAxis = chart.getAxisRight();
+        yAxis.setDrawLabels(false);
+        yAxis.setDrawGridLines(false);
+
+        YAxis y2Axis = chart.getAxisLeft();
+        y2Axis.setDrawGridLines(false);
+
+        //colocando os dados
+        chart.setData(lineData);
+
+        //setando o marker para ler dados ao clicar
+        IMarker marker = new MyMarkerView(PacienteActivity.this, R.layout.custom_marker_view_layout);
+        chart.setMarker(marker);
+
+        }
+
+
+    public class MyMarkerView extends MarkerView {
+
+        private TextView tvContent;
+
+
+        public MyMarkerView(Context context, int layoutResource) {
+            super(context, layoutResource);
+
+            // find your layout components
+            tvContent = (TextView) findViewById(R.id.tvContent);
+        }
+
+        // callbacks everytime the MarkerView is redrawn, can be used to update the
+        // content (user-interface)
+        @Override
+        public void refreshContent(Entry e, Highlight highlight) {
+
+            tvContent.setText("XX/XX/XXXX" + "\n" + "HH:MM" +"\n" +"Status " + e.getY());
+
+            // this will perform necessary layouting
+            super.refreshContent(e, highlight);
+        }
+
+        private MPPointF mOffset;
+
+        @Override
+        public MPPointF getOffset() {
+
+            if(mOffset == null) {
+                // center the marker horizontally and vertically
+                mOffset = new MPPointF(-(getWidth() / 2), -getHeight());
+            }
+
+            return mOffset;
+        }
+    }
+
 }
+
