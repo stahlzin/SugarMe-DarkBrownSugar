@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -30,9 +29,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Intercorrencia;
-import br.com.mateus.sugarme.Model.IntercorrenciaDAO;
+import br.com.mateus.sugarme.DAO.IntercorrenciaDAO;
 import br.com.mateus.sugarme.R;
 
 public class IntercorrenciaActivity extends AppCompatActivity {

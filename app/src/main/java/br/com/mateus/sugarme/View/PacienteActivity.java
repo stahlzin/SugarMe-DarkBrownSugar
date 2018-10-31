@@ -47,6 +47,8 @@ import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 
+import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
+
 public class PacienteActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -225,11 +227,7 @@ public class PacienteActivity extends AppCompatActivity
             MedicalInfoPresenter medicalInfoPresenter = new MedicalInfoPresenter();
             medicalInfoPresenter.getPerfil(PacienteActivity.this);
         } else if (id == R.id.nav_diario) {
-            Intent intent = new Intent(PacienteActivity.this, DiarioGlicemicoActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
-
+            SimpleNavigation (PacienteActivity.this, DiarioGlicemicoActivity.class);
         } else if (id == R.id.nav_exames) {
             Intent intent = new Intent(PacienteActivity.this, ExameActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
