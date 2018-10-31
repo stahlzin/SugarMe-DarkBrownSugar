@@ -27,17 +27,20 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import java.util.ArrayList;
 import java.util.List;
-
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Singleton.GlobalClass;
@@ -46,7 +49,9 @@ import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
+import de.hdodenhof.circleimageview.CircleImageView;
 
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
 public class PacienteActivity extends AppCompatActivity
@@ -55,6 +60,7 @@ public class PacienteActivity extends AppCompatActivity
     //para deslogar
     PacientePresenter pacientePresenter = new PacientePresenter();
     private TextView nomePacienteTextView;
+    private CircleImageView fotoPacienteImageView;
     private Button novaEntradaButton;
     private TextView valorUltimaTextView;
     private TextView statusUltimaTextView;
@@ -64,7 +70,6 @@ public class PacienteActivity extends AppCompatActivity
     private List<DiarioGlicemico> diarioGlicemicoList;
     private FirebaseAuth firebaseAuth;
     private String userId;
-    private DiarioGlicemico diarioGlicemico;
     private DatabaseReference databaseReference;
     private LineChart chart;
 
@@ -82,7 +87,7 @@ public class PacienteActivity extends AppCompatActivity
         statusUltimaTextView = (TextView) findViewById(R.id.statusUltimaTextView);
         dataUltimaTextView = (TextView) findViewById(R.id.dataUltimaTextView);
         horaUltimaTextView = (TextView) findViewById(R.id.horaUltimaTextView);
-        ultimaLeituraGridLayout = (GridLayout) findViewById(R.id.ultimaLeituraGridLayout);
+        ultimaLeituraGridLayout = findViewById(R.id.ultimaLeituraGridLayout);
         chart = (LineChart) findViewById(R.id.chart);
         chart.getDescription().setEnabled(false);
 
@@ -95,6 +100,7 @@ public class PacienteActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         nomePacienteTextView = (TextView) headerView.findViewById(R.id.nomePacienteTextView);
+        fotoPacienteImageView = (CircleImageView) headerView.findViewById(R.id.fotoPacienteImageView);
         navigationView.setNavigationItemSelectedListener(this);
 
         novaEntradaButton.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +122,7 @@ public class PacienteActivity extends AppCompatActivity
         });
 
         setData();
+
 
         //Parametros do PutExtra
         Intent it = getIntent();
@@ -158,6 +165,12 @@ public class PacienteActivity extends AppCompatActivity
 
             }
         });
+
+       if(globalVariable.getFotoPerfil() == null){
+           downloadImageProfile();
+       }else{
+           fotoPacienteImageView.setImageBitmap(globalVariable.getFotoPerfil());
+       }
 
     }
 
@@ -365,5 +378,31 @@ public class PacienteActivity extends AppCompatActivity
         }
     }
 
+
+    public void downloadImageProfile() {
+        final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+        // Create a storage reference from our app
+        StorageReference storageRef = firebaseStorage.getReference();
+
+
+        //Download file in Memory
+        StorageReference islandRef = storageRef.child("users").child("pacientes").child(userId).child("fotoPerfil/fotoPerfil.png");
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+                globalVariable.setFotoPerfil(toBitmap(bytes));
+                fotoPacienteImageView.setImageBitmap(globalVariable.getFotoPerfil());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+    }
 }
 

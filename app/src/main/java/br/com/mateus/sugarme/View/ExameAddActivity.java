@@ -35,7 +35,7 @@ import br.com.mateus.sugarme.Model.Exame;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
-import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
 
 public class ExameAddActivity extends AppCompatActivity {
 

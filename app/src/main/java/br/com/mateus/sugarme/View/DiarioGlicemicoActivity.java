@@ -36,8 +36,8 @@ import br.com.mateus.sugarme.Controller.DiarioGlicemicoPresenter;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
-import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseDatetoTimeStamp;
-import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseInt;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 
 public class DiarioGlicemicoActivity extends AppCompatActivity {
 

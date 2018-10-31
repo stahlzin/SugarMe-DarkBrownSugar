@@ -1,6 +1,7 @@
 package br.com.mateus.sugarme.Singleton;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 public class GlobalClass extends Application{
 
@@ -12,6 +13,15 @@ public class GlobalClass extends Application{
     private String inicioTratamento;
     private int hiperglicemiaPadrao;
     private int hipoglicemiaPadrao;
+    private Bitmap fotoPerfil;
+
+    public Bitmap getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(Bitmap fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
 
     public int getHiperglicemiaPadrao() {
         return hiperglicemiaPadrao;

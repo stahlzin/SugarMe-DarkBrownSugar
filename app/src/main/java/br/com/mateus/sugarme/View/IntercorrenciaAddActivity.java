@@ -19,7 +19,7 @@ import br.com.mateus.sugarme.DAO.IntercorrenciaDAO;
 import br.com.mateus.sugarme.Controller.IntercorrenciaPresenter;
 import br.com.mateus.sugarme.R;
 
-import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
 
 
 public class IntercorrenciaAddActivity extends AppCompatActivity {

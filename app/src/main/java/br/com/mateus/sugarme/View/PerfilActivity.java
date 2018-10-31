@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,11 +17,14 @@ import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.GlobalClass;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
 public class PerfilActivity extends AppCompatActivity {
 
 
-    private ImageView fotoPefilImageView;
+    private CircleImageView fotoPefilImageView;
     private TextView nomePerfilTextView;
     private TextView dataNasPerfilTextView;
     private TextView tipoPerfilTextView;
@@ -44,12 +48,21 @@ public class PerfilActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
         getSupportActionBar().setTitle(R.string.app_name_Perfil);     //Titulo para ser exibido na sua Action Bar em frente à seta
 
-        fotoPefilImageView = (ImageView) findViewById(R.id.fotoPefilImageView);
+        fotoPefilImageView = (CircleImageView) findViewById(R.id.fotoPefilImageView);
         nomePerfilTextView = (TextView) findViewById(R.id.nomePerfilTextView);
         dataNasPerfilTextView = (TextView) findViewById(R.id.dataNasPerfilTextView);
         tipoPerfilTextView = (TextView) findViewById(R.id.tipoPerfilTextView);
         tratamentoPerfilTextView = (TextView) findViewById(R.id.tratamentoPerfilTextView);
         inicioPerfilTextView = (TextView) findViewById(R.id.inicioPerfilTextView);
+
+
+        fotoPefilImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleNavigation(PerfilActivity.this, FotoPerfilActivity.class);
+            }
+        });
+
 
 
 
@@ -71,7 +84,12 @@ public class PerfilActivity extends AppCompatActivity {
         this.inicioPerfilTextView.setText(globalVariable.getInicioTratamento());
         this.tratamentoPerfilTextView.setText(globalVariable.getTratamento());
         this.tipoPerfilTextView.setText(globalVariable.getTipoDiabetes());
-    }
+        if(globalVariable.getFotoPerfil() != null){
+            this.fotoPefilImageView.setImageBitmap(globalVariable.getFotoPerfil());
+        }else{
+            this.fotoPefilImageView.setImageResource(R.drawable.perfil);
+        }
+        }
 
     public void setPerfil(MedicalInfo medicalInfo) {
         //Ajustar a escrita

@@ -32,7 +32,7 @@ import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.DAO.DiarioGlicemicoDAO;
 import br.com.mateus.sugarme.R;
 
-import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseInt;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 
 public class HistoricoDiarioActivity extends AppCompatActivity {
 

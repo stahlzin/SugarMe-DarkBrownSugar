@@ -1,11 +1,15 @@
 package br.com.mateus.sugarme.Builder;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.util.TimeFormatException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 
-public abstract class CoverterFactory {
+public abstract class CoverterBuilder {
 
     public static Integer tryParseInt (Object obj){
         Integer retVal;
@@ -34,6 +38,16 @@ public abstract class CoverterFactory {
         converter.append(":00");
 
         return converter.toString();
+    }
+
+    public static byte [] toByteArray (Bitmap image){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 0,byteArrayOutputStream );
+        return byteArrayOutputStream.toByteArray();
+    }
+    public static Bitmap toBitmap (byte [] bytes){
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        return BitmapFactory.decodeStream(byteArrayInputStream);
     }
 
 }
