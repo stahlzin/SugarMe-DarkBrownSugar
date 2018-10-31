@@ -15,12 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.com.mateus.sugarme.Model.Intercorrencia;
-import br.com.mateus.sugarme.Model.IntercorrenciaDAO;
-import br.com.mateus.sugarme.Presenter.IntercorrenciaPresenter;
+import br.com.mateus.sugarme.DAO.IntercorrenciaDAO;
+import br.com.mateus.sugarme.Controller.IntercorrenciaPresenter;
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.Utils.MaskEditUtil;
 
-import static br.com.mateus.sugarme.Utils.CoverterFactory.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseDatetoTimeStamp;
 
 
 public class IntercorrenciaAddActivity extends AppCompatActivity {

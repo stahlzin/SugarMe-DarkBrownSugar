@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import br.com.mateus.sugarme.Presenter.MedicoPresenter;
+import br.com.mateus.sugarme.Controller.MedicoPresenter;
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
 

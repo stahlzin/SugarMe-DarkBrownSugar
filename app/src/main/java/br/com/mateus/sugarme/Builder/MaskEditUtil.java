@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Utils;
+package br.com.mateus.sugarme.Builder;
 
 import android.text.Editable;
 import android.text.TextWatcher;

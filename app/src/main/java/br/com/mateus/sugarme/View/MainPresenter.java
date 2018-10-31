@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.mateus.sugarme.Presenter.PacientePresenter;
+import br.com.mateus.sugarme.Controller.PacientePresenter;
 
 public class MainPresenter {
     private int temLogin = 0; //Usada nos Listeners

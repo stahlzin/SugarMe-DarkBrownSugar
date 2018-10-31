@@ -16,14 +16,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import br.com.mateus.sugarme.Presenter.MedicoPresenter;
-import br.com.mateus.sugarme.Presenter.PacientePresenter;
+import br.com.mateus.sugarme.Controller.MedicoPresenter;
+import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.Model.Medico;
-import br.com.mateus.sugarme.Model.MedicoDAO;
+import br.com.mateus.sugarme.DAO.MedicoDAO;
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.Model.PacienteDAO;
+import br.com.mateus.sugarme.DAO.PacienteDAO;
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.Utils.MaskEditUtil;
+import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
 public class CadastroActivity extends AppCompatActivity {
     private String[] uf = new String[]{"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA","MG",

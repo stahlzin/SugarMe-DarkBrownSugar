@@ -31,14 +31,11 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import br.com.mateus.sugarme.Model.Exame;
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.Utils.MaskEditUtil;
+import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
-import static br.com.mateus.sugarme.Utils.CoverterFactory.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseDatetoTimeStamp;
 
 public class ExameAddActivity extends AppCompatActivity {
 

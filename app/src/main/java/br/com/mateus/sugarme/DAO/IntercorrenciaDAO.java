@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Model;
+package br.com.mateus.sugarme.DAO;
 
 import android.support.annotation.NonNull;
 
@@ -11,6 +11,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.mateus.sugarme.Model.Intercorrencia;
+import br.com.mateus.sugarme.Model.Paciente;
 
 public class IntercorrenciaDAO {
     private DatabaseReference mDatabase;

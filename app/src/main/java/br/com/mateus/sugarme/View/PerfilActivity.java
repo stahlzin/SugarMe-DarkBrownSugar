@@ -10,12 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
-import br.com.mateus.sugarme.Model.MedicalInfoDAO;
+import br.com.mateus.sugarme.DAO.MedicalInfoDAO;
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.Presenter.MedicalInfoPresenter;
-import br.com.mateus.sugarme.Presenter.PacientePresenter;
+import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
+import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.Utils.GlobalClass;
+import br.com.mateus.sugarme.Singleton.GlobalClass;
 
 public class PerfilActivity extends AppCompatActivity {
 

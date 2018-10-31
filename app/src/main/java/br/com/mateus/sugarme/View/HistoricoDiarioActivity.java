@@ -8,8 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,10 +29,10 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
-import br.com.mateus.sugarme.Model.DiarioGlicemicoDAO;
+import br.com.mateus.sugarme.DAO.DiarioGlicemicoDAO;
 import br.com.mateus.sugarme.R;
 
-import static br.com.mateus.sugarme.Utils.CoverterFactory.tryParseInt;
+import static br.com.mateus.sugarme.Builder.CoverterFactory.tryParseInt;
 
 public class HistoricoDiarioActivity extends AppCompatActivity {
 

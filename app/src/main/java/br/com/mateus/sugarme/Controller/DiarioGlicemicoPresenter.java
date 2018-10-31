@@ -1,10 +1,10 @@
-package br.com.mateus.sugarme.Presenter;
+package br.com.mateus.sugarme.Controller;
 
 import android.app.Activity;
 import android.widget.Toast;
 
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
-import br.com.mateus.sugarme.Model.DiarioGlicemicoDAO;
+import br.com.mateus.sugarme.DAO.DiarioGlicemicoDAO;
 
 public class DiarioGlicemicoPresenter {
     private DiarioGlicemicoDAO diarioGlicemicoDAO = new DiarioGlicemicoDAO();

@@ -2,7 +2,6 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -41,12 +40,12 @@ import java.util.List;
 
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.Utils.GlobalClass;
+import br.com.mateus.sugarme.Singleton.GlobalClass;
 
 import br.com.mateus.sugarme.R;
 
-import br.com.mateus.sugarme.Presenter.PacientePresenter;
-import br.com.mateus.sugarme.Presenter.MedicalInfoPresenter;
+import br.com.mateus.sugarme.Controller.PacientePresenter;
+import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 
 public class PacienteActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Utils;
+package br.com.mateus.sugarme.Builder;
 
 import android.util.Log;
 import android.util.TimeFormatException;

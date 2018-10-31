@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Presenter;
+package br.com.mateus.sugarme.Controller;
 
 import android.app.Activity;
 import android.widget.Toast;
@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.Model.PacienteDAO;
+import br.com.mateus.sugarme.DAO.PacienteDAO;
 
 public class PacientePresenter {
 

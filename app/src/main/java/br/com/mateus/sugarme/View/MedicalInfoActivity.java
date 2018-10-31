@@ -13,12 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
-import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
-import br.com.mateus.sugarme.Model.MedicalInfoDAO;
-import br.com.mateus.sugarme.Presenter.MedicalInfoPresenter;
+import br.com.mateus.sugarme.DAO.MedicalInfoDAO;
+import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 
 public class MedicalInfoActivity extends AppCompatActivity {
 

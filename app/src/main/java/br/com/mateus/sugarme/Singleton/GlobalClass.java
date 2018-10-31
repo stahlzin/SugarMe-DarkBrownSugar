@@ -1,4 +1,4 @@
-package br.com.mateus.sugarme.Utils;
+package br.com.mateus.sugarme.Singleton;
 
 import android.app.Application;
 

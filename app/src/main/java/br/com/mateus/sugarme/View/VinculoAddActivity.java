@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,20 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import br.com.mateus.sugarme.Model.DiarioGlicemico;
-import br.com.mateus.sugarme.Model.DiarioGlicemicoDAO;
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
-
-import static br.com.mateus.sugarme.Utils.CoverterFactory.tryParseInt;
 
 public class VinculoAddActivity extends AppCompatActivity {
 
