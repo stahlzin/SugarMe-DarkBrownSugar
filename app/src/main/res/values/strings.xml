@@ -237,5 +237,6 @@
     <string name="ultimaleitura">Última Leitura</string>
     <string name="grafico">Gráfico do Índice Glicêmico</string>
     <string name="app_name_FotoPerfil">Editar Foto do Perfil</string>
+    <string name="sair">Sair</string>
 
 </resources>

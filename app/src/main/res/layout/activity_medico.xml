@@ -1,36 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     tools:context=".View.MedicoActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_x="170dp"
-        android:layout_y="14dp"
-        android:text="@string/medico" />
+    <include
+        layout="@layout/app_bar_medico"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_x="22dp"
-        android:layout_y="445dp"
-        android:text="@string/logout" />
-
-    <Button
-        android:id="@+id/buttonEditarMedico"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_x="146dp"
-        android:layout_y="94dp"
-        android:text="@string/editar" />
-
-</AbsoluteLayout>
+</android.support.design.widget.CoordinatorLayout>

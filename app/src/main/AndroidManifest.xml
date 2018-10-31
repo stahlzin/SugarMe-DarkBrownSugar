@@ -24,7 +24,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.CadastroActivity" />
-        <activity android:name=".View.MedicoActivity" />
+        <activity android:name=".View.MedicoActivity"
+            android:label="@string/title_activity_paciente"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".View.MedicalInfoActivity"
             android:label="@string/title_activity_medical_info"
