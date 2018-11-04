@@ -238,5 +238,7 @@
     <string name="grafico">Gráfico do Índice Glicêmico</string>
     <string name="app_name_FotoPerfil">Editar Foto do Perfil</string>
     <string name="sair">Sair</string>
+    <string name="iniciarChat">Confirma redirecionamento ao chat?</string>
+    <string name="semVinculoChatMedico">Nenhum médico que aceita chat vinculado!</string>
 
 </resources>

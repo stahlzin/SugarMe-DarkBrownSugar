@@ -16,9 +16,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import br.com.mateus.sugarme.Model.ChatMessage;
+import br.com.mateus.sugarme.Model.Medico;
+import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
+
+
 public class ChatActivity extends AppCompatActivity {
+
+    private String chaveMedico;
+    private String chavePaciente;
 
     //FirebaseListAdapter
     com.firebase.ui.database.FirebaseListAdapter<ChatMessage> adapter;
@@ -41,7 +48,7 @@ public class ChatActivity extends AppCompatActivity {
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
                 FirebaseDatabase.getInstance()
-                        .getReference().child("users").child("pacientes").child(getUserId()).child("chats")
+                        .getReference().child("users").child("pacientes").child(chavePaciente).child("chats").child(chaveMedico)
                         .push()
                         .setValue(new ChatMessage(input.getText().toString(),
                                 FirebaseAuth.getInstance()
@@ -53,8 +60,24 @@ public class ChatActivity extends AppCompatActivity {
                 input.setText("");
             }
         });
+
+
+        //Parametros do PutExtra
+        Intent it = getIntent();
+        if(it != null && it.getExtras() != null){
+            if(it.getStringExtra("chavePaciente").toString().equals("0")){
+                   chavePaciente = getUserId();
+                   chaveMedico = it.getStringExtra("chaveMedico").toString();
+            }
+            else{
+                chaveMedico = getUserId();
+                chavePaciente = it.getStringExtra("chavePaciente").toString();
+            }
+        }
+
         //Mostrar mensagens
         displayChatMessages();
+
 
     }//Fim do OnCreate
 
@@ -70,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
 
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference().child("users")
-                .child("pacientes").child(getUserId()).child("chats")) {
+                .child("pacientes").child(chavePaciente).child("chats").child(chaveMedico)) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Get references to the views of message.xml
