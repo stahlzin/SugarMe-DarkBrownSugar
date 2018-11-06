@@ -249,5 +249,13 @@
     <string name="medico_menu_pacientes">Pacientes</string>
     <string name="medico_menu_chat">Chat</string>
     <string name="medico_menu_config">Configurar</string>
+    <string name="app_name_Configuracoes">Configurações</string>
+    <string name="aceitaChat">Participar do chat?</string>
+    <string name="padHiper">para HIPERGLICEMIA</string>
+    <string name="padHipo">para HIPOGLICEMIA</string>
+    <string name="sairAPP">Deseja sair da aplicação?</string>
+    <string name="salvarAlter">Salvar alterações</string>
+    <string name="compartilhaDiario">Compartilhar diário?</string>
+    <string name="standarValues">Valores padrões</string>
 
 </resources>

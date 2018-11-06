@@ -30,4 +30,17 @@ public class NavigationFactory  {
         atual.startActivity(intent);
         atual.finishAffinity();
     }
+
+    /**Métodos para executar a navegação de forma simples, sem desempilhar a activity
+     * Utilizado em botões para abrir nova activity
+     * @param atual
+     * @param proxima
+     */
+
+    public static void NavigationWithOnePutExtra (Activity atual, Class proxima, String name, String value) {
+        Intent intent = new Intent(atual, proxima);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(name, value);
+        atual.startActivity(intent);
+    }
 }

@@ -3,17 +3,35 @@ package br.com.mateus.sugarme.Singleton;
 import android.app.Application;
 import android.graphics.Bitmap;
 
-public class GlobalClass extends Application{
+public class UserSingleton extends Application{
 
-    //para o perfil
-    private String nomeUser;
+
+    //para o paciente
     private String dataNascUser;
     private String tipoDiabetes;
     private String tratamento;
     private String inicioTratamento;
-    private int hiperglicemiaPadrao;
-    private int hipoglicemiaPadrao;
+    private int hiperglicemiaPadrao = 200;
+    private int hipoglicemiaPadrao = 70;
     private Bitmap fotoPerfil;
+
+    //para o médico
+
+    //para ambos
+    private String nomeUser;
+    private String aceitaChat;
+
+
+
+    //Getters and Setters
+
+    public String getAceitaChat() {
+        return aceitaChat;
+    }
+
+    public void setAceitaChat(String aceitaChat) {
+        this.aceitaChat = aceitaChat;
+    }
 
     public Bitmap getFotoPerfil() {
         return fotoPerfil;
@@ -28,7 +46,7 @@ public class GlobalClass extends Application{
     }
 
     public void setHiperglicemiaPadrao(int hiperglicemiaPadrao) {
-        this.hiperglicemiaPadrao = 200;
+        this.hiperglicemiaPadrao = hiperglicemiaPadrao;
     }
 
     public int getHipoglicemiaPadrao() {
@@ -36,7 +54,7 @@ public class GlobalClass extends Application{
     }
 
     public void setHipoglicemiaPadrao(int hipoglicemiaPadrao) {
-        this.hipoglicemiaPadrao = 70;
+        this.hipoglicemiaPadrao = hipoglicemiaPadrao;
     }
 
     public String getNomeUser() {

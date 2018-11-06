@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.Singleton.GlobalClass;
+import br.com.mateus.sugarme.Singleton.UserSingleton;
 
 import br.com.mateus.sugarme.R;
 
@@ -52,6 +52,7 @@ import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
 public class PacienteActivity extends AppCompatActivity
@@ -141,7 +142,7 @@ public class PacienteActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
         this.nomePacienteTextView.setText(globalVariable.getNomeUser());
 
         diarioGlicemicoList = new ArrayList<DiarioGlicemico>();
@@ -192,7 +193,7 @@ public class PacienteActivity extends AppCompatActivity
     private void setPacienteAsGlobal(Paciente gPaciente) {
         if(gPaciente != null) {
             this.nomePacienteTextView.setText(gPaciente.getNome());
-            final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+            final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
             globalVariable.setDataNascUser(gPaciente.getDtNascimento());
             globalVariable.setNomeUser(gPaciente.getNome());
         }
@@ -224,6 +225,7 @@ public class PacienteActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            NavigationWithOnePutExtra(PacienteActivity.this, ConfigurarActivity.class, "tipo", "paciente");
             return true;
         }
 
@@ -275,7 +277,6 @@ public class PacienteActivity extends AppCompatActivity
             Intent intent = new Intent(PacienteActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PacienteActivity.this.startActivity(intent);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -393,7 +394,7 @@ public class PacienteActivity extends AppCompatActivity
         islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+                final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
                 globalVariable.setFotoPerfil(toBitmap(bytes));
                 fotoPacienteImageView.setImageBitmap(globalVariable.getFotoPerfil());
             }

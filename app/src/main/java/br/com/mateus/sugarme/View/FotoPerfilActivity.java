@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -21,21 +20,14 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.List;
-
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.Singleton.GlobalClass;
+import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toByteArray;
@@ -94,7 +86,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
                 if (foto == null){
 
                 }else{
-                    final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+                    final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
                     globalVariable.setFotoPerfil(foto);
                     uploadImage(foto);
                     SimpleNavigation(FotoPerfilActivity.this, PerfilActivity.class);
@@ -103,7 +95,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
             }
         });
 
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
         if(globalVariable.getFotoPerfil() != null){
             this.fotoPefilEditImageView.setImageBitmap(globalVariable.getFotoPerfil());
         }else{

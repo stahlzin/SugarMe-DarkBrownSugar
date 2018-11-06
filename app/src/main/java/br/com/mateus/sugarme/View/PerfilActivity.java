@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import br.com.mateus.sugarme.Model.MedicalInfo;
@@ -16,7 +15,7 @@ import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.Singleton.GlobalClass;
+import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
@@ -78,7 +77,7 @@ public class PerfilActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
         this.nomePerfilTextView.setText(globalVariable.getNomeUser());
         this.dataNasPerfilTextView.setText(globalVariable.getDataNascUser());
         this.inicioPerfilTextView.setText(globalVariable.getInicioTratamento());
@@ -93,7 +92,7 @@ public class PerfilActivity extends AppCompatActivity {
 
     public void setPerfil(MedicalInfo medicalInfo) {
         //Ajustar a escrita
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
         this.nomePerfilTextView.setText(globalVariable.getNomeUser());
         this.dataNasPerfilTextView.setText(globalVariable.getDataNascUser());
 

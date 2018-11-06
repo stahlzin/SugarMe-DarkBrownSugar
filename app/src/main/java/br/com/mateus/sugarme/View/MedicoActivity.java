@@ -15,6 +15,7 @@ import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
 
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
 public class MedicoActivity extends AppCompatActivity {
@@ -95,6 +96,7 @@ public class MedicoActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            NavigationWithOnePutExtra(MedicoActivity.this, ConfigurarActivity.class, "tipo", "medico");
             return true;
         }
         else if (id == R.id.action_about){
