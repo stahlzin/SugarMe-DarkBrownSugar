@@ -10,7 +10,7 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/pdf_icon" />
+        app:srcCompat="@drawable/exame_icon" />
 
     <GridLayout
         android:layout_width="0dp"
