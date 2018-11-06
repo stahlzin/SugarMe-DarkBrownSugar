@@ -45,7 +45,7 @@ public class MedicoActivity extends AppCompatActivity {
         medicoConfiguracoesGridLayout = (GridLayout) findViewById(R.id.medicoConfiguracoesGridLayout);
 
         //Configuração do Menu em GridLayout
-        perfilMedicoGridLayout.setOnClickListener(new View.OnClickListener() {
+       perfilMedicoGridLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 medicoPresenter.recebeMedico(MedicoActivity.this);
@@ -98,9 +98,6 @@ public class MedicoActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.action_about){
-            return true;
-        }
-        else if (id == R.id.action_sair){
             medicoPresenter.logout();
             FinishNavigation(MedicoActivity.this, MainActivity.class);
             return true;

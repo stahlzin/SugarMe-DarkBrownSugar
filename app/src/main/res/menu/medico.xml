@@ -7,8 +7,4 @@
     <item
         android:id="@+id/action_about"
         android:title="Sobre"/>
-    <item
-        android:id="@+id/action_sair"
-        android:title="@string/sair"/>
-
 </menu>
