@@ -228,7 +228,7 @@
                         android:columnCount="1"
                         android:rowCount="2"
                         android:useDefaultMargins="true"
-                        android:background="@color/colorSuperGraySoft"
+                        android:background="@color/colorSoftBlue"
                         android:layout_margin="15dp"
                         android:elevation="5dp">
 
@@ -252,7 +252,7 @@
                         android:columnCount="1"
                         android:rowCount="2"
                         android:useDefaultMargins="true"
-                        android:background="@color/colorSuperGraySoft"
+                        android:background="@color/colorSoftBlue"
                         android:layout_margin="15dp"
                         android:elevation="5dp">
 
@@ -285,7 +285,7 @@
                         android:columnCount="1"
                         android:rowCount="2"
                         android:useDefaultMargins="true"
-                        android:background="@color/colorSuperGraySoft"
+                        android:background="@color/colorSoftBlue"
                         android:layout_margin="15dp"
                         android:elevation="5dp">
 
@@ -309,7 +309,7 @@
                         android:columnCount="1"
                         android:rowCount="2"
                         android:useDefaultMargins="true"
-                        android:background="@color/colorSuperGraySoft"
+                        android:background="@color/colorSoftBlue"
                         android:layout_margin="15dp"
                         android:elevation="5dp">
 
