@@ -14,6 +14,7 @@ public class UserSingleton extends Application{
     private int hiperglicemiaPadrao = 200;
     private int hipoglicemiaPadrao = 70;
     private Bitmap fotoPerfil;
+    private String compartilhaDiario;
 
     //para o médico
 
@@ -24,6 +25,14 @@ public class UserSingleton extends Application{
 
 
     //Getters and Setters
+
+    public String getCompartilhaDiario() {
+        return compartilhaDiario;
+    }
+
+    public void setCompartilhaDiario(String compartilhaDiario) {
+        this.compartilhaDiario = compartilhaDiario;
+    }
 
     public String getAceitaChat() {
         return aceitaChat;

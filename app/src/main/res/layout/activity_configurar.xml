@@ -41,7 +41,6 @@
             android:id="@+id/aceitaChatswitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:padding="@dimen/fab_margin"
             android:text="@string/aceitaChat"
             android:textAppearance="@android:style/TextAppearance.Medium" />
@@ -62,7 +61,6 @@
             android:id="@+id/compartilhaDiarioSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:padding="@dimen/fab_margin"
             android:text="@string/compartilhaDiario"
             android:textAppearance="@android:style/TextAppearance.Medium" />

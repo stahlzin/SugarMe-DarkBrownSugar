@@ -257,5 +257,6 @@
     <string name="salvarAlter">Salvar alterações</string>
     <string name="compartilhaDiario">Compartilhar diário?</string>
     <string name="standarValues">Valores padrões</string>
+    <string name="alterSalva">Alterações Salvas</string>
 
 </resources>

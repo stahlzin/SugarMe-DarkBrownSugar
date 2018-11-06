@@ -30,6 +30,8 @@ public class CadastroActivity extends AppCompatActivity {
             "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS",
             "SC", "SE", "SP", "TO"};
 
+    //precisa trabalhar as configurações....
+
     //Objetos
     private RadioButton radioButtonPaciente;
     private RadioButton radioButtonMedico;
