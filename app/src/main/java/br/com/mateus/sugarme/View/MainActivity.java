@@ -8,13 +8,13 @@ import br.com.mateus.sugarme.R;
 
 
 public class MainActivity extends AppCompatActivity {
-    MainPresenter mainPresenter;
+    MainController mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainPresenter = new MainPresenter();
+        mainPresenter = new MainController();
 
         //Maximixar a tela
         View decorView = getWindow().getDecorView();

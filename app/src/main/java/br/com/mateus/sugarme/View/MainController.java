@@ -11,16 +11,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 import java.util.List;
 
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 
-public class MainPresenter {
+public class MainController {
     private int temLogin = 0; //Usada nos Listeners
+    private static FirebaseAuth mfirebaseAuth;
+    private static String mUserId;
 
-    public MainPresenter() {
+    public MainController() {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
@@ -100,5 +103,14 @@ public class MainPresenter {
         });
 
     } //Fim do verifica tipo usuario
+
+    /***
+     * Método para retornar a chave do usuário no Firebase
+     * @return
+     */
+    public static String getUserId() {
+        mfirebaseAuth = FirebaseAuth.getInstance();
+        return mUserId = mfirebaseAuth.getCurrentUser().getUid();
+    }
 
 }

@@ -21,22 +21,25 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import br.com.mateus.sugarme.Controller.MedicoPresenter;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
-import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
 
 import static br.com.mateus.sugarme.Controller.ConfigurarController.alterarCofigurarMedico;
 import static br.com.mateus.sugarme.Controller.ConfigurarController.alterarCofigurarPaciente;
-import static br.com.mateus.sugarme.Controller.ConfigurarController.getUserId;
-import static br.com.mateus.sugarme.Controller.ConfigurarController.lerConfigurarPaciente;
+
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class ConfigurarActivity extends AppCompatActivity {
 
+    /***
+     * A classe ConfigurarActivity atua nos usuários Paciente e Médico, adaptada para cada um.
+     * Recebe um parametro para identificar se é paciente ou médico
+     * Utiliza um Controller para inserir e alterar as configurações.
+     * Utiliza um Observer, programado em listener no onStart para trazer as configurações prévias
+     * Utiliza o NavigationFactory para a navegação
+     */
     private PacientePresenter pacientePresenter;
     private MedicoPresenter medicoPresenter;
     private Switch aceitaChatswitch;
@@ -77,6 +80,8 @@ public class ConfigurarActivity extends AppCompatActivity {
         compartilhaDiarioGridLayout = (GridLayout) findViewById(R.id.compartilhaDiarioGridLayout);
         padHipoEditText = (EditText) findViewById(R.id.padHipoEditText);
         padHiperEditText = (EditText) findViewById(R.id.padHiperEditText);
+
+
 
         Intent it = getIntent();
         if(it != null && it.getExtras() != null){
@@ -129,7 +134,6 @@ public class ConfigurarActivity extends AppCompatActivity {
             }
         });
 
-
         salvarAlterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,43 +156,66 @@ public class ConfigurarActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         userId = getUserId();
-        /*databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
         if(tipoUsuario.equals("paciente")) {
-            databaseReference.child("users").child("pacientes").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
+           databaseReference.child("users").child("pacientes").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        if (dataSnapshot.child("aceitaChat").getValue().equals("nao")) {
+                            aceitaChatswitch.setChecked(false);
+                        } else {
+                            aceitaChatswitch.setChecked(true);
+                        }
 
-                    if (dataSnapshot.child("aceitaChat").getChildren().toString().equals("nao")) {
-                        aceitaChatswitch.setChecked(false);
-                    } else {
-                        aceitaChatswitch.setChecked(true);
+                        if (dataSnapshot.child("compartilharDiario").getValue().equals("nao")) {
+                            compartilhaDiarioSwitch.setChecked(false);
+                        } else {
+                            compartilhaDiarioSwitch.setChecked(true);
+                        }
+
+                        if(dataSnapshot.child("hipoglicemia").getValue() == null){
+                            padHipoEditText.setText(" ");
+                        }else{
+                            padHipoEditText.setText(String.valueOf(dataSnapshot.child("hipoglicemia").getValue()));
+                        }
+
+
+                        if(dataSnapshot.child("hiperglicemia").getValue() == null){
+                            padHiperEditText.setText(" ");
+                        } else{
+                            padHiperEditText.setText(String.valueOf(dataSnapshot.child("hiperglicemia").getValue()));
+                        }
+
                     }
-
-                    if (dataSnapshot.child("compartilharDiario").getChildren().toString().equals("nao")) {
-                        compartilhaDiarioSwitch.setChecked(false);
-                    } else {
-                        compartilhaDiarioSwitch.setChecked(true);
-                    }
-
-                    padHipoEditText.setText((CharSequence) dataSnapshot.child("hipoglicemia").getChildren());
-                    padHiperEditText.setText((CharSequence) dataSnapshot.child("hiperglicemia").getChildren());
-
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });
-
-
-
-
-
-
         }
-        else if(tipoUsuario.equals("medico")){
 
-        }*/
+        if(tipoUsuario.equals("medico")){
+            databaseReference.child("users").child("medicos").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        if (dataSnapshot.child("aceitaChat").getValue().equals("nao")) {
+                            aceitaChatswitch.setChecked(false);
+                        } else {
+                            aceitaChatswitch.setChecked(true);
+                        }
+
+                        }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override
