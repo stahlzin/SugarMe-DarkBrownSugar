@@ -23,8 +23,8 @@ public class ConfigurarController {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("users").child("pacientes").child(userId).child("configurar").child("aceitaChat").setValue(aceitaChat);
         databaseReference.child("users").child("pacientes").child(userId).child("configurar").child("compartilharDiario").setValue(compartilharDiario);
-        databaseReference.child("users").child("pacientes").child(userId).child("configurar").child("hipoglicemia").setValue(hipoglicemia);
-        databaseReference.child("users").child("pacientes").child(userId).child("configurar").child("hiperglicemia").setValue(hiperglicemia);
+        databaseReference.child("users").child("pacientes").child(userId).child("configurar").child("hipoglicemiaPadrao").setValue(hipoglicemia);
+        databaseReference.child("users").child("pacientes").child(userId).child("configurar").child("hiperglicemiaPadrao").setValue(hiperglicemia);
 
     }
 

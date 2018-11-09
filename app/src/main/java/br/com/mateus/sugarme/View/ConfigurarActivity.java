@@ -163,29 +163,29 @@ public class ConfigurarActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()) {
-                        if (dataSnapshot.child("aceitaChat").getValue().equals("nao")) {
+                        if (dataSnapshot.child("aceitaChat").getValue() == "nao") {
                             aceitaChatswitch.setChecked(false);
                         } else {
                             aceitaChatswitch.setChecked(true);
                         }
 
-                        if (dataSnapshot.child("compartilharDiario").getValue().equals("nao")) {
+                        if (dataSnapshot.child("compartilharDiario").getValue() == "nao") {
                             compartilhaDiarioSwitch.setChecked(false);
                         } else {
                             compartilhaDiarioSwitch.setChecked(true);
                         }
 
-                        if(dataSnapshot.child("hipoglicemia").getValue() == null){
+                        if(dataSnapshot.child("hipoglicemiaPadrao").getValue() == null){
                             padHipoEditText.setText(" ");
                         }else{
-                            padHipoEditText.setText(String.valueOf(dataSnapshot.child("hipoglicemia").getValue()));
+                            padHipoEditText.setText(String.valueOf(dataSnapshot.child("hipoglicemiaPadrao").getValue()));
                         }
 
 
-                        if(dataSnapshot.child("hiperglicemia").getValue() == null){
+                        if(dataSnapshot.child("hiperglicemiaPadrao").getValue() == null){
                             padHiperEditText.setText(" ");
                         } else{
-                            padHiperEditText.setText(String.valueOf(dataSnapshot.child("hiperglicemia").getValue()));
+                            padHiperEditText.setText(String.valueOf(dataSnapshot.child("hiperglicemiaPadrao").getValue()));
                         }
 
                     }
