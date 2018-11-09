@@ -1,43 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".View.PerfilActivity"
     tools:showIn="@layout/activity_perfil">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/fotoPefilImageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/perfil"
-        android:layout_gravity="center"
-        />
-
-    <TextView
-        android:id="@+id/nomePerfilTextView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/nav_header_vertical_spacing"
-        android:text="@string/nome"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:background="@color/colorSoftOrangeBackground"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dataNasPerfilTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/nav_header_vertical_spacing"
-        android:text="@string/perfil_data"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:gravity="center" />
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:rowCount="3"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_gravity="center"
+            android:elevation="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/fotoPefilImageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:srcCompat="@drawable/perfil"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/fab_margin"
+                />
+
+
+                <TextView
+                android:id="@+id/nomePerfilTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/nav_header_vertical_spacing"
+                android:text="@string/nome"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@color/colorSoftBlue"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <TextView
+                android:id="@+id/dataNasPerfilTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/nav_header_vertical_spacing"
+                android:text="@string/perfil_data"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:gravity="center" />
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:rowCount="4"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_gravity="center"
+            android:elevation="10dp">
 
     <TextView
         android:id="@+id/tipoPerfilTextView"
@@ -77,4 +107,6 @@
         android:layout_gravity="center"
         android:gravity="center"/>
 
+        </GridLayout>
 </LinearLayout>
+</ScrollView>

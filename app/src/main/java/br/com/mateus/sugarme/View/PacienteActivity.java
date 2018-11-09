@@ -52,6 +52,7 @@ import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
@@ -243,40 +244,27 @@ public class PacienteActivity extends AppCompatActivity
             medicalInfoPresenter.getPerfil(PacienteActivity.this);
         } else if (id == R.id.nav_diario) {
             SimpleNavigation (PacienteActivity.this, DiarioGlicemicoActivity.class);
-        } else if (id == R.id.nav_exames) {
-            Intent intent = new Intent(PacienteActivity.this, ExameActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
 
+        } else if (id == R.id.nav_exames) {
+            SimpleNavigation(PacienteActivity.this, ExameActivity.class);
 
         } else if (id == R.id.nav_intercor) {
-            Intent intent = new Intent(PacienteActivity.this, IntercorrenciaActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_medicacao) {
-
-        } else if (id == R.id.nav_agenda) {
+           SimpleNavigation(PacienteActivity.this, IntercorrenciaActivity.class);
 
         } else if (id == R.id.nav_relatorio) {
 
+        } else if (id == R.id.nav_config) {
+            NavigationWithOnePutExtra(PacienteActivity.this, ConfigurarActivity.class, "tipo", "paciente");
+
         } else if (id == R.id.nav_chat) {
-            Intent intent = new Intent(PacienteActivity.this, VinculoChatActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            SimpleNavigation(PacienteActivity.this, VinculoChatActivity.class);
 
         } else if (id == R.id.nav_vincular) {
-            Intent intent = new Intent(PacienteActivity.this, VinculoActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_exames) {
+            SimpleNavigation(PacienteActivity.this, VinculoActivity.class);
 
         } else if (id == R.id.nav_sair) {
             pacientePresenter.logout();
-            Intent intent = new Intent(PacienteActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PacienteActivity.this.startActivity(intent);
+            FinishNavigation(PacienteActivity.this, MainActivity.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,5 +1,7 @@
 package br.com.mateus.sugarme.View;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import br.com.mateus.sugarme.Controller.MedicoPresenter;
 import br.com.mateus.sugarme.Model.Medico;
@@ -27,6 +33,7 @@ public class MedicoActivity extends AppCompatActivity {
     private GridLayout chatMedicoGridLayout;
     private GridLayout pacientesMedicoGridLayout;
     private GridLayout medicoConfiguracoesGridLayout;
+    private AlertDialog alerta;
 
 
     @Override
@@ -49,7 +56,9 @@ public class MedicoActivity extends AppCompatActivity {
        perfilMedicoGridLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                medicoPresenter.recebeMedico(MedicoActivity.this);
+                setEditProfileType();
+
+
             }
         });
 
@@ -107,5 +116,38 @@ public class MedicoActivity extends AppCompatActivity {
         else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setEditProfileType() {
+        //Lista de itens
+        ArrayList<String> itens = new ArrayList<String>();
+        itens.add("Perfil");
+        itens.add("Foto");
+
+        //adapter utilizando um layout customizado (TextView)
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.item_menu_perfil_medico, itens);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("O que deseja editar?");
+        //define o diálogo como uma lista, passa o adapter.
+        builder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                switch (arg1){
+                    case 1: {
+                        NavigationWithOnePutExtra(MedicoActivity.this, FotoPerfilActivity.class, "tipo", "medico");
+                        break;
+                    }
+                    case 0:{
+                        medicoPresenter.recebeMedico(MedicoActivity.this);
+                        break;
+                    }
+                }
+                alerta.dismiss();
+            }
+        });
+
+        alerta = builder.create();
+        alerta.show();
     }
 }

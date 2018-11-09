@@ -143,7 +143,8 @@
         android:id="@+id/spinnerUf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        />
 
 
     <!--Botao Cadastrar-->
@@ -161,8 +162,8 @@
             android:layout_weight="1"
             android:text="@string/excluir"
             android:visibility="invisible"
-            android:background="@color/colorSoftOrangeBackground"
-            android:textColor="@color/colorLink"/>
+            android:textColor="@color/colorBlank"
+            android:background="@color/colorRed"/>
 
         <!--Botao Cadastrar-->
         <Button
@@ -173,8 +174,9 @@
             android:layout_x="122dp"
             android:layout_y="2dp"
             android:text="@string/cadastrar"
-            android:background="@color/colorSoftOrangeBackground"
-            android:textColor="@color/colorLink"/>
+            android:textColor="@color/colorBlank"
+            android:background="@color/colorGreen"
+            android:padding="15dp"          />
 
         <!--Botao Editar-->
         <Button
@@ -186,8 +188,9 @@
             android:layout_y="1dp"
             android:text="@string/salvar"
             android:visibility="invisible"
-            android:background="@color/colorSoftOrangeBackground"
-            android:textColor="@color/colorLink"/>
+            android:textColor="@color/colorBlank"
+            android:background="@color/colorGreen"
+            android:padding="15dp"  />
     </AbsoluteLayout>
 
 </LinearLayout>

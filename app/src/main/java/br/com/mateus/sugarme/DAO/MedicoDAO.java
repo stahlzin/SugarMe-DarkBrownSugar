@@ -60,7 +60,7 @@ public class MedicoDAO {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("radio","editarMedico");
                 intent.putExtra("medico", (Serializable) medico);
-                intent.putExtra("tipo", "editar");
+                intent.putExtra("tipo", "mEditar");
                 activity.startActivity(intent);
             }
 

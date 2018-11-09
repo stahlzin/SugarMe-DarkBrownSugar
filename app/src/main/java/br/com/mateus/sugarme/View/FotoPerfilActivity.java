@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,30 +20,33 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toByteArray;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
+import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class FotoPerfilActivity extends AppCompatActivity {
 
     private CircleImageView fotoPefilEditImageView;
-    private ImageView voltarImageView;
+
     private ImageView cameraImageView;
     private ImageView salvarImageView;
     FirebaseStorage firebaseStorage;
     FirebaseDatabase firebaseDatabase;
     private Bitmap foto;
+    private String userType;
+
 
 
     //camera things
@@ -71,9 +75,10 @@ public class FotoPerfilActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name_FotoPerfil);     //Titulo para ser exibido na sua Action Bar em frente à seta
 
         fotoPefilEditImageView = (CircleImageView) findViewById(R.id.fotoPefilEditImageView);
-        voltarImageView = (ImageView) findViewById(R.id.voltarImageView);
+
         cameraImageView = (ImageView) findViewById(R.id.cameraImageView);
         salvarImageView = (ImageView) findViewById(R.id.salvarImageView);
+
 
         cameraImageView.setOnClickListener(fabListener);
 
@@ -89,7 +94,11 @@ public class FotoPerfilActivity extends AppCompatActivity {
                     final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
                     globalVariable.setFotoPerfil(foto);
                     uploadImage(foto);
-                    SimpleNavigation(FotoPerfilActivity.this, PerfilActivity.class);
+                    if(userType.equals("pacientes")){
+                        FinishNavigation(FotoPerfilActivity.this, PerfilActivity.class);
+                    }else if(userType.equals("medicos")){
+                        FinishNavigation(FotoPerfilActivity.this, MedicoActivity.class);
+                    }
                 }
 
             }
@@ -100,6 +109,17 @@ public class FotoPerfilActivity extends AppCompatActivity {
             this.fotoPefilEditImageView.setImageBitmap(globalVariable.getFotoPerfil());
         }else{
             this.fotoPefilEditImageView.setImageResource(R.drawable.perfil);
+        }
+
+        Intent it = getIntent();
+        if(it != null && it.getExtras() != null) {
+            if (it.getStringExtra("tipo").equals("medico")) {
+                userType = "medicos";
+                getMedicalFoto();
+            }
+            if (it.getStringExtra("tipo").equals("paciente")) {
+                userType = "pacientes";
+            }
         }
     }
 
@@ -170,19 +190,15 @@ public class FotoPerfilActivity extends AppCompatActivity {
 
 
 
-    public void getUserId() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        userId = firebaseAuth.getCurrentUser().getUid();
-    }
 
     private void uploadImage (final Bitmap image){
         //gera um nomoe aleatório
         final String chave = "fotoPerfil";
-        getUserId();
+        userId = getUserId();
         byte [] data = toByteArray (image);
         //armazena no storage com extensão
         StorageReference storageReference = firebaseStorage.getReference();
-        storageReference.child("users").child("pacientes").child(userId).child("fotoPerfil").child(chave+ PNG_EXTENSION).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        storageReference.child("users").child(userType).child(userId).child("fotoPerfil").child(chave+ PNG_EXTENSION).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 //updateImage(image);
@@ -205,7 +221,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
 
     private void saveURLForDownload (Uri downloadURL){
         DatabaseReference databaseReference = firebaseDatabase.getReference();
-        databaseReference.child("users").child("pacientes").child(userId).child("dados").child("fotoPerfil").setValue(downloadURL.toString());
+        databaseReference.child("users").child(userType).child(userId).child("dados").child("fotoPerfil").setValue(downloadURL.toString());
 
     }
 
@@ -213,13 +229,49 @@ public class FotoPerfilActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                FinishNavigation(FotoPerfilActivity.this, PerfilActivity.class);
+                if(userType.equals("pacientes")){
+                    FinishNavigation(FotoPerfilActivity.this, PerfilActivity.class);
+                }else if(userType.equals("medicos")){
+                    FinishNavigation(FotoPerfilActivity.this, MedicoActivity.class);
+                }
                 break;
             default:break;
         }
         return true;
     }
 
+    private void getMedicalFoto(){
+        final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
+        if(globalVariable.getFotoPerfil() == null){
+            downloadImageProfile();
+        }else{
+            fotoPefilEditImageView.setImageBitmap(globalVariable.getFotoPerfil());
+        }
+    }
 
+    private void downloadImageProfile() {
+        userId = getUserId();
+        final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+        // Create a storage reference from our app
+        StorageReference storageRef = firebaseStorage.getReference();
+        //Download file in Memory
+        StorageReference islandRef = storageRef.child("users").child("medicos").child(userId).child("fotoPerfil/fotoPerfil.png");
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
+                globalVariable.setFotoPerfil(toBitmap(bytes));
+                fotoPefilEditImageView.setImageBitmap(globalVariable.getFotoPerfil());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+    }
 
 }

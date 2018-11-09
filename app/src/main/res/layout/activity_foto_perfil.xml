@@ -22,13 +22,13 @@
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="280dp"
         android:columnCount="1"
         android:rowCount="1"
         android:useDefaultMargins="true"
         android:background="@color/colorBlank"
         android:layout_margin="@dimen/fab_margin"
-        android:elevation="10dp">
+        android:elevation="1dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/fotoPefilEditImageView"
@@ -63,12 +63,6 @@
                 android:layout_width="fill_parent"
                 android:gravity="center_horizontal">
 
-                <ImageView
-                    android:id="@+id/voltarImageView"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    app:srcCompat="@drawable/ic_arrow_back_black_24dp"
-                    android:layout_gravity="center"/>
 
                 <ImageView
                     android:id="@+id/cameraImageView"
@@ -96,13 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Voltar" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Nova Foto" />
+                    android:text="Foto da Câmera" />
 
                 <TextView
                     android:layout_width="wrap_content"

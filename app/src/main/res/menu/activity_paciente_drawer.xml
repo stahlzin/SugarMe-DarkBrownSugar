@@ -22,14 +22,6 @@
             android:icon="@drawable/ic_menu_intercor"
             android:title="Intercorrências" />
         <item
-            android:id="@+id/nav_medicacao"
-            android:icon="@drawable/ic_menu_medicacao"
-            android:title="Medicação" />
-        <item
-            android:id="@+id/nav_agenda"
-            android:icon="@drawable/ic_menu_agenda"
-            android:title="Agenda" />
-        <item
             android:id="@+id/nav_relatorio"
             android:icon="@drawable/ic_menu_relatorio"
             android:title="Relatorio" />
@@ -49,6 +41,10 @@
 
     <group android:id="@+id/nav_gp3"
         android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_config"
+            android:icon="@drawable/ic_build_black_24dp"
+            android:title="Configurações" />
         <item
             android:id="@+id/nav_sair"
             android:icon="@drawable/ic_menu_sair"

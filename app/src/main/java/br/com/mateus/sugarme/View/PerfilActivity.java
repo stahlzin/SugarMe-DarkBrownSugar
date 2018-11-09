@@ -2,6 +2,7 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,7 +19,8 @@ import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 
 public class PerfilActivity extends AppCompatActivity {
 
@@ -30,9 +32,6 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView tratamentoPerfilTextView;
     private TextView inicioPerfilTextView;
 
-    private MedicalInfoPresenter medicalInfoPresenter;
-    private MedicalInfoDAO medicalInfoDAO;
-    private Paciente paciente;
     private MedicalInfo medicalInfo;
 
 
@@ -55,10 +54,12 @@ public class PerfilActivity extends AppCompatActivity {
         inicioPerfilTextView = (TextView) findViewById(R.id.inicioPerfilTextView);
 
 
+
         fotoPefilImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                SimpleNavigation(PerfilActivity.this, FotoPerfilActivity.class);
+            public void onClick(View view) {
+                //actionA.setTitle("Action A clicked");
+                NavigationWithOnePutExtra(PerfilActivity.this, FotoPerfilActivity.class, "tipo", "paciente");
             }
         });
 
@@ -155,10 +156,7 @@ public class PerfilActivity extends AppCompatActivity {
             return true;
         }
         if (id== android.R.id.home) {
-            Intent intent = new Intent(PerfilActivity.this, PacienteActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PerfilActivity.this.startActivity(intent);
-            finishAffinity();
+            FinishNavigation(PerfilActivity.this, PacienteActivity.class);
         }
         return super.onOptionsItemSelected(item);
     }

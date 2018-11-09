@@ -16,6 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import br.com.mateus.sugarme.Controller.MedicoPresenter;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.Model.Medico;
@@ -25,12 +27,13 @@ import br.com.mateus.sugarme.DAO.PacienteDAO;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
-public class CadastroActivity extends AppCompatActivity {
-    private String[] uf = new String[]{"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA","MG",
-            "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS",
-            "SC", "SE", "SP", "TO"};
+import static br.com.mateus.sugarme.Builder.DataBuilder.getUfList;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
-    //precisa trabalhar as configurações....
+public class CadastroActivity extends AppCompatActivity {
+    /*private String[] uf = new String[]{"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA","MG",
+            "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS",
+            "SC", "SE", "SP", "TO"};*/
 
     //Objetos
     private RadioButton radioButtonPaciente;
@@ -50,6 +53,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     private PacienteDAO pacienteDAO;
     private MedicoDAO medicoDAO;
+    private ArrayList<String> uf;
 
 
     //ON CREATE ----------
@@ -80,6 +84,7 @@ public class CadastroActivity extends AppCompatActivity {
         textInputCrm.setVisibility(View.GONE);
         spinnerUf.setVisibility(View.GONE);
         textInputEspecialidade.setVisibility(View.GONE);
+
 
 
         // Desabilitar CRM
@@ -121,9 +126,10 @@ public class CadastroActivity extends AppCompatActivity {
         textInputCrm.addTextChangedListener(MaskEditUtil.mask(textInputCrm, MaskEditUtil.FORMAT_CRM));
 
         //Adapter pro spinner
+        uf = getUfList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, uf);
         spinnerUf.setAdapter(adapter);
-
+        spinnerUf.setSelection(1);
 
         //Cadastrar
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +213,19 @@ public class CadastroActivity extends AppCompatActivity {
                 textViewCadastro.setVisibility(View.INVISIBLE);
                 textViewCadastro.setVisibility(View.GONE);
             }
+            if(it.getStringExtra("tipo").equals("mEditar")){
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
+                getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
+                getSupportActionBar().setTitle(R.string.app_name_Cadastro);
+                radioButtonMedico.setChecked(true);
+                textRadioGroupMedico_paciente.setVisibility(View.INVISIBLE);
+                textRadioGroupMedico_paciente.setVisibility(View.GONE);
+                textViewCadastro.setVisibility(View.INVISIBLE);
+                textViewCadastro.setVisibility(View.GONE);
+                spinnerUf.setVisibility(View.VISIBLE);
+                textInputEspecialidade.setVisibility(View.VISIBLE);
+                textInputCrm.setVisibility(View.VISIBLE);
+            }
         }
 
 
@@ -216,16 +235,12 @@ public class CadastroActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(radioButtonMedico.isChecked()){
-            //Voltar a tela inicial
-            Intent intent = new Intent(CadastroActivity.this, MedicoActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            CadastroActivity.this.startActivity(intent);
+            //Voltar a tela inicial, do médico
+            FinishNavigation(CadastroActivity.this, MedicoActivity.class);
         }
         else if(radioButtonPaciente.isChecked()){
-            //Voltar a tela inicial
-            Intent intent = new Intent(CadastroActivity.this, PacienteActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            CadastroActivity.this.startActivity(intent);
+            //Voltar a tela inicial, do paciente
+            FinishNavigation(CadastroActivity.this, PacienteActivity.class);
         }
     }
 
@@ -350,9 +365,6 @@ public class CadastroActivity extends AppCompatActivity {
                 default:break;
             }
         }
-
-
-
         return true;
     }
 }
