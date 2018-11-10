@@ -65,7 +65,10 @@
             android:rowCount="4"
             android:useDefaultMargins="true"
             android:background="@color/colorBlank"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginBottom="30dp"
             android:layout_gravity="center"
             android:elevation="10dp">
 
@@ -108,5 +111,8 @@
         android:gravity="center"/>
 
         </GridLayout>
+
+
 </LinearLayout>
+
 </ScrollView>

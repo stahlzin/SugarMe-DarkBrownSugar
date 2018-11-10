@@ -171,10 +171,10 @@
     <string name="action_editar_perfil">Editar Perfil</string>
     <string name="action_gerenciar_cadastro">Gerenciar Cadastro</string>
     <string name="app_name_CadastroInicial">Complete seu Cadastro</string>
-    <string name="perfil_tipo_diabetes">Diabetes Tipo X</string>
+    <string name="perfil_tipo_diabetes">Diabetes Tipo %s</string>
     <string name="perfil_data">XX/XX/XXXX</string>
     <string name="perfil_tratamento">Tratamento feito com:</string>
-    <string name="perfil_inicio">Início do tratamento</string>
+    <string name="perfil_inicio">Início do tratamento em: %s</string>
     <string name="dtIntercorrencia">Data da intercorrência:</string>
     <string name="anotacoes">Anotações:</string>
     <string name="sintomas">Sintomas:</string>

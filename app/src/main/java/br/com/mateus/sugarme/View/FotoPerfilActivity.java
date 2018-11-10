@@ -4,12 +4,17 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -30,6 +36,7 @@ import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.drawableToBitmap;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toByteArray;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
@@ -46,7 +53,8 @@ public class FotoPerfilActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     private Bitmap foto;
     private String userType;
-
+    private ImageView arquivoImageView;
+    private ImageView fotoProvisoriaImageView;
 
 
     //camera things
@@ -54,6 +62,10 @@ public class FotoPerfilActivity extends AppCompatActivity {
     private static final int REQUEST_TAKE_PICTURE = 1001;
     private static final String PNG_EXTENSION = ".png";
     private String userId;
+
+    //ler pdf
+    private static final int REQUEST_READ_PICTURE = 89;
+    private static final int REQUEST_PERMISSION_READ_STORAGE = 86;
 
 
     //referência ao diretório images
@@ -76,11 +88,25 @@ public class FotoPerfilActivity extends AppCompatActivity {
 
         fotoPefilEditImageView = (CircleImageView) findViewById(R.id.fotoPefilEditImageView);
 
+        arquivoImageView = (ImageView) findViewById(R.id.arquivoImageView);
         cameraImageView = (ImageView) findViewById(R.id.cameraImageView);
         salvarImageView = (ImageView) findViewById(R.id.salvarImageView);
 
 
         cameraImageView.setOnClickListener(fabListener);
+
+        arquivoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(FotoPerfilActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
+                    selectImageFromStorage();
+                }
+                else{
+                    ActivityCompat.requestPermissions(FotoPerfilActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION_READ_STORAGE);
+                }
+
+            }
+        });
 
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -89,7 +115,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (foto == null){
-
+                    Toast.makeText(FotoPerfilActivity.this,"Selecione uma imagem...", Toast.LENGTH_SHORT).show();
                 }else{
                     final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
                     globalVariable.setFotoPerfil(foto);
@@ -178,16 +204,39 @@ public class FotoPerfilActivity extends AppCompatActivity {
                     updateImage(foto);
                 }
                 else{
-                    Toast.makeText(this,"Não foi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"Selecione uma imagem...", Toast.LENGTH_SHORT).show();
                 }
                 break;
-        }
+            case REQUEST_READ_PICTURE:
+                if (resultCode == RESULT_OK && data!=null){
+                    //pega a foto
+              //      Uri selectedImage = data.getData().toString();
+                    //Toast.makeText(FotoPerfilActivity.this, (String.valueOf(selectedImage)), Toast.LENGTH_SHORT).show();
+/*
+                    Glide
+                            .with(this)
+                            .load(selectedImage)
+                            .into(fotoPefilEditImageView);*/
+                   // updateImage(foto);
+
+                }else{
+                    Toast.makeText(FotoPerfilActivity.this, "Selecione uma imagem...", Toast.LENGTH_SHORT).show();
+                }
     }
+    }
+
 
     private void updateImage(Bitmap bitmap){
         fotoPefilEditImageView.setImageBitmap(bitmap);
     }
 
+    private void selectImageFromStorage() {
+        //para o usuário selecionar pelo fileManager
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, REQUEST_READ_PICTURE);
+    }
 
 
 

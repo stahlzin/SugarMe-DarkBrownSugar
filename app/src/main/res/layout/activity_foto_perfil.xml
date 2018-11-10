@@ -63,6 +63,12 @@
                 android:layout_width="fill_parent"
                 android:gravity="center_horizontal">
 
+                <ImageView
+                    android:id="@+id/arquivoImageView"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    app:srcCompat="@drawable/ic_camera_roll_black_24dp"
+                    android:layout_gravity="center"/>
 
                 <ImageView
                     android:id="@+id/cameraImageView"
@@ -85,6 +91,11 @@
                 android:gravity="center_horizontal"
                 android:paddingBottom="@dimen/fab_margin">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Foto do Arquivo" />
 
                 <TextView
                     android:layout_width="wrap_content"

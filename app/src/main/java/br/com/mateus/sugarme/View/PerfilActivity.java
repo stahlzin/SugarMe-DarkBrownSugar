@@ -1,24 +1,28 @@
 package br.com.mateus.sugarme.View;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import br.com.mateus.sugarme.Model.MedicalInfo;
-import br.com.mateus.sugarme.DAO.MedicalInfoDAO;
-import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static br.com.mateus.sugarme.Builder.DataBuilder.getTreamentProfile;
+import static br.com.mateus.sugarme.Builder.DataBuilder.getTypeOfDiabetes;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 
@@ -31,6 +35,8 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView tipoPerfilTextView;
     private TextView tratamentoPerfilTextView;
     private TextView inicioPerfilTextView;
+    private FloatingActionButton editOptFab;
+    private AlertDialog alerta;
 
     private MedicalInfo medicalInfo;
 
@@ -52,19 +58,15 @@ public class PerfilActivity extends AppCompatActivity {
         tipoPerfilTextView = (TextView) findViewById(R.id.tipoPerfilTextView);
         tratamentoPerfilTextView = (TextView) findViewById(R.id.tratamentoPerfilTextView);
         inicioPerfilTextView = (TextView) findViewById(R.id.inicioPerfilTextView);
+        editOptFab = (FloatingActionButton) findViewById(R.id.editOptFab);
 
 
-
-        fotoPefilImageView.setOnClickListener(new View.OnClickListener() {
+        editOptFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //actionA.setTitle("Action A clicked");
-                NavigationWithOnePutExtra(PerfilActivity.this, FotoPerfilActivity.class, "tipo", "paciente");
+                setEditProfileOpt();
             }
         });
-
-
-
 
         //Parametros do PutExtra
         Intent it = getIntent();
@@ -94,35 +96,12 @@ public class PerfilActivity extends AppCompatActivity {
     public void setPerfil(MedicalInfo medicalInfo) {
         //Ajustar a escrita
         final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
+
         this.nomePerfilTextView.setText(globalVariable.getNomeUser());
         this.dataNasPerfilTextView.setText(globalVariable.getDataNascUser());
-
-
-        String tipoDiabetes = medicalInfo.getTipoDiabetes();
-        String infoTipo;
-        switch (tipoDiabetes){
-            case ("1"): infoTipo = "1"; break;
-            case ("2"): infoTipo = "2";break;
-            case ("3"): infoTipo = "Gestacional"; break;
-            default: infoTipo = ""; break;
-        }
-        this.tipoPerfilTextView.setText("Diabetes Tipo: " + infoTipo);
-        this.inicioPerfilTextView.setText("Tratamento iniciou em: " + medicalInfo.getAnoInicioTratamento());
-
-        StringBuilder perfilTratamento = new StringBuilder("");
-        if(medicalInfo.getMedicacao() == 1){
-            perfilTratamento.append("Medicação\n");
-        }
-        if(medicalInfo.getInsulina() == 1){
-            perfilTratamento.append("Insulina\n");
-        }
-        if(medicalInfo.getAlimentar() == 1){
-            perfilTratamento.append("Dieta Restritiva\n");
-        }
-        if(medicalInfo.getEsporte() == 1){
-            perfilTratamento.append("Prática de Atividades Físicas\n");
-        }
-        this.tratamentoPerfilTextView.setText(perfilTratamento);
+        this.tipoPerfilTextView.setText(PerfilActivity.this.getString(R.string.perfil_tipo_diabetes, getTypeOfDiabetes(medicalInfo.getTipoDiabetes())));
+        this.inicioPerfilTextView.setText(PerfilActivity.this.getString(R.string.perfil_inicio, medicalInfo.getAnoInicioTratamento()));
+        this.tratamentoPerfilTextView.setText(getTreamentProfile(medicalInfo.getMedicacao(), medicalInfo.getInsulina(), medicalInfo.getAlimentar(), medicalInfo.getEsporte()  ));
 
         globalVariable.setInicioTratamento(this.inicioPerfilTextView.getText().toString());
         globalVariable.setTipoDiabetes(this.tipoPerfilTextView.getText().toString());
@@ -130,35 +109,56 @@ public class PerfilActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.editar_perfil, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FinishNavigation(PerfilActivity.this, PacienteActivity.class);
+                break;
+            default:break;
+        }
+        return true;
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_editar_perfil) {
-            MedicalInfoPresenter medicalInfoPresenter = new MedicalInfoPresenter();
-            medicalInfoPresenter.recebeInfoMedica(PerfilActivity.this);
-            return true;
-        }
-        if (id == R.id.action_gerenciar_cadastro) {
-            PacientePresenter pacientePresenter = new PacientePresenter();
-            pacientePresenter.recebePaciente(PerfilActivity.this);
-            return true;
-        }
-        if (id== android.R.id.home) {
-            FinishNavigation(PerfilActivity.this, PacienteActivity.class);
-        }
-        return super.onOptionsItemSelected(item);
+    private void setEditProfileOpt() {
+        //Lista de itens
+        ArrayList<String> itens = new ArrayList<String>();
+        itens.add("Perfil");
+        itens.add("Foto");
+        itens.add("Cadastro");
+
+        //adapter utilizando um layout customizado (TextView)
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.item_menu_perfil_medico, itens);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("O que deseja editar?");
+        //define o diálogo como uma lista, passa o adapter.
+        builder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                switch (arg1){
+                    case 0:{
+                        MedicalInfoPresenter medicalInfoPresenter = new MedicalInfoPresenter();
+                        medicalInfoPresenter.recebeInfoMedica(PerfilActivity.this);
+                        break;
+                    }
+                    case 1: {
+                        NavigationWithOnePutExtra(PerfilActivity.this, FotoPerfilActivity.class, "tipo", "paciente");
+                        break;
+                    }
+                    case 2:{
+                        PacientePresenter pacientePresenter = new PacientePresenter();
+                        pacientePresenter.recebePaciente(PerfilActivity.this);
+                        break;
+                    }
+                }
+                alerta.dismiss();
+            }
+        });
+
+        alerta = builder.create();
+        alerta.show();
     }
 
 }
