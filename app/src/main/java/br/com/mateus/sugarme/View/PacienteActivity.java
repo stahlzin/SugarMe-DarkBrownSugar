@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.IMarker;
@@ -126,6 +127,9 @@ public class PacienteActivity extends AppCompatActivity
         setData();
 
 
+
+
+
         //Parametros do PutExtra
         Intent it = getIntent();
         if (it != null && it.getExtras() != null) {
@@ -173,6 +177,24 @@ public class PacienteActivity extends AppCompatActivity
        }else{
            fotoPacienteImageView.setImageBitmap(globalVariable.getFotoPerfil());
        }
+
+
+        //Ver conversas nao lidas
+        databaseReference.child("users").child("pacientes").child(userId).child("notificacoes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Toast.makeText(PacienteActivity.this, "Você tem " + dataSnapshot.getChildrenCount() + " conversa(s) não lida(s)!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
     }
 

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mateus.sugarme.Model.Medico;
+import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
 public class VinculoActivity extends AppCompatActivity {
@@ -147,7 +148,7 @@ public class VinculoActivity extends AppCompatActivity {
             }
         });
     }
-
+    //Medico
     private void setListUptade() {
             databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -180,6 +181,7 @@ public class VinculoActivity extends AppCompatActivity {
             });
     }
 
+    //Medico
     public static class MedicoArrayAdapter extends ArrayAdapter<Medico> {
         public MedicoArrayAdapter(Context context, List<Medico> forecast) {
             super(context, -1, forecast);
@@ -216,7 +218,42 @@ public class VinculoActivity extends AppCompatActivity {
         }
     }
 
+    //Paciente
+    public static class PacienteArrayAdapter extends ArrayAdapter<Paciente> {
+        public PacienteArrayAdapter(Context context, List<Paciente> forecast) {
+            super(context, -1, forecast);
+        }
 
+        private static class ViewHolder {
+            TextView nomePacienteTextView;
+            TextView telefonePacienteTextView;
+            TextView cpfPacienteTextView;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Paciente dgc = getItem(position);
+            PacienteArrayAdapter.ViewHolder viewHolder;
+            if (convertView == null) {
+                viewHolder = new PacienteArrayAdapter.ViewHolder();
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                convertView = inflater.inflate(R.layout.list_busca_paciente, parent, false);
+                viewHolder.nomePacienteTextView = (TextView) convertView.findViewById(R.id.nomePacienteTextView);
+                viewHolder.telefonePacienteTextView = (TextView) convertView.findViewById(R.id.telefonePacienteTextView);
+                viewHolder.cpfPacienteTextView = (TextView) convertView.findViewById(R.id.cpfPacienteTextView);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (PacienteArrayAdapter.ViewHolder) convertView.getTag();
+            }
+
+            Context context = getContext();
+            viewHolder.nomePacienteTextView.setText(String.valueOf(dgc.getNome()));
+            viewHolder.telefonePacienteTextView.setText(dgc.getTelefone());
+            viewHolder.cpfPacienteTextView.setText(dgc.getCpf());
+            return convertView;
+
+        }
+    }
 
 
 
@@ -232,6 +269,38 @@ public class VinculoActivity extends AppCompatActivity {
             default:break;
         }
         return true;
+    }
+
+    private void setListUptadePaciente() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child("medicos").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                medicoList.clear();
+                todosMedicosList.clear();
+                for (DataSnapshot json : dataSnapshot.getChildren()) {
+                    Medico todos = json.child("dados").getValue(Medico.class);
+                    todos.setIdMedico(json.getKey());
+                    todosMedicosList.add(todos);
+                }
+
+                for (int i = 0; i < todosMedicosList.size(); i++){
+                    for (int j = 0; j < idMedicosList.size(); j++){
+                        if(todosMedicosList.get(i).getIdMedico().equals(idMedicosList.get(j))){
+                            Medico add = todosMedicosList.get(i);
+                            medicoList.add(add);
+                        }
+                    }
+                }
+                medicoArrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

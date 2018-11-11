@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,34 +29,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mateus.sugarme.Model.Medico;
+import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
-public class VinculoChatActivity extends AppCompatActivity {
-
-    private ListView medicoDisplayListView;
-    private List<Medico> medicoList = new ArrayList<>();
-    private List<Medico> todosMedicosList = new ArrayList<>();
-    private List<String> idMedicosList = new ArrayList<>();
-    private VinculoActivity.MedicoArrayAdapter medicoArrayAdapter;
-    private ListView medicoBuscaListView;
+public class VinculoChatMedicoActivity extends AppCompatActivity {
+    private ListView medicoDisplayListView; //Neste caso mantive o nome de "Medico" mas será carregado com dados do Paciente
+    private List<Paciente> pacienteList = new ArrayList<>();
+    private List<Paciente> todosPacientesList = new ArrayList<>();
+    private List<String> idPacientesList = new ArrayList<>();
+    private VinculoActivity.PacienteArrayAdapter pacienteArrayAdapter;
+    private ListView pacienteBuscaListView;
     private FirebaseAuth firebaseAuth;
     private String userId;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceMedico;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vinculo_chat);Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_vinculo_chat_medico);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
-        getSupportActionBar().setTitle(R.string.app_name_Vinculo);     //Titulo para ser exibido na sua Action Bar em frente à seta
+        getSupportActionBar().setTitle(R.string.app_name_Pacientes);     //Titulo para ser exibido na sua Action Bar em frente à seta
 
 
         medicoDisplayListView = (ListView) findViewById(R.id.medicoDisplayListView);
-        medicoArrayAdapter = new VinculoActivity.MedicoArrayAdapter(this, medicoList);
-        medicoDisplayListView.setAdapter(medicoArrayAdapter);
+        pacienteArrayAdapter = new VinculoActivity.PacienteArrayAdapter(this, pacienteList);
+        medicoDisplayListView.setAdapter(pacienteArrayAdapter);
 
         configuraObserverShortClick();
 
@@ -67,13 +68,13 @@ public class VinculoChatActivity extends AppCompatActivity {
         medicoDisplayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder dbuilder = new AlertDialog.Builder(VinculoChatActivity.this);
+                AlertDialog.Builder dbuilder = new AlertDialog.Builder(VinculoChatMedicoActivity.this);
                 dbuilder.setTitle(R.string.iniciarChat);
                 dbuilder.setPositiveButton(getString(R.string.simVincular), new DialogInterface.OnClickListener() {//conversar
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Medico medico = medicoList.get(position);
-                        iniciarChat(medico);
+                        Paciente paciente = pacienteList.get(position);
+                        iniciarChat(paciente);
                     }
                 }).setNegativeButton(getString(R.string.naoVincular), new DialogInterface.OnClickListener() {//não conversar
                     @Override
@@ -86,12 +87,12 @@ public class VinculoChatActivity extends AppCompatActivity {
         });
     }
 
-    private void iniciarChat(Medico medico) {
-        Intent intent = new Intent(VinculoChatActivity.this, ChatActivity.class);
+    private void iniciarChat(Paciente paciente) {
+        Intent intent = new Intent(VinculoChatMedicoActivity.this, ChatActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("chaveMedico", medico.getIdMedico());
-        intent.putExtra("chavePaciente","0");
-        VinculoChatActivity.this.startActivity(intent);
+        intent.putExtra("chaveMedico", "0");
+        intent.putExtra("chavePaciente",paciente.getIdPaciente());
+        VinculoChatMedicoActivity.this.startActivity(intent);
     }
 
     public void getUserId() {
@@ -110,21 +111,21 @@ public class VinculoChatActivity extends AppCompatActivity {
     private void getListaVinculos (){
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("pacientes").child(userId).child("vinculos").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("users").child("medicos").child(userId).child("vinculos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                idMedicosList.clear();
+                idPacientesList.clear();
 
                 for (DataSnapshot json : dataSnapshot.getChildren()) {
-                    String id = (String) json.child("idMedico").getValue();
+                    String id = (String) json.child("idPaciente").getValue();
                     seAceitaChat(id);
                 }
-                if(!idMedicosList.isEmpty()){
+                if(!idPacientesList.isEmpty()){
                     setListUptade();
                 }/*else{
-                    medicoList.clear();
-                    medicoArrayAdapter.notifyDataSetChanged();
-                    Toast.makeText(VinculoChatActivity.this, R.string.semVinculoChatMedico, Toast.LENGTH_SHORT).show();
+                    pacienteList.clear();
+                    pacienteArrayAdapter.notifyDataSetChanged();
+                    Toast.makeText(VinculoChatMedicoActivity.this, R.string.semVinculoChatPaciente, Toast.LENGTH_SHORT).show();
                 }*/
             }
 
@@ -136,13 +137,12 @@ public class VinculoChatActivity extends AppCompatActivity {
     }
 
     private void seAceitaChat(final String id) {
-        final boolean aceita;
-        databaseReference.child("users").child("medicos").child(id).child("configurar").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child("pacientes").child(id).child("configurar").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshotMedico) {
-                if(dataSnapshotMedico.exists()){
-                    if(dataSnapshotMedico.child("aceitaChat").getValue().toString().equals("sim")){
-                        idMedicosList.add(id);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshotPaciente) {
+                if(dataSnapshotPaciente.exists()){
+                    if(dataSnapshotPaciente.child("aceitaChat").getValue().toString().equals("sim")){
+                        idPacientesList.add(id);
                         setListUptade();
                     }
                 }
@@ -153,31 +153,31 @@ public class VinculoChatActivity extends AppCompatActivity {
 
             }
         });
-        }
+    }
 
     private void setListUptade() {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("medicos").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("users").child("pacientes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                medicoList.clear();
-                todosMedicosList.clear();
+                pacienteList.clear();
+                todosPacientesList.clear();
                 for (DataSnapshot json : dataSnapshot.getChildren()) {
-                    Medico todos = json.child("dados").getValue(Medico.class);
-                    todos.setIdMedico(json.getKey());
-                    todosMedicosList.add(todos);
+                    Paciente todos = json.child("dados").getValue(Paciente.class);
+                    todos.setIdPaciente(json.getKey());
+                    todosPacientesList.add(todos);
                 }
 
-                for (int i = 0; i < todosMedicosList.size(); i++){
-                    for (int j = 0; j < idMedicosList.size(); j++){
-                        if(todosMedicosList.get(i).getIdMedico().equals(idMedicosList.get(j))){
-                            Medico add = todosMedicosList.get(i);
-                            medicoList.add(add);
+                for (int i = 0; i < todosPacientesList.size(); i++){
+                    for (int j = 0; j < idPacientesList.size(); j++){
+                        if(todosPacientesList.get(i).getIdPaciente().equals(idPacientesList.get(j))){
+                            Paciente add = todosPacientesList.get(i);
+                            pacienteList.add(add);
                         }
                     }
                 }
-                medicoArrayAdapter.notifyDataSetChanged();
+                pacienteArrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -187,58 +187,55 @@ public class VinculoChatActivity extends AppCompatActivity {
         });
     }
 
-    public static class MedicoArrayAdapter extends ArrayAdapter<Medico> {
-        public MedicoArrayAdapter(Context context, List<Medico> forecast) {
+    public static class PacienteArrayAdapter extends ArrayAdapter<Paciente> {
+        public PacienteArrayAdapter(Context context, List<Paciente> forecast) {
             super(context, -1, forecast);
         }
 
+
         private static class ViewHolder {
-            TextView nomeMedicoTextView;
-            TextView especialidadeMedicoTextView;
-            TextView crmMedicoTextView;
+            TextView nomePacienteTextView;
+            TextView telefonePacienteTextView;
+            TextView cpfPacienteTextView;
         }
+
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Medico dgc = getItem(position);
-            VinculoChatActivity.MedicoArrayAdapter.ViewHolder viewHolder;
+            Paciente dgc = getItem(position);
+            VinculoChatMedicoActivity.PacienteArrayAdapter.ViewHolder viewHolder;
             if (convertView == null) {
-                viewHolder = new VinculoChatActivity.MedicoArrayAdapter.ViewHolder();
+                viewHolder = new VinculoChatMedicoActivity.PacienteArrayAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
-                convertView = inflater.inflate(R.layout.list_busca_medico, parent, false);
-                viewHolder.nomeMedicoTextView = (TextView) convertView.findViewById(R.id.nomeMedicoTextView);
-                viewHolder.especialidadeMedicoTextView = (TextView) convertView.findViewById(R.id.especialidadeMedicoTextView);
-                viewHolder.crmMedicoTextView = (TextView) convertView.findViewById(R.id.crmMedicoTextView);
+                convertView = inflater.inflate(R.layout.list_busca_paciente, parent, false);
+                viewHolder.nomePacienteTextView = (TextView) convertView.findViewById(R.id.nomePacienteTextView);
+                viewHolder.telefonePacienteTextView = (TextView) convertView.findViewById(R.id.telefonePacienteTextView);
+                viewHolder.cpfPacienteTextView = (TextView) convertView.findViewById(R.id.cpfPacienteTextView);
                 convertView.setTag(viewHolder);
             } else {
-                viewHolder = (VinculoChatActivity.MedicoArrayAdapter.ViewHolder) convertView.getTag();
+                viewHolder = (VinculoChatMedicoActivity.PacienteArrayAdapter.ViewHolder) convertView.getTag();
             }
 
             Context context = getContext();
-            viewHolder.nomeMedicoTextView.setText(String.valueOf(dgc.getNome()));
-            viewHolder.especialidadeMedicoTextView.setText(dgc.getEspecialidade());
-            viewHolder.crmMedicoTextView.setText(dgc.getCrm());
+            viewHolder.nomePacienteTextView.setText(String.valueOf(dgc.getNome()));
+            viewHolder.telefonePacienteTextView.setText(dgc.getTelefone());
+            viewHolder.cpfPacienteTextView.setText(dgc.getCpf());
             return convertView;
 
         }
     }
 
-
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(VinculoChatActivity.this, PacienteActivity.class);
+                Intent intent = new Intent(VinculoChatMedicoActivity.this, MedicoActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                VinculoChatActivity.this.startActivity(intent);
+                VinculoChatMedicoActivity.this.startActivity(intent);
                 finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
                 break;
             default:break;
         }
         return true;
     }
-
 }

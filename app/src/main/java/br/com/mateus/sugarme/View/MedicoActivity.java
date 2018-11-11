@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,9 +13,18 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 
 import br.com.mateus.sugarme.Controller.MedicoPresenter;
 import br.com.mateus.sugarme.Model.Medico;
@@ -34,6 +44,15 @@ public class MedicoActivity extends AppCompatActivity {
     private GridLayout pacientesMedicoGridLayout;
     private GridLayout medicoConfiguracoesGridLayout;
     private AlertDialog alerta;
+    private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
+    private String userId;
+
+
+    public void getUserId() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
+    }
 
 
     @Override
@@ -44,6 +63,10 @@ public class MedicoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
+        //Id
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
         getSupportActionBar().setTitle(R.string.app_name);
         medicoPresenter = new MedicoPresenter();
 
@@ -51,6 +74,7 @@ public class MedicoActivity extends AppCompatActivity {
         chatMedicoGridLayout = (GridLayout) findViewById(R.id.chatMedicoGridLayout);
         pacientesMedicoGridLayout = (GridLayout) findViewById(R.id.pacientesMedicoGridLayout);
         medicoConfiguracoesGridLayout = (GridLayout) findViewById(R.id.medicoConfiguracoesGridLayout);
+        final TextView qteSemLerChatTextView = (TextView) findViewById(R.id.qteSemLerChatTextView); //Qtde notificacoes
 
         //Configuração do Menu em GridLayout
        perfilMedicoGridLayout.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +90,9 @@ public class MedicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Chamar o chat
+                Intent intent = new Intent(MedicoActivity.this, VinculoChatMedicoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                MedicoActivity.this.startActivity(intent);
             }
         });
 
@@ -85,7 +112,28 @@ public class MedicoActivity extends AppCompatActivity {
         //Fim da configuração do Menu
 
 
+
+
+
+
+
+        //Ver conversas nao lidas
+        databaseReference.child("users").child("medicos").child(userId).child("notificacoes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    qteSemLerChatTextView.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
+
 
 
     @Override
