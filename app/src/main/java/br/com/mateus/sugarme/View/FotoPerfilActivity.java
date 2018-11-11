@@ -2,6 +2,7 @@ package br.com.mateus.sugarme.View;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -30,7 +33,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
@@ -54,7 +59,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
     private Bitmap foto;
     private String userType;
     private ImageView arquivoImageView;
-    private ImageView fotoProvisoriaImageView;
+    private int controleFotoAdd = 0;
 
 
     //camera things
@@ -114,18 +119,25 @@ public class FotoPerfilActivity extends AppCompatActivity {
         salvarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (foto == null){
+                if(controleFotoAdd == 0){
                     Toast.makeText(FotoPerfilActivity.this,"Selecione uma imagem...", Toast.LENGTH_SHORT).show();
                 }else{
-                    final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
-                    globalVariable.setFotoPerfil(foto);
-                    uploadImage(foto);
-                    if(userType.equals("pacientes")){
-                        FinishNavigation(FotoPerfilActivity.this, PerfilActivity.class);
-                    }else if(userType.equals("medicos")){
-                        FinishNavigation(FotoPerfilActivity.this, MedicoActivity.class);
+                    if (foto == null){
+                        uploadImage();
+                        
+                    }else{
+                        final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
+                        globalVariable.setFotoPerfil(foto);
+                        uploadImage(foto);
+                        if(userType.equals("pacientes")){
+                            FinishNavigation(FotoPerfilActivity.this, PerfilActivity.class);
+                        }else if(userType.equals("medicos")){
+                            FinishNavigation(FotoPerfilActivity.this, MedicoActivity.class);
+                        }
                     }
                 }
+
+
 
             }
         });
@@ -149,7 +161,8 @@ public class FotoPerfilActivity extends AppCompatActivity {
         }
     }
 
-   private View.OnClickListener fabListener = new View.OnClickListener() {
+
+    private View.OnClickListener fabListener = new View.OnClickListener() {
         public void onClick(View v) {
             //verifica se já tem permissão
             if (ActivityCompat.checkSelfPermission(FotoPerfilActivity.this,
@@ -200,24 +213,20 @@ public class FotoPerfilActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK){
                     //pega a foto
                     foto = (Bitmap) data.getExtras().get("data");
-                    //faz upload para o Firebase Storage
+                    //faz update do ImageView
                     updateImage(foto);
+                    controleFotoAdd = 1;
                 }
                 else{
                     Toast.makeText(this,"Selecione uma imagem...", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case REQUEST_READ_PICTURE:
-                if (resultCode == RESULT_OK && data!=null){
+                if (resultCode == RESULT_OK && data!=null && data.getData() != null){
                     //pega a foto
-              //      Uri selectedImage = data.getData().toString();
-                    //Toast.makeText(FotoPerfilActivity.this, (String.valueOf(selectedImage)), Toast.LENGTH_SHORT).show();
-/*
-                    Glide
-                            .with(this)
-                            .load(selectedImage)
-                            .into(fotoPefilEditImageView);*/
-                   // updateImage(foto);
+                    mImageUri = data.getData();
+                    Glide.with(this).load(mImageUri).into(fotoPefilEditImageView);
+                    controleFotoAdd = 1;
 
                 }else{
                     Toast.makeText(FotoPerfilActivity.this, "Selecione uma imagem...", Toast.LENGTH_SHORT).show();
@@ -225,6 +234,57 @@ public class FotoPerfilActivity extends AppCompatActivity {
     }
     }
 
+    private Uri mImageUri;
+    private StorageTask mUploadTask;
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadImage() {
+        if (mImageUri != null) {
+            final String chave = "fotoPerfil";
+
+            StorageReference fileReference = firebaseStorage.getReference();
+
+
+            fileReference.child("users").child(userType).child(userId).child("fotoPerfil").child(chave+ getFileExtension(mImageUri));
+
+            mUploadTask = fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //mProgressBar.setProgress(0);
+                                }
+                            }, 500);
+
+                            Toast.makeText(FotoPerfilActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(FotoPerfilActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    /*.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            //mProgressBar.setProgress((int) progress);
+                        }
+                    });*/
+        } else {
+            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void updateImage(Bitmap bitmap){
         fotoPefilEditImageView.setImageBitmap(bitmap);
