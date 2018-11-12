@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -37,9 +38,13 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.IOException;
+
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
+
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.drawableToBitmap;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
@@ -227,6 +232,14 @@ public class FotoPerfilActivity extends AppCompatActivity {
                     mImageUri = data.getData();
                     Glide.with(this).load(mImageUri).into(fotoPefilEditImageView);
                     controleFotoAdd = 1;
+                    try {
+                        Bitmap mfoto = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+                        foto = Bitmap.createScaledBitmap(mfoto, (int)(mfoto.getWidth()*0.3), (int)(mfoto.getHeight()*0.3), true );
+                        updateImage(foto);
+                    } catch (IOException e) {
+
+                        Toast.makeText(FotoPerfilActivity.this,"RUIM Irmaão", Toast.LENGTH_SHORT).show();
+                    }
 
                 }else{
                     Toast.makeText(FotoPerfilActivity.this, "Selecione uma imagem...", Toast.LENGTH_SHORT).show();

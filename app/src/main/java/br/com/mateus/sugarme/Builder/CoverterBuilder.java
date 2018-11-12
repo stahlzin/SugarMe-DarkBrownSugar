@@ -10,6 +10,9 @@ import android.util.TimeFormatException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 
 public abstract class CoverterBuilder {
@@ -76,6 +79,7 @@ public abstract class CoverterBuilder {
         drawable.draw(canvas);
         return bitmap;
     }
+
 
 
 }
