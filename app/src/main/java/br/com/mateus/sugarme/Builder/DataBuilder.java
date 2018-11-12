@@ -84,4 +84,8 @@ public class DataBuilder {
         return "";
     }
 
+    public static String getSintomasInter (){
+        return "done";
+    }
+
 }

@@ -5,15 +5,6 @@ import java.io.Serializable;
 public class Paciente implements Serializable {
     private String idPaciente;
     private String nome;
-
-    public String getIdPaciente() {
-        return idPaciente;
-    }
-
-    public void setIdPaciente(String idPaciente) {
-        this.idPaciente = idPaciente;
-    }
-
     private String telefone;
     private String dtNascimento;
     private String cpf;
@@ -28,6 +19,13 @@ public class Paciente implements Serializable {
     public Paciente() {
     }
 
+    public String getIdPaciente() {
+        return idPaciente;
+    }
+
+    public void setIdPaciente(String idPaciente) {
+        this.idPaciente = idPaciente;
+    }
 
     public String getNome() {
         return nome;

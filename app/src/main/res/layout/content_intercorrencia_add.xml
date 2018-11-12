@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+ xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".View.IntercorrenciaAddActivity"
     tools:showIn="@layout/activity_intercorrencia_add"
     android:layout_marginRight="5dp"
@@ -12,164 +12,194 @@
     android:layout_marginBottom="35dp"
     android:layout_marginTop="70dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <!--DtIntercorrencia-->
 
-    <android.support.design.widget.TextInputLayout
+
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/textInputDtIntercorrencia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/dtIntercorrencia"
-            android:inputType="number" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/textInputHrIntercorrencia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/dtIntercorrencia"
-            android:inputType="number" />
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="1"
+        android:useDefaultMargins="true"
+        android:background="@color/colorBlank"
+        android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="@string/sintomas"
-        android:textStyle="bold"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:background="@color/colorSoftBlueGreyBackground"/>
+        android:elevation="10dp">
 
-    <TableLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="0">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textInputDtIntercorrencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/dtIntercorrencia"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="0">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textInputHrIntercorrencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hrIntercorrencia"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
+    </GridLayout>
+
+
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:shrinkColumns="*"
-        android:stretchColumns="*"
-        android:background="@color/colorSoftBlueGreyBackground">
-        <!-- Linha 2 com 2 colunas -->
-        <TableRow
+        android:columnCount="1"
+        android:rowCount="2"
+        android:useDefaultMargins="true"
+        android:background="@color/colorBlank"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="center"
+        android:elevation="10dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:gravity="center_horizontal">
+            android:layout_gravity="start"
+            android:padding="10dp"
+            android:text="@string/sintomas"
+            android:textStyle="bold"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            />
 
-            <CheckBox
-                android:id="@+id/checkBoxHipoglicemia"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/hipoglicemia" />
-
-            <CheckBox
-                android:id="@+id/checkBoxHiperglicemia"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hiperglicemia"
-                android:padding="10dp"
-                android:layout_weight="1"/>
-        </TableRow>
-
-        <TableRow
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:gravity="center_horizontal">
-
-            <CheckBox
-                android:id="@+id/checkBoxCansaco"
-                android:layout_width="match_parent"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
+            android:background="@color/colorSoftBlueGreyBackground">
+            <!-- Linha 2 com 2 colunas -->
+            <TableRow
                 android:layout_height="wrap_content"
-                android:text="@string/cansaco"
-                android:padding="10dp"
-                android:layout_weight="1"/>
+                android:layout_width="fill_parent"
+                android:gravity="center_horizontal">
 
-            <CheckBox
-                android:id="@+id/checkBoxCaimbra"
-                android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/checkBoxHipoglicemia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/hipoglicemia" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxHiperglicemia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hiperglicemia"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
                 android:layout_height="wrap_content"
-                android:text="@string/caimbra"
-                android:padding="10dp"
-                android:layout_weight="1"/>
-        </TableRow>
+                android:layout_width="fill_parent"
+                android:gravity="center_horizontal">
 
-        <TableRow
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:gravity="center_horizontal">
+                <CheckBox
+                    android:id="@+id/checkBoxCansaco"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cansaco"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
 
-            <CheckBox
-                android:id="@+id/checkBoxNausea"
-                android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/checkBoxCaimbra"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/caimbra"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
                 android:layout_height="wrap_content"
-                android:text="@string/nauseaVomito"
-                android:padding="10dp"
-                android:layout_weight="1"/>
+                android:layout_width="fill_parent"
+                android:gravity="center_horizontal">
 
-            <CheckBox
-                android:id="@+id/checkBoxSede"
-                android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/checkBoxNausea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nauseaVomito"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxSede"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sedeExcessiva"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow
                 android:layout_height="wrap_content"
-                android:text="@string/sedeExcessiva"
-                android:padding="10dp"
-                android:layout_weight="1"/>
-        </TableRow>
-        <TableRow
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:gravity="center_horizontal">
+                android:layout_width="fill_parent"
+                android:gravity="center_horizontal">
 
-            <CheckBox
-                android:id="@+id/checkBoxVisao"
-                android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/checkBoxVisao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/visao"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxMiccao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/miccao"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+
+            <TableRow
                 android:layout_height="wrap_content"
-                android:text="@string/visao"
-                android:padding="10dp"
-                android:layout_weight="1"/>
+                android:layout_width="fill_parent"
+                android:gravity="center_horizontal">
 
-            <CheckBox
-                android:id="@+id/checkBoxMiccao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/miccao"
-                android:padding="10dp"
-                android:layout_weight="1"/>
-        </TableRow>
+                <CheckBox
+                    android:id="@+id/checkBoxDesmaio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nauseaDesmaio"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
 
-        <TableRow
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:gravity="center_horizontal">
-
-            <CheckBox
-                android:id="@+id/checkBoxDesmaio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/nauseaDesmaio"
-                android:padding="10dp"
-                android:layout_weight="1"/>
-
-            <CheckBox
-                android:id="@+id/checkBoxInternacao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/internacao"
-                android:padding="10dp"
-                android:layout_weight="1"/>
-        </TableRow>
-    </TableLayout>
-
+                <CheckBox
+                    android:id="@+id/checkBoxInternacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/internacao"
+                    android:padding="10dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+        </TableLayout>
+    </GridLayout>
     <!--Anotacao-->
 
     <android.support.design.widget.TextInputLayout
@@ -186,3 +216,4 @@
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>
+</ScrollView>

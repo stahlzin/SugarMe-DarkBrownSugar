@@ -141,6 +141,8 @@ public class IntercorrenciaActivity extends AppCompatActivity {
             viewHolder.dataInterTextView.setText(dgc.getDataIntercorrencia());
             viewHolder.horaInterTextView.setText(dgc.getHoraIntercorrencia());
             viewHolder.anotacoesInterTextView.setText(dgc.getAnotacoes());
+
+            //Passar Para o padrão Builder
             StringBuilder sintomas = new StringBuilder();
             if(dgc.getHipoglicemia() == 1){
                 sintomas.append("Hipoglicemia\n");
@@ -186,12 +188,18 @@ public class IntercorrenciaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder dbuilder = new AlertDialog.Builder(IntercorrenciaActivity.this);
-                dbuilder.setPositiveButton(getString(R.string.deletarItemHistorico), new DialogInterface.OnClickListener() {
+                dbuilder.setTitle(getString(R.string.deletarItemHistorico));
+                dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intercorrencia intercorrencia = intercorrenciaList.get(position);
                         IntercorrenciaDAO intercorrenciaDAO = new IntercorrenciaDAO();
                         intercorrenciaDAO.excluir(intercorrencia.getId());
+                    }
+                }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
                     }
                 }).create();
                 dbuilder.show();

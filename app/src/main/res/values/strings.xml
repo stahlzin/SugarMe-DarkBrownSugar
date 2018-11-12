@@ -175,7 +175,7 @@
     <string name="perfil_data">XX/XX/XXXX</string>
     <string name="perfil_tratamento">Tratamento feito com:</string>
     <string name="perfil_inicio">Início do tratamento em: %s</string>
-    <string name="dtIntercorrencia">Data da intercorrência:</string>
+    <string name="dtIntercorrencia">Data:</string>
     <string name="anotacoes">Anotações:</string>
     <string name="sintomas">Sintomas:</string>
     <string name="faltaAr">Falta de Ar</string>
@@ -261,5 +261,6 @@
     <string name="alterSalva">Alterações Salvas</string>
     <string name="semVinculoChatPaciente">Nenhum paciente vinculado permite chat!</string>
     <string name="chat">Chat</string>
+    <string name="hrIntercorrencia">Hora:</string>
 
 </resources>

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import br.com.mateus.sugarme.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.Perfil;
 import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.R;
@@ -38,7 +38,7 @@ public class PerfilActivity extends AppCompatActivity {
     private FloatingActionButton editOptFab;
     private AlertDialog alerta;
 
-    private MedicalInfo medicalInfo;
+    private Perfil perfil;
 
 
     @Override
@@ -71,8 +71,8 @@ public class PerfilActivity extends AppCompatActivity {
         //Parametros do PutExtra
         Intent it = getIntent();
         if(it != null && it.getExtras() != null) {
-            medicalInfo = (MedicalInfo) it.getSerializableExtra("info");
-            this.setPerfil(medicalInfo);
+            perfil = (Perfil) it.getSerializableExtra("info");
+            this.setPerfil(perfil);
         }
 
     }
@@ -93,15 +93,15 @@ public class PerfilActivity extends AppCompatActivity {
         }
         }
 
-    public void setPerfil(MedicalInfo medicalInfo) {
+    public void setPerfil(Perfil perfil) {
         //Ajustar a escrita
         final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
 
         this.nomePerfilTextView.setText(globalVariable.getNomeUser());
         this.dataNasPerfilTextView.setText(globalVariable.getDataNascUser());
-        this.tipoPerfilTextView.setText(PerfilActivity.this.getString(R.string.perfil_tipo_diabetes, getTypeOfDiabetes(medicalInfo.getTipoDiabetes())));
-        this.inicioPerfilTextView.setText(PerfilActivity.this.getString(R.string.perfil_inicio, medicalInfo.getAnoInicioTratamento()));
-        this.tratamentoPerfilTextView.setText(getTreamentProfile(medicalInfo.getMedicacao(), medicalInfo.getInsulina(), medicalInfo.getAlimentar(), medicalInfo.getEsporte()  ));
+        this.tipoPerfilTextView.setText(PerfilActivity.this.getString(R.string.perfil_tipo_diabetes, getTypeOfDiabetes(perfil.getTipoDiabetes())));
+        this.inicioPerfilTextView.setText(PerfilActivity.this.getString(R.string.perfil_inicio, perfil.getAnoInicioTratamento()));
+        this.tratamentoPerfilTextView.setText(getTreamentProfile(perfil.getMedicacao(), perfil.getInsulina(), perfil.getAlimentar(), perfil.getEsporte()  ));
 
         globalVariable.setInicioTratamento(this.inicioPerfilTextView.getText().toString());
         globalVariable.setTipoDiabetes(this.tipoPerfilTextView.getText().toString());

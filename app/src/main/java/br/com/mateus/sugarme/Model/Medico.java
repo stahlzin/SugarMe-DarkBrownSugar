@@ -5,7 +5,7 @@ import com.google.firebase.database.Exclude;
 import java.io.Serializable;
 
 public class Medico implements Serializable {
-    private  String idMedico;
+    private String idMedico;
     private String nome;
     private String telefone;
     private String dtNascimento;

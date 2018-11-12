@@ -15,7 +15,7 @@ import android.support.v7.widget.Toolbar;
 
 import br.com.mateus.sugarme.R;
 
-import br.com.mateus.sugarme.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.Perfil;
 import br.com.mateus.sugarme.DAO.MedicalInfoDAO;
 import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 
@@ -83,11 +83,11 @@ public class MedicalInfoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MedicalInfo medicalInfo = preencheInfoMedica();
+                Perfil perfil = preencheInfoMedica();
                 medicalInfoPresenter = new MedicalInfoPresenter();
-                if(medicalInfoPresenter.isDadosOk(medicalInfo, MedicalInfoActivity.this)){
+                if(medicalInfoPresenter.isDadosOk(perfil, MedicalInfoActivity.this)){
                     medicalInfoDAO = new MedicalInfoDAO();
-                    medicalInfoDAO.inserir(medicalInfo);
+                    medicalInfoDAO.inserir(perfil);
                     Toast.makeText(MedicalInfoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MedicalInfoActivity.this, PacienteActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -100,8 +100,8 @@ public class MedicalInfoActivity extends AppCompatActivity {
         Intent it = getIntent();
         if(it != null && it.getExtras() != null){
             if(it.getStringExtra("edit").equals("editarInfo")) {
-                MedicalInfo medicalInfo = (MedicalInfo) it.getSerializableExtra("info");
-                this.setMedicalInfo(medicalInfo);
+                Perfil perfil = (Perfil) it.getSerializableExtra("info");
+                this.setMedicalInfo(perfil);
             }
         }
     } //Fim do OnCreate
@@ -115,86 +115,86 @@ public class MedicalInfoActivity extends AppCompatActivity {
         MedicalInfoActivity.this.startActivity(intent);
     }
 
-   private MedicalInfo preencheInfoMedica(){
-        MedicalInfo medicalInfo;
+   private Perfil preencheInfoMedica(){
+        Perfil perfil;
         if(radioButtonTipo1.isChecked()) {
             //int medicacao, int alimentar, int insulina, int esporte,
             // int colesterol, int pressaoAlta, int obesidade, int triglicerídeos, int sedentarismo
-            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
+            perfil = new Perfil(textInputPeso.getText().toString(),
             textInputAltura.getText().toString(), "1", textAnoDescoberta.getText().toString(),
             textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
                     checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
-            return medicalInfo;
+            return perfil;
         }
         else if(radioButtonTipo2.isChecked()){
-            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
+            perfil = new Perfil(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "2", textAnoDescoberta.getText().toString(),
                     textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
                     checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
-            return medicalInfo;
+            return perfil;
         }
         else if(radioButtonTipo3.isChecked()){
-            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
+            perfil = new Perfil(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "3", textAnoDescoberta.getText().toString(),
                     textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
                     checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
-            return medicalInfo;
+            return perfil;
         }
         else{
-            medicalInfo = new MedicalInfo(textInputPeso.getText().toString(),
+            perfil = new Perfil(textInputPeso.getText().toString(),
                     textInputAltura.getText().toString(), "", textAnoDescoberta.getText().toString(),
                     textAnoTratamento.getText().toString(), checkBox1.isChecked() ? 1 : 0, checkBox4.isChecked() ? 1 : 0,
                     checkBox2.isChecked() ? 1 : 0, checkBox3.isChecked() ? 1 : 0,
                     checkBox5.isChecked() ? 1 : 0, checkBox6.isChecked() ? 1 : 0, checkBox7.isChecked() ? 1 : 0,
                     checkBox8.isChecked() ? 1 : 0, checkBox9.isChecked() ? 1 : 0);
-            return medicalInfo;
+            return perfil;
         }
     }
 
 
     //Preenchendo os TextInput, RadioButton e CheckBox
-    public void setMedicalInfo(MedicalInfo medicalInfo) {
-        this.textInputPeso.setText(medicalInfo.getPeso());
-        this.textInputAltura.setText(medicalInfo.getAltura());
-        if(medicalInfo.getTipoDiabetes().equals("1")){
+    public void setMedicalInfo(Perfil perfil) {
+        this.textInputPeso.setText(perfil.getPeso());
+        this.textInputAltura.setText(perfil.getAltura());
+        if(perfil.getTipoDiabetes().equals("1")){
             this.radioButtonTipo1.setChecked(true);
         }
-        else if(medicalInfo.getTipoDiabetes().equals("2")){
+        else if(perfil.getTipoDiabetes().equals("2")){
             this.radioButtonTipo2.setChecked(true);
         }
-        this.textAnoDescoberta.setText(medicalInfo.getAnoDescoberta());
-        this.textAnoTratamento.setText(medicalInfo.getAnoInicioTratamento());
-        if(medicalInfo.getMedicacao()==1){
+        this.textAnoDescoberta.setText(perfil.getAnoDescoberta());
+        this.textAnoTratamento.setText(perfil.getAnoInicioTratamento());
+        if(perfil.getMedicacao()==1){
             this.checkBox1.setChecked(true);
         }
-        if(medicalInfo.getAlimentar()==1){
+        if(perfil.getAlimentar()==1){
             this.checkBox4.setChecked(true);
         }
-        if(medicalInfo.getInsulina()==1){
+        if(perfil.getInsulina()==1){
             this.checkBox2.setChecked(true);
         }
-        if(medicalInfo.getEsporte()==1){
+        if(perfil.getEsporte()==1){
             this.checkBox3.setChecked(true);
         }
-        if(medicalInfo.getColesterol()==1){
+        if(perfil.getColesterol()==1){
             this.checkBox5.setChecked(true);
         }
-        if(medicalInfo.getPressaoAlta()==1){
+        if(perfil.getPressaoAlta()==1){
             this.checkBox6.setChecked(true);
         }
-        if(medicalInfo.getObesidade()==1){
+        if(perfil.getObesidade()==1){
             this.checkBox7.setChecked(true);
         }
-        if(medicalInfo.getTriglicerídeos()==1){
+        if(perfil.getTriglicerídeos()==1){
             this.checkBox8.setChecked(true);
         }
-        if(medicalInfo.getSedentarismo()==1){
+        if(perfil.getSedentarismo()==1){
             this.checkBox9.setChecked(true);
         }
 

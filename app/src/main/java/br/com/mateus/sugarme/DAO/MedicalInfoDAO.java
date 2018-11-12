@@ -13,7 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 
-import br.com.mateus.sugarme.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.Perfil;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.View.MedicalInfoActivity;
 import br.com.mateus.sugarme.View.PerfilActivity;
@@ -23,15 +23,15 @@ public class MedicalInfoDAO {
     private FirebaseAuth firebaseAuth;
     private String userId;
     private DatabaseReference databaseReference;
-    private MedicalInfo medicalInfo;
+    private Perfil perfil;
     private Paciente paciente;
 
 
     //Inserir ou Atualizar
-    public void inserir(MedicalInfo medicalInfo){
+    public void inserir(Perfil perfil){
         getUserId();
         mDatabase =  FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child("pacientes").child(userId).child("InfoMedicas").setValue(medicalInfo);
+        mDatabase.child("users").child("pacientes").child(userId).child("InfoMedicas").setValue(perfil);
     }
 
     //Pegar Id Usuario
@@ -43,7 +43,7 @@ public class MedicalInfoDAO {
 
     //Consultar medico e ir para a tela de edição
     public void consultaInfoMedica(final Activity activity) {
-        medicalInfo = new MedicalInfo();
+        perfil = new Perfil();
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -51,12 +51,12 @@ public class MedicalInfoDAO {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
+                    perfil = dataSnapshot.getValue(Perfil.class);
                     //Trocar de Activity
                     Intent intent = new Intent(activity, MedicalInfoActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("edit","editarInfo");
-                    intent.putExtra("info", (Serializable) medicalInfo);
+                    intent.putExtra("info", (Serializable) perfil);
                     activity.startActivity(intent);
                 }
                 else{
@@ -76,7 +76,7 @@ public class MedicalInfoDAO {
 
     //Consultar medico e ir para a tela de edição
     public void buscaPerfil(final Activity activity) {
-        medicalInfo = new MedicalInfo();
+        perfil = new Perfil();
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -84,11 +84,11 @@ public class MedicalInfoDAO {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    medicalInfo = dataSnapshot.getValue(MedicalInfo.class);
+                    perfil = dataSnapshot.getValue(Perfil.class);
                     //Trocar de Activity
                     Intent intent = new Intent(activity, PerfilActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("info", (Serializable) medicalInfo);
+                    intent.putExtra("info", (Serializable) perfil);
                     activity.startActivity(intent);
                 }
                 else{

@@ -3,18 +3,18 @@ package br.com.mateus.sugarme.Controller;
 import android.app.Activity;
 import android.widget.Toast;
 
-import br.com.mateus.sugarme.Model.MedicalInfo;
+import br.com.mateus.sugarme.Model.Perfil;
 import br.com.mateus.sugarme.DAO.MedicalInfoDAO;
 
 
 public class MedicalInfoPresenter {
     private MedicalInfoDAO medicalInfoDAO = new MedicalInfoDAO();
 
-    public boolean isDadosOk(MedicalInfo medicalInfo, Activity activity){
+    public boolean isDadosOk(Perfil perfil, Activity activity){
 
-            if(!medicalInfo.getPeso().isEmpty()){
-                if(!medicalInfo.getAltura().isEmpty()){
-                    if(!medicalInfo.getTipoDiabetes().isEmpty()){
+            if(!perfil.getPeso().isEmpty()){
+                if(!perfil.getAltura().isEmpty()){
+                    if(!perfil.getTipoDiabetes().isEmpty()){
                         return true;
                     }
                     else {

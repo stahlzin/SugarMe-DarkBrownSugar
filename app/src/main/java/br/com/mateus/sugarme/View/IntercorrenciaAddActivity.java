@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import br.com.mateus.sugarme.Builder.MaskEditUtil;
 import br.com.mateus.sugarme.Model.Intercorrencia;
 import br.com.mateus.sugarme.DAO.IntercorrenciaDAO;
 import br.com.mateus.sugarme.Controller.IntercorrenciaPresenter;
@@ -72,7 +73,8 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
         buttonSalvar = (FloatingActionButton) findViewById(R.id.fabSalvar);
 
         //Máscara da data
-//       textInputDtIntercorrencia.addTextChangedListener(MaskEditUtil.mask(textInputDtIntercorrencia, MaskEditUtil.FORMAT_DATE_));
+       //textInputDtIntercorrencia.addTextChangedListener(MaskEditUtil.mask(textInputDtIntercorrencia, MaskEditUtil.FORMAT_DATE_));
+       //textInputHrIntercorrencia.addTextChangedListener(MaskEditUtil.mask(textInputDtIntercorrencia, MaskEditUtil.FORMAT_HOUR));
 
         //Salvar
         buttonSalvar.setOnClickListener(new View.OnClickListener() {
