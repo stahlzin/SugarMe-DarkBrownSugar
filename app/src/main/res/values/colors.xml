@@ -17,5 +17,6 @@
     <color name="colorSuperGraySoft">#F5F5F5</color>
     <color name="colorSoftBlue">#e1f5fe</color>
     <color name="colorRed">#FFF44336</color>
+    <color name="colorInterBckg">#12586D</color>
     <color name="colorGreen">#FF8BC34A</color>
 </resources>

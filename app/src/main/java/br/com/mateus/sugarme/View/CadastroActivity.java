@@ -28,7 +28,11 @@ import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
 import static br.com.mateus.sugarme.Builder.DataBuilder.getUfList;
+import static br.com.mateus.sugarme.Controller.ConfigurarController.alterarCofigurarMedico;
+import static br.com.mateus.sugarme.Controller.ConfigurarController.alterarCofigurarPaciente;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
+import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class CadastroActivity extends AppCompatActivity {
     /*private String[] uf = new String[]{"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA","MG",
@@ -55,6 +59,7 @@ public class CadastroActivity extends AppCompatActivity {
     private MedicoDAO medicoDAO;
     private ArrayList<String> uf;
 
+    private String userId;
 
     //ON CREATE ----------
     @Override
@@ -135,7 +140,7 @@ public class CadastroActivity extends AppCompatActivity {
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insereFirebase();
+                insereFirebase("cad");
             }
 
         });
@@ -146,7 +151,7 @@ public class CadastroActivity extends AppCompatActivity {
         buttonEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insereFirebase();
+                insereFirebase("alt");
             }
         });
 
@@ -308,7 +313,7 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     //Cadastrar ou Editar
-    private void insereFirebase(){
+    private void insereFirebase(String configurar){
         //Medico Selecionado
         if(radioButtonMedico.isChecked()){
             Medico medico = preencheMedico();
@@ -316,10 +321,12 @@ public class CadastroActivity extends AppCompatActivity {
             if(medicoPresenter.isDadosOk(medico, CadastroActivity.this)){
                 medicoDAO = new MedicoDAO();
                 medicoDAO.inserir(medico);
+                    if(configurar.equals("cad")){
+                        userId = getUserId();
+                        alterarCofigurarMedico(userId, "sim");
+                    }
                 Toast.makeText(CadastroActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CadastroActivity.this, MedicoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                CadastroActivity.this.startActivity(intent);
+                SimpleNavigation(CadastroActivity.this, MedicoActivity.class);
             }
 
         }
@@ -330,10 +337,12 @@ public class CadastroActivity extends AppCompatActivity {
             if(pacientePresenter.isDadosOk(paciente, CadastroActivity.this)){
                 pacienteDAO = new PacienteDAO();
                 pacienteDAO.inserir(paciente);
+                if(configurar.equals("cad")){
+                    userId = getUserId();
+                    alterarCofigurarPaciente(userId, "sim", "sim", "70", "200");
+                }
                 Toast.makeText(CadastroActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CadastroActivity.this, PacienteActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                CadastroActivity.this.startActivity(intent);
+                SimpleNavigation(CadastroActivity.this, PacienteActivity.class);
             }
         }
         else{
@@ -346,10 +355,7 @@ public class CadastroActivity extends AppCompatActivity {
         if(radioButtonMedico.isChecked()){
             switch (item.getItemId()) {
                 case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                    Intent intent = new Intent(CadastroActivity.this, MedicoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    CadastroActivity.this.startActivity(intent);
-                    finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                    FinishNavigation(CadastroActivity.this, MedicoActivity.class);
                     break;
                 default:break;
             }
@@ -357,10 +363,7 @@ public class CadastroActivity extends AppCompatActivity {
         else if(radioButtonPaciente.isChecked()){
             switch (item.getItemId()) {
                 case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                    Intent intent = new Intent(CadastroActivity.this, PerfilActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    CadastroActivity.this.startActivity(intent);
-                    finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                    FinishNavigation(CadastroActivity.this, PerfilActivity.class);
                     break;
                 default:break;
             }

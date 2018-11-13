@@ -50,7 +50,6 @@ public class VinculoAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vinculo_add);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
         getSupportActionBar().setTitle(R.string.app_name_VinculoAdd);     //Titulo para ser exibido na sua Action Bar em frente à seta
@@ -107,10 +106,7 @@ public class VinculoAddActivity extends AppCompatActivity {
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).child("idMedico").setValue(medico.getIdMedico());
-        databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).child("aceitaChat").setValue("sim");
-        databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medico.getIdMedico()).child("compartilharDiario").setValue("sim");
         databaseReference.child("users").child("medicos").child(medico.getIdMedico()).child("vinculos").child(userId).child("idPaciente").setValue(userId);
-        databaseReference.child("users").child("medicos").child(medico.getIdMedico()).child("vinculos").child(userId).child("aceitaChat").setValue("sim");
     }
 
     private void preencheMedicoListView(String crmBusca) {

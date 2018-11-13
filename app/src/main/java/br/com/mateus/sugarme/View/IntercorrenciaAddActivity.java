@@ -14,13 +14,13 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.com.mateus.sugarme.Builder.MaskEditUtil;
 import br.com.mateus.sugarme.Model.Intercorrencia;
 import br.com.mateus.sugarme.DAO.IntercorrenciaDAO;
-import br.com.mateus.sugarme.Controller.IntercorrenciaPresenter;
+import br.com.mateus.sugarme.Controller.IntercorrenciaController;
 import br.com.mateus.sugarme.R;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
 
 public class IntercorrenciaAddActivity extends AppCompatActivity {
@@ -41,7 +41,7 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
     private FloatingActionButton buttonSalvar;
 
 
-    private IntercorrenciaPresenter intercorrenciaPresenter;
+    private IntercorrenciaController intercorrenciaController;
     private IntercorrenciaDAO intercorrenciaDAO;
 
     //OnCreate-------------------------------------
@@ -81,8 +81,8 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intercorrencia intercorrencia = preencheIntercorrencia();
-                intercorrenciaPresenter = new IntercorrenciaPresenter();
-                if(intercorrenciaPresenter.isDadosOk(intercorrencia, IntercorrenciaAddActivity.this)) {
+                intercorrenciaController = new IntercorrenciaController();
+                if(intercorrenciaController.isDadosOk(intercorrencia, IntercorrenciaAddActivity.this)) {
                     intercorrenciaDAO = new IntercorrenciaDAO();
                     intercorrenciaDAO.inserir(intercorrencia);
                     Toast.makeText(IntercorrenciaAddActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
@@ -118,7 +118,7 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
 
 
     private void setValoresPadroes (){
-        SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formataHora = new SimpleDateFormat("HH:mm");
         Date data = new Date();
         Date hora = new Date();
@@ -132,20 +132,15 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
     //onBackPressed
     @Override
     public void onBackPressed() {
-            //Voltar a tela inicial
-        Intent intent = new Intent(IntercorrenciaAddActivity.this, PacienteActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        IntercorrenciaAddActivity.this.startActivity(intent);
+        //Voltar a tela inicial
+        FinishNavigation(IntercorrenciaAddActivity.this, PacienteActivity.class);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(IntercorrenciaAddActivity.this, IntercorrenciaActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                IntercorrenciaAddActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(IntercorrenciaAddActivity.this, IntercorrenciaActivity.class);
                 break;
             default:break;
         }

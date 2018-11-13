@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,6 +33,8 @@ import java.util.List;
 import br.com.mateus.sugarme.Model.Intercorrencia;
 import br.com.mateus.sugarme.DAO.IntercorrenciaDAO;
 import br.com.mateus.sugarme.R;
+
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
 public class IntercorrenciaActivity extends AppCompatActivity {
 
@@ -68,7 +71,6 @@ public class IntercorrenciaActivity extends AppCompatActivity {
         intercorrenciaArrayAdapter = new IntercorrenciaActivity.IntercorrenciaArrayAdapter(this, intercorrenciaList);
         intercorrenciaListView.setAdapter(intercorrenciaArrayAdapter);
 
-        configuraObserverShortClick();
     }
 
 
@@ -116,31 +118,37 @@ public class IntercorrenciaActivity extends AppCompatActivity {
             TextView horaInterTextView;
             TextView sintomasInterTextView;
             TextView anotacoesInterTextView;
+            ImageView deleteIntercorrenciaImageView;
+            String interId;
+
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Intercorrencia dgc = getItem (position);
-            IntercorrenciaActivity.IntercorrenciaArrayAdapter.ViewHolder viewHolder;
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final Intercorrencia dgc = getItem (position);
+            final IntercorrenciaActivity.IntercorrenciaArrayAdapter.ViewHolder viewHolder;
             if (convertView == null){
                 viewHolder = new IntercorrenciaActivity.IntercorrenciaArrayAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(R.layout.list_item_intercorrencia, parent, false);
 
+                viewHolder.deleteIntercorrenciaImageView = (ImageView) convertView.findViewById(R.id.deleteIntercorrenciaImageView);
                 viewHolder.dataInterTextView = (TextView) convertView.findViewById(R.id.dataInterTextView);
                 viewHolder.horaInterTextView = (TextView) convertView.findViewById(R.id.horaInterTextView);
                 viewHolder.sintomasInterTextView = (TextView) convertView.findViewById(R.id.sintomasInterTextView);
                 viewHolder.anotacoesInterTextView = (TextView) convertView.findViewById(R.id.anotacoesInterTextView);
+
                 convertView.setTag(viewHolder);
             }
             else{
                 viewHolder = (IntercorrenciaActivity.IntercorrenciaArrayAdapter.ViewHolder)convertView.getTag();
             }
 
-            Context context = getContext();
+            final Context context = getContext();
             viewHolder.dataInterTextView.setText(dgc.getDataIntercorrencia());
             viewHolder.horaInterTextView.setText(dgc.getHoraIntercorrencia());
             viewHolder.anotacoesInterTextView.setText(dgc.getAnotacoes());
+            viewHolder.interId = dgc.getId();
 
             //Passar Para o padrão Builder
             StringBuilder sintomas = new StringBuilder();
@@ -177,47 +185,49 @@ public class IntercorrenciaActivity extends AppCompatActivity {
 
             viewHolder.sintomasInterTextView.setText(sintomas);
 
+            viewHolder.deleteIntercorrenciaImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dbuilder = new AlertDialog.Builder(context);
+                    dbuilder.setTitle("Deseja excluir essa intercorrência?");
+                    dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            IntercorrenciaDAO intercorrenciaDAO = new IntercorrenciaDAO();
+                            intercorrenciaDAO.excluir(viewHolder.interId);
+                        }
+                    }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+                    dbuilder.show();
+
+
+                }
+            });
+
             return convertView;
         }
 
     }
 
 
-    private void configuraObserverShortClick(){
-        intercorrenciaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder dbuilder = new AlertDialog.Builder(IntercorrenciaActivity.this);
-                dbuilder.setTitle(getString(R.string.deletarItemHistorico));
-                dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intercorrencia intercorrencia = intercorrenciaList.get(position);
-                        IntercorrenciaDAO intercorrenciaDAO = new IntercorrenciaDAO();
-                        intercorrenciaDAO.excluir(intercorrencia.getId());
-                    }
-                }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).create();
-                dbuilder.show();
-            }
-        });
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(IntercorrenciaActivity.this, PacienteActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                IntercorrenciaActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
-                break;
+                FinishNavigation(IntercorrenciaActivity.this, PacienteActivity.class);
             default:break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Voltar a tela inicial
+        FinishNavigation(IntercorrenciaActivity.this, PacienteActivity.class);
     }
 }
