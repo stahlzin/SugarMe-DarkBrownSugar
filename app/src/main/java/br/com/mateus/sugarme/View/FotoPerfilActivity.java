@@ -2,20 +2,13 @@ package br.com.mateus.sugarme.View;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +16,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -36,7 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
@@ -46,11 +36,9 @@ import br.com.mateus.sugarme.Singleton.UserSingleton;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-import static br.com.mateus.sugarme.Builder.CoverterBuilder.drawableToBitmap;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toByteArray;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
-import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class FotoPerfilActivity extends AppCompatActivity {
@@ -66,24 +54,19 @@ public class FotoPerfilActivity extends AppCompatActivity {
     private ImageView arquivoImageView;
     private int controleFotoAdd = 0;
 
+    ProgressDialog progressDialog;
 
-    //camera things
+    //camera
     private static final int REQUEST_PERMISSION_CAMERA = 2001;
     private static final int REQUEST_TAKE_PICTURE = 1001;
     private static final String PNG_EXTENSION = ".png";
     private String userId;
 
-    //ler pdf
+    //imagem do arquivo
     private static final int REQUEST_READ_PICTURE = 89;
     private static final int REQUEST_PERMISSION_READ_STORAGE = 86;
 
-
-    //referência ao diretório images
-    private StorageReference imagesReference;
-    //referência para gerar nomes de arquivos únicos
-    private DatabaseReference fileNameGenerator;
-    //referência para guardar as urls das fotos cujo upload foi realizado
-    private DatabaseReference urlsReference;
+    private Uri mImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +111,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
                     Toast.makeText(FotoPerfilActivity.this,"Selecione uma imagem...", Toast.LENGTH_SHORT).show();
                 }else{
                     if (foto == null){
-                        uploadImage();
-                        
+                        Toast.makeText(FotoPerfilActivity.this,"Falha na seleção da imagem!", Toast.LENGTH_SHORT).show();
                     }else{
                         final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
                         globalVariable.setFotoPerfil(foto);
@@ -141,9 +123,6 @@ public class FotoPerfilActivity extends AppCompatActivity {
                         }
                     }
                 }
-
-
-
             }
         });
 
@@ -175,7 +154,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
                 //verifica se deve explicar
                 if (ActivityCompat.shouldShowRequestPermissionRationale(FotoPerfilActivity.this,
                         Manifest.permission.CAMERA)){
-                    Toast.makeText(FotoPerfilActivity.this,"Deu ruim", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FotoPerfilActivity.this,"É necessário permissão para acessar a câmera!", Toast.LENGTH_SHORT).show();
                 }
                 //se não tem permissão, pede
                 ActivityCompat.requestPermissions(FotoPerfilActivity.this, new String[]
@@ -204,7 +183,17 @@ public class FotoPerfilActivity extends AppCompatActivity {
                 }
                 //usuário disse não
                 else{
-                    Toast.makeText(this, "Ruim",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sem permissão para acessar a câmera",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_PERMISSION_READ_STORAGE:
+                //usuário disse sim
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    selectImageFromStorage();
+                }
+                //usuário disse não
+                else{
+                    Toast.makeText(this, "Sem permissão para acessar o armazenamento interno",Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -230,7 +219,6 @@ public class FotoPerfilActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data!=null && data.getData() != null){
                     //pega a foto
                     mImageUri = data.getData();
-                    Glide.with(this).load(mImageUri).into(fotoPefilEditImageView);
                     controleFotoAdd = 1;
                     try {
                         Bitmap mfoto = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
@@ -238,7 +226,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
                         updateImage(foto);
                     } catch (IOException e) {
 
-                        Toast.makeText(FotoPerfilActivity.this,"RUIM Irmaão", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FotoPerfilActivity.this,"Falha na conversão da imagem", Toast.LENGTH_SHORT).show();
                     }
 
                 }else{
@@ -247,57 +235,7 @@ public class FotoPerfilActivity extends AppCompatActivity {
     }
     }
 
-    private Uri mImageUri;
-    private StorageTask mUploadTask;
 
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-
-    private void uploadImage() {
-        if (mImageUri != null) {
-            final String chave = "fotoPerfil";
-
-            StorageReference fileReference = firebaseStorage.getReference();
-
-
-            fileReference.child("users").child(userType).child(userId).child("fotoPerfil").child(chave+ getFileExtension(mImageUri));
-
-            mUploadTask = fileReference.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //mProgressBar.setProgress(0);
-                                }
-                            }, 500);
-
-                            Toast.makeText(FotoPerfilActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(FotoPerfilActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    /*.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            //mProgressBar.setProgress((int) progress);
-                        }
-                    });*/
-        } else {
-            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void updateImage(Bitmap bitmap){
         fotoPefilEditImageView.setImageBitmap(bitmap);
@@ -314,6 +252,12 @@ public class FotoPerfilActivity extends AppCompatActivity {
 
 
     private void uploadImage (final Bitmap image){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setTitle("Salvando Arquivo...");
+        progressDialog.setProgress(0);
+        progressDialog.show();
+
         //gera um nomoe aleatório
         final String chave = "fotoPerfil";
         userId = getUserId();
@@ -327,16 +271,19 @@ public class FotoPerfilActivity extends AppCompatActivity {
                 Uri downloadUrl = taskSnapshot.getUploadSessionUri();
                 //no database a chave tem que ser sem extensão, por causa do ponto
                 saveURLForDownload (downloadUrl);
-                Toast.makeText(FotoPerfilActivity.this, "OK",
-                        Toast.LENGTH_SHORT).show();
-            }
+          }
         }).addOnFailureListener(new OnFailureListener() {
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(FotoPerfilActivity.this, "ruim",
+                Toast.makeText(FotoPerfilActivity.this, "Falha na atualização da imagem",
                         Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
-        });
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                int currentProgress = (int) (100 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                progressDialog.setProgress(currentProgress);
+            }});
     }
 
 
@@ -344,7 +291,6 @@ public class FotoPerfilActivity extends AppCompatActivity {
     private void saveURLForDownload (Uri downloadURL){
         DatabaseReference databaseReference = firebaseDatabase.getReference();
         databaseReference.child("users").child(userType).child(userId).child("dados").child("fotoPerfil").setValue(downloadURL.toString());
-
     }
 
     @Override

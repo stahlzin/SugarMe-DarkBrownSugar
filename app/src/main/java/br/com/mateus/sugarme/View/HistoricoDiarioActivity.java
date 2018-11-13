@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,17 +32,19 @@ import java.util.List;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.DAO.DiarioGlicemicoDAO;
 import br.com.mateus.sugarme.R;
+import br.com.mateus.sugarme.Singleton.UserSingleton;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.State.DiarioGlicemicoState.getStateBackgroundColor;
+import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class HistoricoDiarioActivity extends AppCompatActivity {
 
     private List<DiarioGlicemico> diarioGlicemicoList = new ArrayList<>();
     private HistoricoDiarioArrayAdapter historicoDiarioArrayAdapter;
     private ListView diarioHistoricoListView;
-    private FirebaseAuth firebaseAuth;
     private String userId;
-    private DiarioGlicemico diarioGlicemico;
     private DatabaseReference databaseReference;
 
 
@@ -60,14 +63,13 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
         historicoDiarioArrayAdapter = new HistoricoDiarioArrayAdapter(this, diarioGlicemicoList);
         diarioHistoricoListView.setAdapter(historicoDiarioArrayAdapter);
 
-        configuraObserverShortClick();
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        getUserId();
+        userId = getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child("users").child("pacientes").child(userId).child("diario").orderByChild("gliTimestamp").limitToLast(30).addValueEventListener(new ValueEventListener() {
@@ -90,12 +92,9 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
-    public void getUserId() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        userId = firebaseAuth.getCurrentUser().getUid();
-    }
 
 
     public static class HistoricoDiarioArrayAdapter extends ArrayAdapter<DiarioGlicemico> {
@@ -108,12 +107,14 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
             TextView categoriaTextView;
             TextView dataTextView;
             TextView horaTextView;
+            ImageView deleteIndiceImageView;
+            String diarioId;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             DiarioGlicemico dgc = getItem (position);
-            ViewHolder viewHolder;
+            final ViewHolder viewHolder;
             if (convertView == null){
                 viewHolder = new ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -122,75 +123,57 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
                 viewHolder.categoriaTextView = (TextView) convertView.findViewById(R.id.categoriaTextView);
                 viewHolder.dataTextView = (TextView) convertView.findViewById(R.id.dataTextView);
                 viewHolder.horaTextView = (TextView) convertView.findViewById(R.id.horaTextView);
+                viewHolder.deleteIndiceImageView = (ImageView) convertView.findViewById(R.id.deleteIndiceImageView);
                 convertView.setTag(viewHolder);
             }
             else{
                 viewHolder = (ViewHolder)convertView.getTag();
             }
 
-            Context context = getContext();
+            final Context context = getContext();
             viewHolder.glicemiaTextView.setText(String.valueOf(dgc.getGlicemia()));
-            int valor = tryParseInt(viewHolder.glicemiaTextView.getText().toString());
-            int color = changeColor(valor);
-            switch (color){
-                case -2:
-                    viewHolder.glicemiaTextView.setBackgroundResource(R.color.colorHiper);
-                    break;
-                case -1:
-                    viewHolder.glicemiaTextView.setBackgroundResource(R.color.colorHipo);
-                    break;
-                case 0:
-                    viewHolder.glicemiaTextView.setBackgroundResource(R.color.colorNormal);
-                    break;
-            }
+
+            int valor = getStateBackgroundColor(tryParseInt(viewHolder.glicemiaTextView.getText().toString()), 180, 70);
+            viewHolder.glicemiaTextView.setBackgroundResource(valor);
 
 
             viewHolder.categoriaTextView.setText(dgc.getCategoria());
             viewHolder.dataTextView.setText(dgc.getData());
             viewHolder.horaTextView.setText(dgc.getHora());
+            viewHolder.diarioId = dgc.getDiarioId();
+
+            viewHolder.deleteIndiceImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dbuilder = new AlertDialog.Builder(context);
+                    dbuilder.setTitle("Deseja deletar esse item do histórico?");
+                    dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DiarioGlicemicoDAO diarioGlicemicoDAO = new DiarioGlicemicoDAO();
+                            diarioGlicemicoDAO.excluir(viewHolder.diarioId);
+                        }
+                    }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+                    dbuilder.show();
+                }
+            });
+
             return convertView;
 
         }
 
     }
 
-    private static int changeColor(int valor) {
-        if (valor <= 70) {
-            return -1;
-        }
-        if (valor >= 200) {
-            return -2;
-        }
-        return 0;
-    }
-
-    private void configuraObserverShortClick(){
-        diarioHistoricoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder dbuilder = new AlertDialog.Builder(HistoricoDiarioActivity.this);
-                dbuilder.setPositiveButton(getString(R.string.deletarItemHistorico), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DiarioGlicemico diarioGlicemico = diarioGlicemicoList.get(position);
-                        DiarioGlicemicoDAO diarioGlicemicoDAO = new DiarioGlicemicoDAO();
-                        diarioGlicemicoDAO.excluir(diarioGlicemico.getDiarioId());
-                    }
-                }).create();
-                dbuilder.show();
-            }
-        });
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(HistoricoDiarioActivity.this, PacienteActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                HistoricoDiarioActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(HistoricoDiarioActivity.this, PacienteActivity.class);
                 break;
             default:break;
         }

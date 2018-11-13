@@ -53,6 +53,7 @@ import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
@@ -70,11 +71,14 @@ public class PacienteActivity extends AppCompatActivity
     private TextView dataUltimaTextView;
     private TextView horaUltimaTextView;
     private GridLayout ultimaLeituraGridLayout;
+    private GridLayout qteChatGridLayout;
     private List<DiarioGlicemico> diarioGlicemicoList;
     private FirebaseAuth firebaseAuth;
     private String userId;
     private DatabaseReference databaseReference;
     private LineChart chart;
+    private TextView qteSemLerPChatTextView;
+
 
 
     @Override
@@ -91,8 +95,11 @@ public class PacienteActivity extends AppCompatActivity
         dataUltimaTextView = (TextView) findViewById(R.id.dataUltimaTextView);
         horaUltimaTextView = (TextView) findViewById(R.id.horaUltimaTextView);
         ultimaLeituraGridLayout = findViewById(R.id.ultimaLeituraGridLayout);
+        qteChatGridLayout = findViewById(R.id.qteChatGridLayout);
+
         chart = (LineChart) findViewById(R.id.chart);
         chart.getDescription().setEnabled(false);
+        qteSemLerPChatTextView = (TextView) findViewById(R.id.qteSemLerPChatTextView);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -109,18 +116,22 @@ public class PacienteActivity extends AppCompatActivity
         novaEntradaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PacienteActivity.this, DiarioGlicemicoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                SimpleNavigation(PacienteActivity.this, DiarioGlicemicoActivity.class);
+
             }
         });
 
         ultimaLeituraGridLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PacienteActivity.this, HistoricoDiarioActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                SimpleNavigation(PacienteActivity.this, HistoricoDiarioActivity.class);
+
+            }
+        });
+        qteChatGridLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleNavigation(PacienteActivity.this, VinculoChatActivity.class);
             }
         });
 
@@ -184,7 +195,7 @@ public class PacienteActivity extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Toast.makeText(PacienteActivity.this, "Você tem " + dataSnapshot.getChildrenCount() + " conversa(s) não lida(s)!", Toast.LENGTH_SHORT).show();
+                    qteSemLerPChatTextView.setText(Long.toString(dataSnapshot.getChildrenCount()));
                 }
             }
 
@@ -194,7 +205,21 @@ public class PacienteActivity extends AppCompatActivity
             }
         });
 
+       //Valores de hiperglicemia e hipoglicemia
+        databaseReference.child("users").child("pacientes").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    globalVariable.setHiperglicemiaPadrao(tryParseInt(dataSnapshot.child("hiperglicemiaPadrao").getValue()));
+                    globalVariable.setHipoglicemiaPadrao(tryParseInt(dataSnapshot.child("hipoglicemiaPadrao").getValue()));
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

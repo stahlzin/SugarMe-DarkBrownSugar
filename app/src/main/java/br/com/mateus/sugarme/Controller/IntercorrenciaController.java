@@ -20,10 +20,10 @@ public class IntercorrenciaController {
                         intercorrencia.getVisão() == 1 ||
                         intercorrencia.getMiccao() == 1){
                     if(!intercorrencia.getAnotacoes().isEmpty()){
-                        if(intercorrencia.getHiperglicemia() != intercorrencia.getHipoglicemia()){
-                            return true;
-                        }else{
+                        if(intercorrencia.getHiperglicemia() == 1 && intercorrencia.getHipoglicemia() == 1){
                             Toast.makeText(activity, "Hipoglicemia e Hiperglicemia não podem ser registradas juntas!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            return true;
                         }
                     }
                     //Anotacao vazia
