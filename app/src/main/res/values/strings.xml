@@ -260,6 +260,7 @@
     <string name="standarValues">Valores padrões</string>
     <string name="alterSalva">Alterações Salvas</string>
     <string name="semVinculoChatPaciente">Nenhum paciente vinculado permite chat!</string>
+    <string name="semVinculoPaciente">Nenhum paciente vinculado!</string>
     <string name="chat">Chat</string>
     <string name="hrIntercorrencia">Hora:</string>
 

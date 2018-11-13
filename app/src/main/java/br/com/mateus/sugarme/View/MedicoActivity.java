@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
@@ -75,6 +77,7 @@ public class MedicoActivity extends AppCompatActivity {
         pacientesMedicoGridLayout = (GridLayout) findViewById(R.id.pacientesMedicoGridLayout);
         medicoConfiguracoesGridLayout = (GridLayout) findViewById(R.id.medicoConfiguracoesGridLayout);
         final TextView qteSemLerChatTextView = (TextView) findViewById(R.id.qteSemLerChatTextView); //Qtde notificacoes
+        final TextView qtdePacientesVinculadosTextView = (TextView) findViewById(R.id.qtePacientesVinculadosTextView);//Pacientes
 
         //Configuração do Menu em GridLayout
        perfilMedicoGridLayout.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +103,9 @@ public class MedicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Listar Pacientes, relatorio
+                Intent intent = new Intent(MedicoActivity.this, PacientesVinculadosActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                MedicoActivity.this.startActivity(intent);
             }
         });
 
@@ -123,6 +129,22 @@ public class MedicoActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     qteSemLerChatTextView.setText(Long.toString(dataSnapshot.getChildrenCount()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        //Ver pacientes vinculados
+        databaseReference.child("users").child("medicos").child(userId).child("vinculos").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    qtdePacientesVinculadosTextView.setText(Long.toString(dataSnapshot.getChildrenCount()));
                 }
             }
 

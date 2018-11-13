@@ -67,21 +67,8 @@ public class VinculoChatActivity extends AppCompatActivity {
         medicoDisplayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder dbuilder = new AlertDialog.Builder(VinculoChatActivity.this);
-                dbuilder.setTitle(R.string.iniciarChat);
-                dbuilder.setPositiveButton(getString(R.string.simVincular), new DialogInterface.OnClickListener() {//conversar
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Medico medico = medicoList.get(position);
-                        iniciarChat(medico);
-                    }
-                }).setNegativeButton(getString(R.string.naoVincular), new DialogInterface.OnClickListener() {//não conversar
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).create();
-                dbuilder.show();
+                Medico medico = medicoList.get(position);
+                iniciarChat(medico);
             }
         });
     }
