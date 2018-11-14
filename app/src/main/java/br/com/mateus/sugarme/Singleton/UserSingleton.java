@@ -11,8 +11,6 @@ public class UserSingleton extends Application{
     private String tipoDiabetes;
     private String tratamento;
     private String inicioTratamento;
-    private int hiperglicemiaPadrao = 200;
-    private int hipoglicemiaPadrao = 70;
     private Bitmap fotoPerfil;
     private String compartilhaDiario;
 
@@ -50,21 +48,6 @@ public class UserSingleton extends Application{
         this.fotoPerfil = fotoPerfil;
     }
 
-    public int getHiperglicemiaPadrao() {
-        return hiperglicemiaPadrao;
-    }
-
-    public void setHiperglicemiaPadrao(int hiperglicemiaPadrao) {
-        this.hiperglicemiaPadrao = hiperglicemiaPadrao;
-    }
-
-    public int getHipoglicemiaPadrao() {
-        return hipoglicemiaPadrao;
-    }
-
-    public void setHipoglicemiaPadrao(int hipoglicemiaPadrao) {
-        this.hipoglicemiaPadrao = hipoglicemiaPadrao;
-    }
 
     public String getNomeUser() {
         return nomeUser;

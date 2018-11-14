@@ -87,8 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:shrinkColumns="*"
-            android:stretchColumns="*"
-            android:background="@color/colorSoftBlueGreyBackground">
+            android:stretchColumns="*">
             <!-- Linha 2 com 2 colunas -->
             <TableRow
                 android:layout_height="wrap_content"
@@ -200,20 +199,34 @@
             </TableRow>
         </TableLayout>
     </GridLayout>
-    <!--Anotacao-->
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/textInputAnotacoes"
+        <!--Anotacao-->
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="95dp"
-            android:hint="@string/anotacoes" />
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:rowCount="1"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_gravity="center"
+            android:elevation="10dp">
 
-    </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="start|fill_horizontal"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="@dimen/fab_margin"
+                    >
 
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputAnotacoes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="3"
+                        android:hint="@string/anotacoes" />
+                </android.support.design.widget.TextInputLayout>
+        </GridLayout>
 </LinearLayout>
 </ScrollView>

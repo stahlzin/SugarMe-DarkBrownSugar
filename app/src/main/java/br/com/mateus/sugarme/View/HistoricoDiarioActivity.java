@@ -2,7 +2,6 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +11,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,14 +29,16 @@ import java.util.List;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.DAO.DiarioGlicemicoDAO;
 import br.com.mateus.sugarme.R;
-import br.com.mateus.sugarme.Singleton.UserSingleton;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+
 import static br.com.mateus.sugarme.State.DiarioGlicemicoState.getStateBackgroundColor;
 import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class HistoricoDiarioActivity extends AppCompatActivity {
+
+
 
     private List<DiarioGlicemico> diarioGlicemicoList = new ArrayList<>();
     private HistoricoDiarioArrayAdapter historicoDiarioArrayAdapter;
@@ -95,8 +94,6 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
 
     }
 
-
-
     public static class HistoricoDiarioArrayAdapter extends ArrayAdapter<DiarioGlicemico> {
         public HistoricoDiarioArrayAdapter (Context context, List<DiarioGlicemico> forecast){
             super (context, -1, forecast);
@@ -133,14 +130,11 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
             final Context context = getContext();
             viewHolder.glicemiaTextView.setText(String.valueOf(dgc.getGlicemia()));
 
-            int valor = getStateBackgroundColor(tryParseInt(viewHolder.glicemiaTextView.getText().toString()), 180, 70);
-            viewHolder.glicemiaTextView.setBackgroundResource(valor);
-
-
             viewHolder.categoriaTextView.setText(dgc.getCategoria());
             viewHolder.dataTextView.setText(dgc.getData());
             viewHolder.horaTextView.setText(dgc.getHora());
             viewHolder.diarioId = dgc.getDiarioId();
+            viewHolder.glicemiaTextView.setBackgroundResource(getStateBackgroundColor(dgc.getCategoria()));
 
             viewHolder.deleteIndiceImageView.setOnClickListener(new View.OnClickListener() {
                 @Override

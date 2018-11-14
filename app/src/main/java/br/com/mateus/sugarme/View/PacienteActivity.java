@@ -205,21 +205,6 @@ public class PacienteActivity extends AppCompatActivity
             }
         });
 
-       //Valores de hiperglicemia e hipoglicemia
-        databaseReference.child("users").child("pacientes").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    globalVariable.setHiperglicemiaPadrao(tryParseInt(dataSnapshot.child("hiperglicemiaPadrao").getValue()));
-                    globalVariable.setHipoglicemiaPadrao(tryParseInt(dataSnapshot.child("hipoglicemiaPadrao").getValue()));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
     }
 

@@ -187,7 +187,7 @@
     <string name="sedeExcessiva">Sede Excessiva</string>
     <string name="title_activity_diario_glicemico">DiarioGlicemicoActivity</string>
     <string name="diario_ultimaleitura">Últimas Leituras</string>
-    <string name="diario_historico">Consultar histórico</string>
+    <string name="diario_historico">Ver histórico</string>
     <string name="diario_registrar">Registrar Leitura</string>
     <string name="diarioEscala">mg/dl</string>
     <string name="diarioSampleLeitura">90</string>

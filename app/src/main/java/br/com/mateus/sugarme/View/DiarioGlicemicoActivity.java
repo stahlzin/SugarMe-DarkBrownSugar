@@ -2,17 +2,15 @@ package br.com.mateus.sugarme.View;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +36,11 @@ import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
+import static br.com.mateus.sugarme.State.DiarioGlicemicoState.createDiarioCat;
+import static br.com.mateus.sugarme.State.DiarioGlicemicoState.getStateBackgroundColor;
+import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class DiarioGlicemicoActivity extends AppCompatActivity {
 
@@ -51,10 +54,11 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
     private List<DiarioGlicemico> diarioGlicemicoList;
     private FirebaseAuth firebaseAuth;
     private String userId;
-    private DiarioGlicemico diarioGlicemico;
     private DatabaseReference databaseReference;
     private AlertDialog alerta;
     private IntercorrenciaDAO intercorrenciaDAO;
+    private ImageView diarioHistoricoImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,112 +81,28 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         penultimaLeituratextView = (TextView) findViewById(R.id.PenultimaLeituratextView);
         anteLeituratextView = (TextView) findViewById(R.id.AnteLeituratextView);
 
+        diarioHistoricoImageView = (ImageView) findViewById(R.id.diarioHistoricoImageView);
+
+        diarioHistoricoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleNavigation(DiarioGlicemicoActivity.this, HistoricoDiarioActivity.class);
+
+            }
+        });
+
 
         diarioHistorioTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DiarioGlicemicoActivity.this, HistoricoDiarioActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                SimpleNavigation(DiarioGlicemicoActivity.this, HistoricoDiarioActivity.class);
 
             }
         });
-
-
-        ultimaLeituratextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int valor = tryParseInt(ultimaLeituratextView.getText().toString());
-                int color = changeColor(valor);
-                switch (color){
-                    case -2:
-                       ultimaLeituratextView.setBackgroundResource(R.color.colorHiper);
-                        break;
-                    case -1:
-                        ultimaLeituratextView.setBackgroundResource(R.color.colorHipo);
-                        break;
-                    case 0:
-                        ultimaLeituratextView.setBackgroundResource(R.color.colorNormal);
-                        break;
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        anteLeituratextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int valor = tryParseInt(anteLeituratextView.getText().toString());
-                int color = changeColor(valor);
-                switch (color){
-                    case -2:
-                        anteLeituratextView.setBackgroundResource(R.color.colorHiper);
-                        break;
-                    case -1:
-                        anteLeituratextView.setBackgroundResource(R.color.colorHipo);
-                        break;
-                    case 0:
-                        anteLeituratextView.setBackgroundResource(R.color.colorNormal);
-                        break;
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        penultimaLeituratextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int valor = tryParseInt(penultimaLeituratextView.getText().toString());
-                int color = changeColor(valor);
-                switch (color){
-                    case -2:
-                        penultimaLeituratextView.setBackgroundResource(R.color.colorHiper);
-                        break;
-                    case -1:
-                        penultimaLeituratextView.setBackgroundResource(R.color.colorHipo);
-                        break;
-                    case 0:
-                        penultimaLeituratextView.setBackgroundResource(R.color.colorNormal);
-                        break;
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
 
 
         diarioGlicemicoList = new ArrayList<DiarioGlicemico>();
-        getUserId();
+        userId = getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child("users").child("pacientes").child(userId).child("diario").orderByChild("gliTimestamp").limitToLast(3).addValueEventListener(new ValueEventListener() {
@@ -248,26 +168,10 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
 
     private void sucessoAdd() {
         Toast.makeText(DiarioGlicemicoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(DiarioGlicemicoActivity.this, PacienteActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        DiarioGlicemicoActivity.this.startActivity(intent);
-    }
-
-    public void getUserId() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        userId = firebaseAuth.getCurrentUser().getUid();
+        SimpleNavigation(DiarioGlicemicoActivity.this, PacienteActivity.class);
     }
 
 
-    private int changeColor(int valor) {
-        if (valor <= 70) {
-            return -1;
-        }
-        if (valor >= 200) {
-            return -2;
-        }
-        return 0;
-    }
 
     private void setValuesOfDiarioGlicemicoList(List<DiarioGlicemico> diarioGlicemicoList) {
 
@@ -278,16 +182,22 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
                 anteLeituratextView.setText("--");
                 penultimaLeituratextView.setText("--");
                 ultimaLeituratextView.setText(String.valueOf(diarioGlicemicoList.get(0).getGlicemia()));
+                ultimaLeituratextView.setBackgroundResource(getStateBackgroundColor(diarioGlicemicoList.get(0).getCategoria()));
                 break;
             case 2:
                 anteLeituratextView.setText("--");
                 penultimaLeituratextView.setText(String.valueOf(diarioGlicemicoList.get(0).getGlicemia()));
+                penultimaLeituratextView.setBackgroundResource(getStateBackgroundColor(diarioGlicemicoList.get(0).getCategoria()));
                 ultimaLeituratextView.setText(String.valueOf(diarioGlicemicoList.get(1).getGlicemia()));
+                ultimaLeituratextView.setBackgroundResource(getStateBackgroundColor(diarioGlicemicoList.get(1).getCategoria()));
                 break;
             case 3:
                 anteLeituratextView.setText(String.valueOf(diarioGlicemicoList.get(0).getGlicemia()));
+                anteLeituratextView.setBackgroundResource(getStateBackgroundColor(diarioGlicemicoList.get(0).getCategoria()));
                 penultimaLeituratextView.setText(String.valueOf(diarioGlicemicoList.get(1).getGlicemia()));
+                penultimaLeituratextView.setBackgroundResource(getStateBackgroundColor(diarioGlicemicoList.get(1).getCategoria()));
                 ultimaLeituratextView.setText(String.valueOf(diarioGlicemicoList.get(2).getGlicemia()));
+                ultimaLeituratextView.setBackgroundResource(getStateBackgroundColor(diarioGlicemicoList.get(2).getCategoria()));
                 break;
             default:
                 anteLeituratextView.setText("--");
@@ -304,7 +214,7 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         diarioGlicemico.setGlicemia(tryParseInt(glicemiaDiarioEditText.getText().toString()));
         diarioGlicemico.setData(dataDiarioTextView.getText().toString());
         diarioGlicemico.setHora(horaDiarioTextView.getText().toString());
-        diarioGlicemico.setCategoria(createCategoria(diarioGlicemico));
+        diarioGlicemico.setCategoria(createDiarioCat(tryParseInt(glicemiaDiarioEditText.getText().toString())));
         diarioGlicemico.setGliTimestamp(tryParseDatetoTimeStamp(dataDiarioTextView.getText().toString(), horaDiarioTextView.getText().toString()));
         return diarioGlicemico;
     }
@@ -322,28 +232,12 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
 
     }
 
-    private String createCategoria(DiarioGlicemico diarioGlicemico){
-        String anw = "Normal";
-        int comp = tryParseInt(glicemiaDiarioEditText.getText().toString());
-
-        if (comp <= 70){
-            anw = "Hipoglicemia";
-        }
-        if (comp >= 200){
-            anw = "Hiperglicemia";
-        }
-
-        return anw;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(DiarioGlicemicoActivity.this, PacienteActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                DiarioGlicemicoActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(DiarioGlicemicoActivity.this, PacienteActivity.class);
                 break;
             default:break;
         }
