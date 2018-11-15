@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
@@ -13,6 +15,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,6 +37,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import br.com.mateus.sugarme.Model.Exame;
@@ -41,13 +46,14 @@ import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
 import static br.com.mateus.sugarme.Builder.DataBuilder.getDescExamList;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
 public class ExameAddActivity extends AppCompatActivity {
 
     Button uploadExameButton;
     TextView statusExameTextView;
     FloatingActionButton addfloatingActionButton;
-    TextInputEditText dataExameTextInput, descricaoExameTextInput;
+    TextInputEditText dataExameTextInput;
     Uri uriPDF;
     ProgressDialog progressDialog;
     String userId;
@@ -71,10 +77,29 @@ public class ExameAddActivity extends AppCompatActivity {
         statusExameTextView = (TextView) findViewById(R.id.statusExameTextView);
         addfloatingActionButton = (FloatingActionButton) findViewById(R.id.addfloatingActionButton);
         dataExameTextInput = (TextInputEditText) findViewById(R.id.dataExameTextInput);
-        descricaoExameTextInput = (TextInputEditText) findViewById(R.id.descricaoExameTextInput);
         descricaoExameSpinner = (Spinner) findViewById(R.id.descricaoExameSpinner);
+        addfloatingActionButton.setEnabled(false);
+        addfloatingActionButton.setVisibility(View.INVISIBLE);
 
         dataExameTextInput.addTextChangedListener(MaskEditUtil.mask(dataExameTextInput, MaskEditUtil.FORMAT_DATE));
+
+        dataExameTextInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addfloatingActionButton.setEnabled(true);
+                addfloatingActionButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         //Firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -98,7 +123,7 @@ public class ExameAddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // data, no presenter
                 if (uriPDF != null ) {
-                    if(descricaoExameTextInput.getText().toString() != ""){
+                    if(descricaoExameSpinner.getSelectedItem().toString() != ""){
                         uploadFile(uriPDF);
                     }else{
                         Toast.makeText(ExameAddActivity.this, "Você deve adicionar uma descrição", Toast.LENGTH_SHORT).show();
@@ -118,6 +143,15 @@ public class ExameAddActivity extends AppCompatActivity {
     public void getUserId() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
+    }
+
+    private int getIndex(String desc){
+        for (int i=0;i<this.descricaoExameSpinner.getCount();i++){
+            if (this.descricaoExameSpinner.getItemAtPosition(i).toString().equalsIgnoreCase(desc)){
+                return i;
+            }
+        }
+        return 0;
     }
 
 
@@ -145,7 +179,7 @@ public class ExameAddActivity extends AppCompatActivity {
                     Exame exame = new Exame();
                     exame.setDataExame(dataExameTextInput.getText().toString());
                     exame.setIdExame(fileName);
-                    exame.setDescricaoExame(descricaoExameTextInput.getText().toString());
+                    exame.setDescricaoExame(descricaoExameSpinner.getSelectedItem().toString());
                     exame.setUrlExame(urlExame);
                     exame.setExameTimestamp(tryParseDatetoTimeStamp(dataExameTextInput.getText().toString(), "00:00"));
 
@@ -203,20 +237,43 @@ public class ExameAddActivity extends AppCompatActivity {
         //garantir que o usuario selecionou o pdf
         if(requestCode == 89 && resultCode == RESULT_OK && data!=null){
             uriPDF = data.getData();//uri do arquivo selecionado
-            statusExameTextView.setText("Arquivo selecionado: " + data.getData().getLastPathSegment());
+            String name = getFileName (uriPDF);
+            statusExameTextView.setText("Arquivo selecionado: " + name);
+            uploadExameButton.setEnabled(true);
+            uploadExameButton.setBackgroundResource(R.color.colorGreen);
+
         }else{
             Toast.makeText(ExameAddActivity.this, "Selecione um arquivo...", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(ExameAddActivity.this, ExameActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                ExameAddActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(ExameAddActivity.this, ExameActivity.class);
                 break;
             default:break;
         }
