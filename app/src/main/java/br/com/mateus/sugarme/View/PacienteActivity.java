@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.IMarker;
@@ -49,11 +48,10 @@ import br.com.mateus.sugarme.Singleton.UserSingleton;
 import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Controller.PacientePresenter;
-import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
+import br.com.mateus.sugarme.Controller.PerfilController;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
-import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
@@ -272,8 +270,8 @@ public class PacienteActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            MedicalInfoPresenter medicalInfoPresenter = new MedicalInfoPresenter();
-            medicalInfoPresenter.getPerfil(PacienteActivity.this);
+            PerfilController perfilController = new PerfilController();
+            perfilController.getPerfil(PacienteActivity.this);
         } else if (id == R.id.nav_diario) {
             SimpleNavigation (PacienteActivity.this, DiarioGlicemicoActivity.class);
 

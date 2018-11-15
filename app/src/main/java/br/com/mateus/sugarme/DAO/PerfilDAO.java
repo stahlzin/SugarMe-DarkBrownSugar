@@ -15,10 +15,10 @@ import java.io.Serializable;
 
 import br.com.mateus.sugarme.Model.Perfil;
 import br.com.mateus.sugarme.Model.Paciente;
-import br.com.mateus.sugarme.View.MedicalInfoActivity;
+import br.com.mateus.sugarme.View.PerfilEditActivity;
 import br.com.mateus.sugarme.View.PerfilActivity;
 
-public class MedicalInfoDAO {
+public class PerfilDAO {
     private DatabaseReference mDatabase;
     private FirebaseAuth firebaseAuth;
     private String userId;
@@ -53,14 +53,14 @@ public class MedicalInfoDAO {
                 if (dataSnapshot.exists()){
                     perfil = dataSnapshot.getValue(Perfil.class);
                     //Trocar de Activity
-                    Intent intent = new Intent(activity, MedicalInfoActivity.class);
+                    Intent intent = new Intent(activity, PerfilEditActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("edit","editarInfo");
                     intent.putExtra("info", (Serializable) perfil);
                     activity.startActivity(intent);
                 }
                 else{
-                    Intent intent = new Intent(activity, MedicalInfoActivity.class);
+                    Intent intent = new Intent(activity, PerfilEditActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
                 }

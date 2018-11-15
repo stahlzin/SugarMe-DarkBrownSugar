@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.widget.Toast;
 
 import br.com.mateus.sugarme.Model.Perfil;
-import br.com.mateus.sugarme.DAO.MedicalInfoDAO;
+import br.com.mateus.sugarme.DAO.PerfilDAO;
 
 
-public class MedicalInfoPresenter {
-    private MedicalInfoDAO medicalInfoDAO = new MedicalInfoDAO();
+public class PerfilController {
+    private PerfilDAO perfilDAO = new PerfilDAO();
 
     public boolean isDadosOk(Perfil perfil, Activity activity){
 
@@ -34,11 +34,11 @@ public class MedicalInfoPresenter {
 
 
     public void recebeInfoMedica(Activity activity) {
-        medicalInfoDAO.consultaInfoMedica(activity);
+        perfilDAO.consultaInfoMedica(activity);
     }
 
     public void getPerfil (Activity activity){
-        medicalInfoDAO.buscaPerfil(activity);
+        perfilDAO.buscaPerfil(activity);
     }
 }
 

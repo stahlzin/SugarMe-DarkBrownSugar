@@ -15,7 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import br.com.mateus.sugarme.Model.Perfil;
-import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
+import br.com.mateus.sugarme.Controller.PerfilController;
 import br.com.mateus.sugarme.Controller.PacientePresenter;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
@@ -139,8 +139,8 @@ public class PerfilActivity extends AppCompatActivity {
 
                 switch (arg1){
                     case 0:{
-                        MedicalInfoPresenter medicalInfoPresenter = new MedicalInfoPresenter();
-                        medicalInfoPresenter.recebeInfoMedica(PerfilActivity.this);
+                        PerfilController perfilController = new PerfilController();
+                        perfilController.recebeInfoMedica(PerfilActivity.this);
                         break;
                     }
                     case 1: {

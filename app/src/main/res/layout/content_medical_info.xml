@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context=".View.MedicalInfoActivity"
+    tools:context=".View.PerfilEditActivity"
     tools:showIn="@layout/activity_medical_info"
     android:layout_marginRight="5dp"
     android:layout_marginLeft="5dp"
@@ -17,69 +17,97 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:gravity="center"
-        tools:context=".View.MedicalInfoActivity"
-        >
+        android:orientation="vertical">
 
-        <!--Peso-->
-        <android.support.design.widget.TextInputLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:text="@string/perfil_peso_alt"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="0dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginTop="@dimen/fab_margin"/>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/textInputPeso"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/peso"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
-
-        <!--Altura-->
-        <android.support.design.widget.TextInputLayout
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:columnCount="2"
+            android:layout_weight="1"
+            android:rowCount="1"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginTop="0dp"
+            android:elevation="10dp">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/textInputAltura"
+                <!--Peso-->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:padding="10dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputPeso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/peso"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <!--Altura-->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="150dp"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputAltura"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/altura"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+        </GridLayout>
+
+        <!--Tipo de Diabetes-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tipoDiabetes"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="0dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginTop="@dimen/fab_margin"/>
+
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/altura"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
+                android:columnCount="1"
+                android:layout_weight="1"
+                android:rowCount="1"
+                android:useDefaultMargins="true"
+                android:background="@color/colorBlank"
+                android:layout_marginEnd="@dimen/fab_margin"
+                android:layout_marginStart="@dimen/fab_margin"
+                android:layout_marginBottom="@dimen/fab_margin"
+                android:layout_marginTop="0dp"
+                android:elevation="10dp">
 
-        <TableLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:shrinkColumns="*"
-            android:stretchColumns="*"
-            android:background="@color/colorSoftOrangeBackground">
-            <!-- Linha 2 com 2 colunas -->
-            <TableRow
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:gravity="center_horizontal">
-
-                <TextView
-                    android:id="@+id/textViewTipoDiabetes"
-                    android:layout_weight="1"
-                    android:textAppearance="@android:style/TextAppearance.Medium"
-                    android:gravity="start"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:textStyle="bold"
-                    android:text="@string/tipoDiabetes"/>
 
                 <RadioGroup
                     android:id="@+id/textRadioGroupTipo_diabetes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
-                    android:gravity="center|start"
+                    android:gravity="start"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:padding="10dp">
 
@@ -102,12 +130,37 @@
                         android:text="@string/gestacional" />
 
                 </RadioGroup>
-            </TableRow>
-        </TableLayout>
+            </GridLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/perfil_anos"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="0dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginTop="@dimen/fab_margin"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:layout_weight="1"
+            android:rowCount="2"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginTop="0dp"
+            android:elevation="10dp">
 
         <!--Ano Descoberta-->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:padding="10dp">
 
@@ -122,6 +175,7 @@
         <!--Ano Tratamento-->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:padding="10dp">
 
@@ -132,27 +186,41 @@
                 android:hint="@string/anoTratamento"
                 android:inputType="date" />
         </android.support.design.widget.TextInputLayout>
+        </GridLayout>
 
 
 
         <TextView
-            android:id="@+id/textViewTipoTratamento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAppearance="@android:style/TextAppearance.Medium"
             android:text="@string/tipotratmento"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:background="@color/colorSoftOrangeBackground"/>
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="0dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginTop="@dimen/fab_margin"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:layout_weight="1"
+            android:rowCount="1"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginTop="0dp"
+            android:elevation="10dp">
+
 
         <TableLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:shrinkColumns="*"
-            android:stretchColumns="*"
-            android:background="@color/colorSoftOrangeBackground">
+            android:stretchColumns="*">
                 <!-- Linha 2 com 2 colunas -->
                 <TableRow
                     android:layout_height="wrap_content"
@@ -199,15 +267,33 @@
                 </TableRow>
         </TableLayout>
 
+        </GridLayout>
+
+
         <TextView
-            android:id="@+id/textViewDoencasAssociadas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAppearance="@android:style/TextAppearance.Medium"
             android:text="@string/outrasDoencas"
-            android:textStyle="bold"
-            android:padding="12dp"/>
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="0dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginTop="@dimen/fab_margin"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:layout_weight="1"
+            android:rowCount="1"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginTop="0dp"
+            android:elevation="10dp">
+
 
         <TableLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -274,6 +360,7 @@
             android:layout_weight="1"/>
         </TableRow>
         </TableLayout>
+        </GridLayout>
     </LinearLayout>
 
 </ScrollView>

@@ -29,7 +29,7 @@
             android:label="@string/title_activity_paciente"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".View.MedicalInfoActivity"
+            android:name=".View.PerfilEditActivity"
             android:label="@string/title_activity_medical_info"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

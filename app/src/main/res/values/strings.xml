@@ -43,20 +43,20 @@
     <string name="dataNascimento">Data de Nascimento:</string>
     <string name="altura">Altura(cm):</string>
     <string name="informacoesMedicas">Informações Médicas</string>
-    <string name="tipoDiabetes">Tipo Diabetes</string>
+    <string name="tipoDiabetes">Tipo Diabetes:</string>
     <string name="tipo1">Tipo 1</string>
     <string name="tipo2">Tipo 2</string>
     <string name="gestacional">Gestacional</string>
     <string name="anoDescoberta">Ano de Descoberta</string>
     <string name="anoTratamento">Ano do Início do Tratamento</string>
-    <string name="tipotratmento">Tipo de Tratamento</string>
+    <string name="tipotratmento">Tipo de Tratamento: </string>
 
     <string name="tipoInsulina">Insulina</string>
     <string name="tipoMedicacao">Medicação</string>
     <string name="tipoAlimentar">Dieta Restrititva</string>
     <string name="tipoEsporte">Atividades Físicas</string>
 
-    <string name="outrasDoencas">Outras enfermidades</string>
+    <string name="outrasDoencas">Outras enfermidades:</string>
 
     <string name="colesterol">Colesterol</string>
     <string name="pressaoAlta">Pressão Alta</string>
@@ -263,5 +263,7 @@
     <string name="semVinculoPaciente">Nenhum paciente vinculado!</string>
     <string name="chat">Chat</string>
     <string name="hrIntercorrencia">Hora:</string>
+    <string name="perfil_peso_alt">Informe seu peso e altura:</string>
+    <string name="perfil_anos">Datas do diagnóstico:</string>
 
 </resources>

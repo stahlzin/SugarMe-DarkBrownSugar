@@ -16,10 +16,10 @@ import android.support.v7.widget.Toolbar;
 import br.com.mateus.sugarme.R;
 
 import br.com.mateus.sugarme.Model.Perfil;
-import br.com.mateus.sugarme.DAO.MedicalInfoDAO;
-import br.com.mateus.sugarme.Controller.MedicalInfoPresenter;
+import br.com.mateus.sugarme.DAO.PerfilDAO;
+import br.com.mateus.sugarme.Controller.PerfilController;
 
-public class MedicalInfoActivity extends AppCompatActivity {
+public class PerfilEditActivity extends AppCompatActivity {
 
     private TextInputEditText textInputPeso;
     private TextInputEditText textInputAltura;
@@ -43,8 +43,8 @@ public class MedicalInfoActivity extends AppCompatActivity {
 
     private TextView textViewEditarCadastro;
 
-    private MedicalInfoPresenter medicalInfoPresenter;
-    private MedicalInfoDAO medicalInfoDAO;
+    private PerfilController perfilController;
+    private PerfilDAO perfilDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +84,14 @@ public class MedicalInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Perfil perfil = preencheInfoMedica();
-                medicalInfoPresenter = new MedicalInfoPresenter();
-                if(medicalInfoPresenter.isDadosOk(perfil, MedicalInfoActivity.this)){
-                    medicalInfoDAO = new MedicalInfoDAO();
-                    medicalInfoDAO.inserir(perfil);
-                    Toast.makeText(MedicalInfoActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MedicalInfoActivity.this, PacienteActivity.class);
+                perfilController = new PerfilController();
+                if(perfilController.isDadosOk(perfil, PerfilEditActivity.this)){
+                    perfilDAO = new PerfilDAO();
+                    perfilDAO.inserir(perfil);
+                    Toast.makeText(PerfilEditActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(PerfilEditActivity.this, PacienteActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    MedicalInfoActivity.this.startActivity(intent);
+                    PerfilEditActivity.this.startActivity(intent);
                 }
             }
         });
@@ -110,9 +110,9 @@ public class MedicalInfoActivity extends AppCompatActivity {
     //OnBackPressed
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(MedicalInfoActivity.this, PerfilActivity.class);
+        Intent intent = new Intent(PerfilEditActivity.this, PerfilActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        MedicalInfoActivity.this.startActivity(intent);
+        PerfilEditActivity.this.startActivity(intent);
     }
 
    private Perfil preencheInfoMedica(){
@@ -204,9 +204,9 @@ public class MedicalInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(MedicalInfoActivity.this, PerfilActivity.class);
+                Intent intent = new Intent(PerfilEditActivity.this, PerfilActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                MedicalInfoActivity.this.startActivity(intent);
+                PerfilEditActivity.this.startActivity(intent);
                 finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
                 break;
             default:break;
