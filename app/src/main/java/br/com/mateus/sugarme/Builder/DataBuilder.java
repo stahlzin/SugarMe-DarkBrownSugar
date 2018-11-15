@@ -88,4 +88,38 @@ public class DataBuilder {
         return "done";
     }
 
+    public static ArrayList getDescExamList(){
+
+        ArrayList<String> desc = new ArrayList<>();
+
+        desc.add("Rotina Sanguínea");
+        desc.add("Rotina Urina");
+        desc.add("Rotina Combinada: Sangue e Urina");
+        desc.add("Curva Glicêmica");
+        desc.add("Glicemia de jejum");
+        desc.add("Teste de tolerância à glicose (TOTG)");
+        desc.add("Glicemia pós-prandial");
+        desc.add("Glicosúria");
+        desc.add("Hemoglobina glicada (HbA1C)");
+        desc.add("T4/TSH");
+        desc.add("Triglicérides");
+        desc.add("Colesterol total");
+        desc.add("HDL colesterol");
+        desc.add("LDL colesterol");
+        desc.add("Creatinina");
+        desc.add("Urina I");
+        desc.add("Relação Albumina/creatinina (A/C)");
+        desc.add("Pesquisa de microalbuminúria ");
+        desc.add("Proteinúria de 24 horas");
+        desc.add("Taxa de filtração glomerular");
+        desc.add("Pesquisa de co-morbidades");
+        desc.add("Dosagem do peptídeo C");
+        desc.add("Dosagem de auto-anticorpos anti GAD e anti-insulina");
+        desc.add("RX de punho e mãos para avaliação da idade óssea");
+        desc.add("Pesquisa de Doença celíaca (transglutaminase)");
+        desc.add("Outros exames");
+
+        return desc ;
+    }
+
 }

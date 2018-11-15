@@ -15,7 +15,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,11 +33,14 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+
 import br.com.mateus.sugarme.Model.Exame;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.DataBuilder.getDescExamList;
 
 public class ExameAddActivity extends AppCompatActivity {
 
@@ -46,6 +51,8 @@ public class ExameAddActivity extends AppCompatActivity {
     Uri uriPDF;
     ProgressDialog progressDialog;
     String userId;
+    private Spinner descricaoExameSpinner;
+    private ArrayList<String> desc;
 
     FirebaseStorage firebaseStorage;
     FirebaseDatabase firebaseDatabase;
@@ -65,6 +72,7 @@ public class ExameAddActivity extends AppCompatActivity {
         addfloatingActionButton = (FloatingActionButton) findViewById(R.id.addfloatingActionButton);
         dataExameTextInput = (TextInputEditText) findViewById(R.id.dataExameTextInput);
         descricaoExameTextInput = (TextInputEditText) findViewById(R.id.descricaoExameTextInput);
+        descricaoExameSpinner = (Spinner) findViewById(R.id.descricaoExameSpinner);
 
         dataExameTextInput.addTextChangedListener(MaskEditUtil.mask(dataExameTextInput, MaskEditUtil.FORMAT_DATE));
 
@@ -100,6 +108,11 @@ public class ExameAddActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //Adapter pro spinner
+        desc = getDescExamList();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, desc);
+        descricaoExameSpinner.setAdapter(adapter);
     }
 
     public void getUserId() {

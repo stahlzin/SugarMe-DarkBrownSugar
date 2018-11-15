@@ -35,9 +35,6 @@ import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 import static br.com.mateus.sugarme.View.MainController.getUserId;
 
 public class CadastroActivity extends AppCompatActivity {
-    /*private String[] uf = new String[]{"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA","MG",
-            "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS",
-            "SC", "SE", "SP", "TO"};*/
 
     //Objetos
     private RadioButton radioButtonPaciente;
