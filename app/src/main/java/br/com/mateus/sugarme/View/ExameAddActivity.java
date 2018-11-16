@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,13 +39,18 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import br.com.mateus.sugarme.Model.Exame;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Builder.MaskEditUtil;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Builder.DataBuilder.getDescExamList;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
@@ -78,28 +84,12 @@ public class ExameAddActivity extends AppCompatActivity {
         addfloatingActionButton = (FloatingActionButton) findViewById(R.id.addfloatingActionButton);
         dataExameTextInput = (TextInputEditText) findViewById(R.id.dataExameTextInput);
         descricaoExameSpinner = (Spinner) findViewById(R.id.descricaoExameSpinner);
-        addfloatingActionButton.setEnabled(false);
-        addfloatingActionButton.setVisibility(View.INVISIBLE);
 
         dataExameTextInput.addTextChangedListener(MaskEditUtil.mask(dataExameTextInput, MaskEditUtil.FORMAT_DATE));
-
-        dataExameTextInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addfloatingActionButton.setEnabled(true);
-                addfloatingActionButton.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        SimpleDateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
+        Date data = new Date();
+        String dataFormatada = formataData.format(data);
+        dataExameTextInput.setText(dataFormatada);
 
         //Firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -109,30 +99,37 @@ public class ExameAddActivity extends AppCompatActivity {
         addfloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ContextCompat.checkSelfPermission(ExameAddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
-                    selectPDF();
-                }
-                else{
-                    ActivityCompat.requestPermissions(ExameAddActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 86);
-                }
-            }
-        });
+
+                    if(ContextCompat.checkSelfPermission(ExameAddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
+                        selectPDF();
+                    }
+                    else{
+                        ActivityCompat.requestPermissions(ExameAddActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 86);
+                    }
+        }});
+
         //fazer o upload no Storage e no Realtime database
         uploadExameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // data, no presenter
+
+            if(isData(dataExameTextInput.getText().toString())){
                 if (uriPDF != null ) {
-                    if(descricaoExameSpinner.getSelectedItem().toString() != ""){
-                        uploadFile(uriPDF);
-                    }else{
-                        Toast.makeText(ExameAddActivity.this, "Você deve adicionar uma descrição", Toast.LENGTH_SHORT).show();
-                    }
+                        if(descricaoExameSpinner.getSelectedItem().toString() != ""){
+                            uploadFile(uriPDF);
+                        }else{
+                            Toast.makeText(ExameAddActivity.this, "Você deve adicionar uma descrição", Toast.LENGTH_SHORT).show();
+                        }
                 }else{
-                    Toast.makeText(ExameAddActivity.this, "Você deve selecionar um arquivo", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ExameAddActivity.this, "Você deve selecionar um arquivo", Toast.LENGTH_SHORT).show();
+                    }
                 }
+            else{
+                Toast.makeText(ExameAddActivity.this, "Você deve selecionar uma data válida", Toast.LENGTH_SHORT).show();
             }
-        });
+
+
+        }});
 
         //Adapter pro spinner
         desc = getDescExamList();
@@ -145,15 +142,25 @@ public class ExameAddActivity extends AppCompatActivity {
         userId = firebaseAuth.getCurrentUser().getUid();
     }
 
-    private int getIndex(String desc){
-        for (int i=0;i<this.descricaoExameSpinner.getCount();i++){
-            if (this.descricaoExameSpinner.getItemAtPosition(i).toString().equalsIgnoreCase(desc)){
-                return i;
-            }
-        }
-        return 0;
-    }
 
+    private boolean isData(String dataExame){
+        if(dataExame.length() != 10){
+            return false;
+        }
+        int ano = Integer.parseInt(dataExame.substring(6,10));
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        df.setLenient (false);
+        try {
+            df.parse (dataExame); //Data é valida
+            if(ano > 1900 && ano <= 2019 ){
+                return true;
+            }
+        } catch (ParseException ex) {
+            //Data invalida
+            return false;
+        }
+        return false;
+    }
 
     //metodo para o upload
     private void uploadFile(Uri uriPDF) {

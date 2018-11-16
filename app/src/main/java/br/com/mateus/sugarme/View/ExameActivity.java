@@ -1,11 +1,17 @@
 package br.com.mateus.sugarme.View;
 //falta o delete, o download, o controller
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,8 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,13 +33,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.mateus.sugarme.DAO.ExameDAO;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Exame;
 import br.com.mateus.sugarme.R;
+
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
 public class ExameActivity extends AppCompatActivity {
 
@@ -40,8 +52,16 @@ public class ExameActivity extends AppCompatActivity {
     private ListView exameListView;
     private FirebaseAuth firebaseAuth;
     private String userId;
-    private DiarioGlicemico diarioGlicemico;
     private DatabaseReference databaseReference;
+
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +88,11 @@ public class ExameActivity extends AppCompatActivity {
 
         exameListView= (ListView) findViewById(R.id.exameListView);
 
+
         exameArrayAdapter = new ExameActivity.ExameArrayAdapter(this, exameList);
         exameListView.setAdapter(exameArrayAdapter);
 
-        configuraObserverShortClick();
+        //configuraObserverShortClick();
     }
 
     private void configuraObserverShortClick() {
@@ -141,31 +162,187 @@ public class ExameActivity extends AppCompatActivity {
         private static class ViewHolder{
             TextView dataExameTextView;
             TextView descricaoExameTextView;
+            ImageView deleteExameImageView;
+            ImageView downloadExameImageView;
+            ImageView shareExameImageView;
+            String exameId;
+
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Exame dgc = getItem (position);
-            ExameActivity.ExameArrayAdapter.ViewHolder viewHolder;
+            final ExameActivity.ExameArrayAdapter.ViewHolder viewHolder;
             if (convertView == null){
                 viewHolder = new ExameActivity.ExameArrayAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(R.layout.list_exame, parent, false);
                 viewHolder.dataExameTextView = (TextView) convertView.findViewById(R.id.dataExameTextView);
                 viewHolder.descricaoExameTextView = (TextView) convertView.findViewById(R.id.descricaoExameTextView);
+                viewHolder.deleteExameImageView = (ImageView) convertView.findViewById(R.id.deleteExameImageView);
+                viewHolder.downloadExameImageView = (ImageView) convertView.findViewById(R.id.downloadExameImageView);
+                viewHolder.shareExameImageView = (ImageView) convertView.findViewById(R.id.shareExameImageView);
                 convertView.setTag(viewHolder);
             }
             else{
                 viewHolder = (ExameActivity.ExameArrayAdapter.ViewHolder)convertView.getTag();
             }
 
-            Context context = getContext();
+            final Context context = getContext();
             viewHolder.dataExameTextView.setText(String.valueOf(dgc.getDataExame()));
             viewHolder.descricaoExameTextView.setText(dgc.getDescricaoExame());
+            viewHolder.exameId = dgc.getIdExame();
+
+            //Deletar
+            viewHolder.deleteExameImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dbuilder = new AlertDialog.Builder(context);
+                    dbuilder.setTitle("Deseja deletar esse exame?");
+                    dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Delete do database e do storage
+                            ExameDAO exameDAO = new ExameDAO();
+                            exameDAO.excluir(viewHolder.exameId);
+                                                    }
+                    }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+                    dbuilder.show();
+                }
+            });
+
+            //Compartilhar
+            viewHolder.shareExameImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dbuilder = new AlertDialog.Builder(context);
+                    dbuilder.setTitle("Deseja compartilhar esse exame?");
+                    dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+                    dbuilder.show();
+                }
+            });
+
+            //Download
+            viewHolder.downloadExameImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dbuilder = new AlertDialog.Builder(context);
+                    dbuilder.setTitle("Deseja fazer o download desse exame?");
+                    dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+                    dbuilder.show();
+                }
+            });
+
+
             return convertView;
         }
 
     }
+
+    private void shareFile (String fileName){
+
+    }
+
+    /***
+     * Métodos para fazer download do Storage
+     */
+
+    //Primeiro verifica se tem permissão para salvar na memoria interna
+
+    public void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        if (ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //Explain
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(activity,
+                        PERMISSIONS_STORAGE,
+                        REQUEST_EXTERNAL_STORAGE);
+            }
+
+
+        } else {
+            downloadFromStorage("name");
+        }
+    }
+
+    //Se der autorização
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    downloadFromStorage("name");
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                    Toast.makeText(ExameActivity.this, "No podemos escribir sin tener permiso", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    //Gravar no disco a pasta
+    private static File getDirFromSDCard() {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            File sdcard = Environment.getExternalStorageDirectory()
+                    .getAbsoluteFile();
+            File dir = new File(sdcard, "SugarMe" + File.separator + "Exames");
+            if (!dir.exists())
+                dir.mkdirs();
+            return dir;
+        } else {
+            return null;
+        }
+    }
+
+    private void downloadFromStorage (String fileName){
+
+    }
+
 
 
 
@@ -173,10 +350,7 @@ public class ExameActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(ExameActivity.this, PacienteActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                ExameActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(ExameActivity.this, PacienteActivity.class);
                 break;
             default:break;
         }
