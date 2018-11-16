@@ -37,6 +37,7 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
     private List<Paciente> pacienteList = new ArrayList<>();
     private List<Paciente> todosPacientesList = new ArrayList<>();
     private List<String> idPacientesList = new ArrayList<>();
+    private List<String> notificacoesPacientesList = new ArrayList<>();
     private VinculoActivity.PacienteArrayAdapter pacienteArrayAdapter;
     private ListView pacienteBuscaListView;
     private FirebaseAuth firebaseAuth;
@@ -93,7 +94,25 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         getUserId();
+        getListaNotificacoes();
         getListaVinculos();
+    }
+
+    private void getListaNotificacoes() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("medicos").child(userId).child("notificacoes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot json : dataSnapshot.getChildren()){
+                    notificacoesPacientesList.add(json.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getListaVinculos (){
@@ -161,6 +180,9 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
                     for (int j = 0; j < idPacientesList.size(); j++){
                         if(todosPacientesList.get(i).getIdPaciente().equals(idPacientesList.get(j))){
                             Paciente add = todosPacientesList.get(i);
+                            if(notificacoesPacientesList.contains(idPacientesList.get(j))){
+                                add.setNome(add.getNome() + " -> Nova(s) mensagens!");
+                            }
                             pacienteList.add(add);
                         }
                     }

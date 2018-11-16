@@ -1,8 +1,11 @@
 package br.com.mateus.sugarme.View;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -19,12 +22,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +40,16 @@ import java.util.List;
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
 
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.toByteArray;
+import static br.com.mateus.sugarme.View.MainController.getUserId;
+
 public class VinculoChatActivity extends AppCompatActivity {
 
     private ListView medicoDisplayListView;
     private List<Medico> medicoList = new ArrayList<>();
     private List<Medico> todosMedicosList = new ArrayList<>();
     private List<String> idMedicosList = new ArrayList<>();
+    private List<String> notificacoesMedicosList = new ArrayList<>();
     private VinculoActivity.MedicoArrayAdapter medicoArrayAdapter;
     private ListView medicoBuscaListView;
     private FirebaseAuth firebaseAuth;
@@ -91,10 +103,29 @@ public class VinculoChatActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         getUserId();
+        getListaNotificacoes();
         getListaVinculos();
     }
 
+    private void getListaNotificacoes() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("notificacoes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot json : dataSnapshot.getChildren()){
+                    notificacoesMedicosList.add(json.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void getListaVinculos (){
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child("users").child("pacientes").child(userId).child("vinculos").addValueEventListener(new ValueEventListener() {
@@ -160,6 +191,9 @@ public class VinculoChatActivity extends AppCompatActivity {
                     for (int j = 0; j < idMedicosList.size(); j++){
                         if(todosMedicosList.get(i).getIdMedico().equals(idMedicosList.get(j))){
                             Medico add = todosMedicosList.get(i);
+                            if(notificacoesMedicosList.contains(add.getIdMedico())){
+                                add.setNome(add.getNome() + " -> Nova(s) mensagens!");
+                            }
                             medicoList.add(add);
                         }
                     }
