@@ -38,9 +38,6 @@ import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
 public class MedicoActivity extends AppCompatActivity {
     private MedicoPresenter medicoPresenter;
-    private Button novaEntradaButton;
-    private Button buttonEditarMedico;
-    private Medico medico;
     private GridLayout perfilMedicoGridLayout;
     private GridLayout chatMedicoGridLayout;
     private GridLayout pacientesMedicoGridLayout;
@@ -93,9 +90,7 @@ public class MedicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Chamar o chat
-                Intent intent = new Intent(MedicoActivity.this, VinculoChatMedicoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                MedicoActivity.this.startActivity(intent);
+                SimpleNavigation(MedicoActivity.this, VinculoChatMedicoActivity.class);
             }
         });
 
@@ -103,9 +98,7 @@ public class MedicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Listar Pacientes, relatorio
-                Intent intent = new Intent(MedicoActivity.this, PacientesVinculadosActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                MedicoActivity.this.startActivity(intent);
+                SimpleNavigation(MedicoActivity.this, PacientesVinculadosActivity.class);
             }
         });
 
@@ -113,6 +106,7 @@ public class MedicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Configurações
+                NavigationWithOnePutExtra(MedicoActivity.this, ConfigurarActivity.class, "tipo", "medico");
             }
         });
         //Fim da configuração do Menu
@@ -190,7 +184,7 @@ public class MedicoActivity extends AppCompatActivity {
     private void setEditProfileType() {
         //Lista de itens
         ArrayList<String> itens = new ArrayList<String>();
-        itens.add("Perfil");
+        itens.add("Informações Cadastrais");
         itens.add("Foto");
 
         //adapter utilizando um layout customizado (TextView)
