@@ -265,5 +265,10 @@
     <string name="hrIntercorrencia">Hora:</string>
     <string name="perfil_peso_alt">Informe seu peso e altura:</string>
     <string name="perfil_anos">Datas do diagnóstico:</string>
+    <string name="sobreSugarMe">SugarMe é uma aplicação com o objetivo de melhorar a aderência de um paciente diabético com seu tratamento, criando um diário de acompanhamento e um canal de comunicação com seus médicos.\n\n
+O SugarMe foi desenvolvido pelos alunos: Fernando Stahl, Larissa Slavik, Mateus Manetta e Vitorio Gonzalez, sob orientação da Profª Dra. Ana Paula Gonçalves Serra, do curso de Análise e Desenvolvimento de Sistemas da FATEC Ipiranga.\n\n
+Essa aplicação encontra-se em fase experimental de desenvolvimento.
+</string>
+    <string name="app_name_Sobre">Sobre o SugarMe</string>
 
 </resources>

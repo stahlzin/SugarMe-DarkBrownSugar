@@ -258,6 +258,8 @@ public class PacienteActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             NavigationWithOnePutExtra(PacienteActivity.this, ConfigurarActivity.class, "tipo", "paciente");
             return true;
+        }if (id == R.id.action_about){
+            NavigationWithOnePutExtra(PacienteActivity.this, SobreActivity.class, "tipo", "paciente");
         }
 
         return super.onOptionsItemSelected(item);
