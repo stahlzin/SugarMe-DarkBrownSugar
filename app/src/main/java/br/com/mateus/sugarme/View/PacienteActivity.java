@@ -16,9 +16,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.IMarker;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -52,6 +54,7 @@ import br.com.mateus.sugarme.Controller.PerfilController;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
@@ -71,11 +74,16 @@ public class PacienteActivity extends AppCompatActivity
     private GridLayout ultimaLeituraGridLayout;
     private GridLayout qteChatGridLayout;
     private List<DiarioGlicemico> diarioGlicemicoList;
+    private List<DiarioGlicemico> graficDiarioGlicemicoList;
     private FirebaseAuth firebaseAuth;
     private String userId;
     private DatabaseReference databaseReference;
     private LineChart chart;
     private TextView qteSemLerPChatTextView;
+    private TextView limHipoTextView;
+    private TextView limHiperTextView;
+    private int hiperglicemiaPad;
+    private int hipoglicemiaPad;
 
 
 
@@ -94,6 +102,8 @@ public class PacienteActivity extends AppCompatActivity
         horaUltimaTextView = (TextView) findViewById(R.id.horaUltimaTextView);
         ultimaLeituraGridLayout = findViewById(R.id.ultimaLeituraGridLayout);
         qteChatGridLayout = findViewById(R.id.qteChatGridLayout);
+        limHipoTextView = findViewById(R.id.limHipoTextView);
+        limHiperTextView = findViewById(R.id.limHiperTextView);
 
         chart = (LineChart) findViewById(R.id.chart);
         chart.getDescription().setEnabled(false);
@@ -133,7 +143,8 @@ public class PacienteActivity extends AppCompatActivity
             }
         });
 
-        setData();
+        getHipoHiperPad();
+        //setData();
 
 
 
@@ -202,7 +213,6 @@ public class PacienteActivity extends AppCompatActivity
 
             }
         });
-
 
     }
 
@@ -304,36 +314,87 @@ public class PacienteActivity extends AppCompatActivity
         return true;
     }
 
+    /***
+     * Métodos para colocar dados no gráfico
+     */
+
+    private void getHipoHiperPad(){
+        //Hiper e Hipoglicemia Padrão
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    if(dataSnapshot.child("hipoglicemiaPadrao").getValue() == null){
+                        hipoglicemiaPad = 70;
+                    }else{
+                        hipoglicemiaPad = tryParseInt(dataSnapshot.child("hipoglicemiaPadrao").getValue());
+                    }
+
+                    if(dataSnapshot.child("hiperglicemiaPadrao").getValue() == null){
+                        hiperglicemiaPad = 200;
+                    } else{
+                        hiperglicemiaPad = tryParseInt(dataSnapshot.child("hiperglicemiaPadrao").getValue());
+                    }
+
+
+                    limHipoTextView.setText(getString(R.string.hipoPad, String.valueOf(hipoglicemiaPad)));
+                    limHiperTextView.setText(getString(R.string.hiperPad, String.valueOf(hiperglicemiaPad)));
+                    getDataFromFire ();
+                                    }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void getDataFromFire () {
+        //Dados do firebase
+        graficDiarioGlicemicoList = new ArrayList<DiarioGlicemico>();
+        getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child("pacientes").child(userId).child("diario").orderByChild("gliTimestamp").limitToLast(30).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                graficDiarioGlicemicoList.clear();
+                for (DataSnapshot json : dataSnapshot.getChildren()) {
+                    DiarioGlicemico todos = json.getValue(DiarioGlicemico.class);
+                    todos.setDiarioId(json.getKey());
+                    graficDiarioGlicemicoList.add(todos);
+                }
+                setData();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
 
     private void setData() {
+
+
         //definição de valores (trazer do firebase)
         List<Entry> values = new ArrayList<Entry>();
 
-            values.add(new Entry(1, 90 ));
-            values.add(new Entry(2,150));
+        for(int i = 0; i < graficDiarioGlicemicoList.size(); i++){
+            float x = i + 1;
+            float y = graficDiarioGlicemicoList.get(i).getGlicemia();
+            values.add(new Entry(x, y));
+        }
 
-            values.add(new Entry(3, 95 ));
-            values.add(new Entry(4,168));
-
-            values.add(new Entry(5, 189 ));
-            values.add(new Entry(6,35));
-
-            values.add(new Entry(7, 30 ));
-            values.add(new Entry(8,300));
-
-
-            values.add(new Entry(9, 90 ));
-            values.add(new Entry(10,150));
-
-            values.add(new Entry(11, 95 ));
-            values.add(new Entry(12,168));
-
-            values.add(new Entry(13, 189 ));
-            values.add(new Entry(14,35));
-
-            values.add(new Entry(15, 30 ));
-
-        LineDataSet dataSet = new LineDataSet(values, "15 últimas leituras");
+        LineDataSet dataSet = new LineDataSet(values, "Índice Glicêmico");
         LineData lineData = new LineData(dataSet);
 
         //formatando eixos
@@ -343,14 +404,24 @@ public class PacienteActivity extends AppCompatActivity
         xAxis.setDrawLabels(false);
         xAxis.setDrawGridLines(false);
         xAxis.setAxisMinimum(1);
-        xAxis.setAxisMaximum(15);
+        xAxis.setAxisMaximum(30);
 
         YAxis yAxis = chart.getAxisRight();
         yAxis.setDrawLabels(false);
         yAxis.setDrawGridLines(false);
 
         YAxis y2Axis = chart.getAxisLeft();
+        y2Axis.setDrawLabels(false);
         y2Axis.setDrawGridLines(false);
+
+        //Limite entre hipo e hiperglicemia
+        LimitLine upperLimitLine = new LimitLine(hiperglicemiaPad);
+        upperLimitLine.setLineColor(PacienteActivity.this.getResources().getColor(R.color.colorRed));
+        yAxis.addLimitLine(upperLimitLine);
+
+        LimitLine lowerLimitLine = new LimitLine(hipoglicemiaPad);
+        lowerLimitLine.setLineColor(PacienteActivity.this.getResources().getColor(R.color.colorRed));
+        yAxis.addLimitLine(lowerLimitLine);
 
         //colocando os dados
         chart.setData(lineData);
@@ -379,7 +450,13 @@ public class PacienteActivity extends AppCompatActivity
         @Override
         public void refreshContent(Entry e, Highlight highlight) {
 
-            tvContent.setText("XX/XX/XXXX" + "\n" + "HH:MM" +"\n" +"Status " + e.getY());
+            int mIndex = ((int)e.getX() - 1);
+            String mData = graficDiarioGlicemicoList.get(mIndex).getData();
+            String mHora = graficDiarioGlicemicoList.get(mIndex).getHora();
+            String mStatus = graficDiarioGlicemicoList.get(mIndex).getCategoria();
+
+
+            tvContent.setText(mData + "\n" + mHora +"\n" + mStatus);
 
             // this will perform necessary layouting
             super.refreshContent(e, highlight);
@@ -399,6 +476,9 @@ public class PacienteActivity extends AppCompatActivity
         }
     }
 
+    /***
+     * Método de download de foto para o perfil
+     */
 
     public void downloadImageProfile() {
         final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();

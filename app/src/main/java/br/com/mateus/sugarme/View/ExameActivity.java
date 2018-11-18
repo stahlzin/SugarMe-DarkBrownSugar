@@ -67,6 +67,7 @@ public class ExameActivity extends AppCompatActivity {
     private String userId;
     private String exameId;
     private DatabaseReference databaseReference;
+    FirebaseStorage firebaseStorage;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -114,9 +115,10 @@ public class ExameActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 Exame exame = exameList.get(position);
-                exameId = exame.getUrlExame();
+                exameId = exame.getIdExame();
 //                Toast.makeText(ExameActivity.this, exameId, Toast.LENGTH_SHORT).show();
-                verifyStoragePermissions(ExameActivity.this);
+                //verifyStoragePermissions(ExameActivity.this);
+                downloadFromStorage(exameId);
 
                 //
                 // browseTo(exameId);
@@ -364,6 +366,24 @@ public class ExameActivity extends AppCompatActivity {
     }
 
     private void downloadFromStorage (String fileName){
+
+        firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageRef = firebaseStorage.getReference();
+
+
+        storageRef.child("users").child("pacientes").child(userId).child("exames").child(fileName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                browseTo(uri.toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+
 
     }
 

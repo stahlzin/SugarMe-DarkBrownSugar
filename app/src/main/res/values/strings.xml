@@ -236,7 +236,7 @@
     <string name="visao">Visão embaçada</string>
     <string name="miccao">Micção excessiva</string>
     <string name="ultimaleitura">Última Leitura</string>
-    <string name="grafico">Gráfico do Índice Glicêmico</string>
+    <string name="grafico">Gráfico últimas 30 leituras</string>
     <string name="app_name_FotoPerfil">Editar Foto do Perfil</string>
     <string name="sair">Sair</string>
     <string name="iniciarChat">Confirma redirecionamento ao chat?</string>
@@ -270,5 +270,7 @@ O SugarMe foi desenvolvido pelos alunos: Fernando Stahl, Larissa Slavik, Mateus 
 Essa aplicação encontra-se em fase experimental de desenvolvimento.
 </string>
     <string name="app_name_Sobre">Sobre o SugarMe</string>
+    <string name="hipoPad">Limite Hipoglicemia: %s</string>
+    <string name="hiperPad">Limite Hiperglicêmia: %s</string>
 
 </resources>

@@ -179,8 +179,7 @@ public class MedicoActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.action_about){
-            medicoPresenter.logout();
-            FinishNavigation(MedicoActivity.this, MainActivity.class);
+            NavigationWithOnePutExtra(MedicoActivity.this, SobreActivity.class, "tipo", "medico");
             return true;
         }
         else {
