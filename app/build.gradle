@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui:2.3.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation files('libs/itextg-5.5.8.jar')
 }
 
 configurations.all {

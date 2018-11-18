@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -26,14 +27,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +56,7 @@ import br.com.mateus.sugarme.Model.Exame;
 import br.com.mateus.sugarme.R;
 
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static java.io.File.createTempFile;
 
 public class ExameActivity extends AppCompatActivity {
 
@@ -52,6 +65,7 @@ public class ExameActivity extends AppCompatActivity {
     private ListView exameListView;
     private FirebaseAuth firebaseAuth;
     private String userId;
+    private String exameId;
     private DatabaseReference databaseReference;
 
     // Storage Permissions
@@ -92,20 +106,30 @@ public class ExameActivity extends AppCompatActivity {
         exameArrayAdapter = new ExameActivity.ExameArrayAdapter(this, exameList);
         exameListView.setAdapter(exameArrayAdapter);
 
-        //configuraObserverShortClick();
+        configuraObserverShortClick();
     }
 
     private void configuraObserverShortClick() {
         exameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                Exame exame = exameList.get(position);
+                exameId = exame.getUrlExame();
+//                Toast.makeText(ExameActivity.this, exameId, Toast.LENGTH_SHORT).show();
+                verifyStoragePermissions(ExameActivity.this);
+
+                //
+                // browseTo(exameId);
+
+                /*
+
                 AlertDialog.Builder dbuilder = new AlertDialog.Builder(ExameActivity.this);
                 dbuilder.setPositiveButton(getString(R.string.downloadItemExame), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         /*DiarioGlicemico diarioGlicemico = exameListView.get(position);
                         DiarioGlicemicoDAO diarioGlicemicoDAO = new DiarioGlicemicoDAO();
-                        diarioGlicemicoDAO.excluir(diarioGlicemico.getDiarioId());*/
+                        diarioGlicemicoDAO.excluir(diarioGlicemico.getDiarioId());
                     }
                 }).setNegativeButton(getString(R.string.deleteItemExame), new DialogInterface.OnClickListener() {
                     @Override
@@ -113,7 +137,7 @@ public class ExameActivity extends AppCompatActivity {
 
                     }
                 }).create();
-                dbuilder.show();
+                dbuilder.show();*/
             }
         });
 
@@ -291,7 +315,7 @@ public class ExameActivity extends AppCompatActivity {
 
 
         } else {
-            downloadFromStorage("name");
+            downloadFromStorage(exameId);
         }
     }
 
@@ -307,7 +331,7 @@ public class ExameActivity extends AppCompatActivity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    downloadFromStorage("name");
+                    downloadFromStorage(exameId);
 
                 } else {
 
@@ -343,6 +367,15 @@ public class ExameActivity extends AppCompatActivity {
 
     }
 
+    public void browseTo(String url){
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")){
+            url = "http://" + url;
+        }
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
 
 
 
