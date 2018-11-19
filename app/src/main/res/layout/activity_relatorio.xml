@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".View.RelatorioActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:columnCount="1"
+        android:rowCount="1"
+        android:useDefaultMargins="true"
+        android:background="@color/colorPrimary"
+        android:elevation="10dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/relatorioact"
+        android:layout_row="0"
+        android:layout_column="0"/>
+
+    </GridLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/escolhaMês"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginBottom="0dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:layout_marginTop="@dimen/fab_margin"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="1"
+        android:rowCount="1"
+        android:useDefaultMargins="true"
+        android:background="@color/colorBlank"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginTop="0dp"
+        android:elevation="10dp">
+
+        <Spinner
+            android:id="@+id/mesRelSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"/>
+
+
+    </GridLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/escolhaAno"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginBottom="0dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:layout_marginTop="@dimen/fab_margin"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="1"
+        android:rowCount="1"
+        android:useDefaultMargins="true"
+        android:background="@color/colorBlank"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginTop="0dp"
+        android:elevation="10dp">
+
+
+        <EditText
+            android:id="@+id/anoRelEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="5"
+            android:maxLength="4"
+            android:inputType="number" />
+    </GridLayout>
+
+    <Button
+        android:layout_margin="@dimen/fab_margin"
+        android:id="@+id/gerarRelButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/gerarRel"
+        android:textColor="@color/colorBlank"
+        android:background="@color/colorGreen"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:padding="10dp"/>
+
+
+
+</LinearLayout>

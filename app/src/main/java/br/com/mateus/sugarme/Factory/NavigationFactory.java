@@ -43,4 +43,14 @@ public class NavigationFactory  {
         intent.putExtra(name, value);
         atual.startActivity(intent);
     }
+
+    public static void NavigationToCreateReport (Activity atual, Class proxima, String tipo, String tValue, String mes, String mValue, String ano, String aValue, String id, String idValue) {
+        Intent intent = new Intent(atual, proxima);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(tipo, tValue);
+        intent.putExtra(mes, mValue);
+        intent.putExtra(ano, aValue);
+        intent.putExtra(id, idValue);
+        atual.startActivity(intent);
+    }
 }

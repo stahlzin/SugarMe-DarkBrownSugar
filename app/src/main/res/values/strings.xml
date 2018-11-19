@@ -236,7 +236,7 @@
     <string name="visao">Visão embaçada</string>
     <string name="miccao">Micção excessiva</string>
     <string name="ultimaleitura">Última Leitura</string>
-    <string name="grafico">Gráfico últimas 30 leituras</string>
+    <string name="grafico">Gráfico 20 últimas leituras</string>
     <string name="app_name_FotoPerfil">Editar Foto do Perfil</string>
     <string name="sair">Sair</string>
     <string name="iniciarChat">Confirma redirecionamento ao chat?</string>
@@ -272,5 +272,13 @@ Essa aplicação encontra-se em fase experimental de desenvolvimento.
     <string name="app_name_Sobre">Sobre o SugarMe</string>
     <string name="hipoPad">Limite Hipoglicemia: %s</string>
     <string name="hiperPad">Limite Hiperglicêmia: %s</string>
+    <string name="app_name_Relatorio">Relatório</string>
+    <string name="escolhaMês">Escolha um mês</string>
+    <string name="escolhaAno">Escolha o ano</string>
+    <string name="gerarRel">Gerar Relatório</string>
+    <string name="relIdentifica">Identificação</string>
+    <string name="relOpts">Opções</string>
+    <string name="opt_rel_open">Abrir</string>
+    <string name="opt_rel_share">Compartilhar</string>
 
 </resources>

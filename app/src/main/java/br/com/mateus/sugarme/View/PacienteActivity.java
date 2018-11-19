@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.IMarker;
@@ -294,7 +293,7 @@ public class PacienteActivity extends AppCompatActivity
            SimpleNavigation(PacienteActivity.this, IntercorrenciaActivity.class);
 
         } else if (id == R.id.nav_relatorio) {
-
+            NavigationWithOnePutExtra(PacienteActivity.this, RelatorioActivity.class, "tipo", "paciente");
         } else if (id == R.id.nav_config) {
             NavigationWithOnePutExtra(PacienteActivity.this, ConfigurarActivity.class, "tipo", "paciente");
 
@@ -359,7 +358,7 @@ public class PacienteActivity extends AppCompatActivity
         getUserId();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child("pacientes").child(userId).child("diario").orderByChild("gliTimestamp").limitToLast(30).addValueEventListener(new ValueEventListener() {
+        databaseReference.child("users").child("pacientes").child(userId).child("diario").orderByChild("gliTimestamp").limitToLast(20).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 graficDiarioGlicemicoList.clear();
@@ -368,7 +367,10 @@ public class PacienteActivity extends AppCompatActivity
                     todos.setDiarioId(json.getKey());
                     graficDiarioGlicemicoList.add(todos);
                 }
-                setData();
+                if(!graficDiarioGlicemicoList.isEmpty()){
+                    setData();
+                }
+
             }
 
             @Override
@@ -404,7 +406,7 @@ public class PacienteActivity extends AppCompatActivity
         xAxis.setDrawLabels(false);
         xAxis.setDrawGridLines(false);
         xAxis.setAxisMinimum(1);
-        xAxis.setAxisMaximum(30);
+        xAxis.setAxisMaximum(20);
 
         YAxis yAxis = chart.getAxisRight();
         yAxis.setDrawLabels(false);
