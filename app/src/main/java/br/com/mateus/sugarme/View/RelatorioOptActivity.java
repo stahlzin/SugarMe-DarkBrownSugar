@@ -1,10 +1,12 @@
 package br.com.mateus.sugarme.View;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -17,14 +19,22 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -33,6 +43,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.List;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
@@ -42,16 +53,20 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
-
 import br.com.mateus.sugarme.R;
 
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
 public class RelatorioOptActivity extends AppCompatActivity {
+    //Atributos do XML
     private String tipoUsuario;
     private LineChart relChart;
     private TextView limHipoRelTextView;
@@ -59,15 +74,21 @@ public class RelatorioOptActivity extends AppCompatActivity {
     private TextView idRelTextView;
     private GridLayout abrirRelGridLayout;
     private GridLayout shareRelGridLayout;
+    private Bitmap chart;
+    private TableLayout relOptTL;
+
+    //Intent get
+    private String relUserID;
+    private String relMes;
+    private String relAno;
 
 
-
+    //Atributos do iText
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
     private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-    private Button abrirButton;
-    private Button shareButton;
+    private Button gerarRelButton;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -88,7 +109,42 @@ public class RelatorioOptActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
         getSupportActionBar().setTitle(R.string.app_name_Relatorio);
 
+        relChart = (LineChart) findViewById(R.id.relChart);
+        relChart.getDescription().setEnabled(false);
 
+        limHipoRelTextView = (TextView) findViewById(R.id.limHipoRelTextView);
+        limHiperRelTextView = (TextView) findViewById(R.id.limHiperRelTextView);
+        idRelTextView = (TextView) findViewById(R.id.idRelTextView);
+        abrirRelGridLayout = (GridLayout) findViewById(R.id.abrirRelGridLayout);
+        shareRelGridLayout = (GridLayout) findViewById(R.id.shareRelGridLayout);
+
+        relOptTL = (TableLayout) findViewById(R.id.relOptTL);
+        relOptTL.setVisibility(View.INVISIBLE);
+        relOptTL.setVisibility(View.GONE);
+
+        gerarRelButton = (Button) findViewById(R.id.gerarRelButton);
+
+
+
+        gerarRelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                relOptTL.setVisibility(View.VISIBLE);
+                gerarRelButton.setVisibility(View.INVISIBLE);
+                gerarRelButton.setVisibility(View.GONE);
+            }
+        });
+
+        setData();
+
+        abrirRelGridLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //String path= Environment.getExternalStorageDirectory()+"/SugarMe/Relatorios/";
+                //relChart.saveToGallery("indice", path, "grafico", Bitmap.CompressFormat.PNG, 100);
+                saveGraficToGallery();
+            }
+        });
 
 
 
@@ -100,12 +156,15 @@ public class RelatorioOptActivity extends AppCompatActivity {
             else if(it.getStringExtra("tipo").equals("medico")){
                 tipoUsuario = "medico";
             }
+            relUserID = it.getStringExtra("id");
+            relMes = it.getStringExtra("mes");
+            relAno = it.getStringExtra("ano");
         }
+
     }
 
-
     private void readFromExternalStorage(String filename){
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Exames/"+ filename + ".pdf");
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Relatorios/"+ filename + ".pdf");
         Intent target = new Intent(Intent.ACTION_VIEW);
         target.setDataAndType(Uri.fromFile(file), "application/pdf");
 
@@ -119,7 +178,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
     }
 
     private void shareFileFromExternalStorage (String filename){
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Exames/"+ filename + ".pdf");
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Relatorios/"+ filename + ".pdf");
         final Uri arquivo = Uri.fromFile(file);
         final Intent _intent = new Intent();
         _intent.setAction(Intent.ACTION_SEND);
@@ -132,6 +191,12 @@ public class RelatorioOptActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(_intent, "Compartilhar"));
     }
 
+
+    public void saveGraficToGallery(){
+        chart = relChart.getChartBitmap();
+        verifyStoragePermissions(RelatorioOptActivity.this);
+    }
+
     /**
      * Checks if the app has permission to write to device storage
      *
@@ -139,7 +204,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
      *
      * @param activity
      */
-    public static void verifyStoragePermissions(Activity activity) {
+    public void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -200,7 +265,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
                 Environment.MEDIA_MOUNTED)) {
             File sdcard = Environment.getExternalStorageDirectory()
                     .getAbsoluteFile();
-            File dir = new File(sdcard, "SugarMe" + File.separator + "Exames");
+            File dir = new File(sdcard, "SugarMe" + File.separator + "Relatorios");
             if (!dir.exists())
                 dir.mkdirs();
             return dir;
@@ -209,14 +274,14 @@ public class RelatorioOptActivity extends AppCompatActivity {
         }
     }
 
-    public static void createPDF(){
+    public void createPDF(){
         //create document object
         Document document=new Document();
         File dir = getDirFromSDCard();
 
         //output file path
         //String outpath= Environment.getExternalStorageDirectory()+"/theBestPdf/PDF1.pdf";
-        String outpath= Environment.getExternalStorageDirectory()+"/SugarMe/Exames/PDF1.pdf";
+        String outpath= Environment.getExternalStorageDirectory()+"/SugarMe/Relatorios/Relatorio1.pdf";
 
 
         try {
@@ -273,9 +338,25 @@ public class RelatorioOptActivity extends AppCompatActivity {
         document.newPage();
     }
 
-    private static void addContent(Document document) throws DocumentException {
+    private void addContent(Document document) throws DocumentException {
         Anchor anchor = new Anchor("First Chapter", catFont);
         anchor.setName("First Chapter");
+
+        //add a grafic
+
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+            chart.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Image image = Image.getInstance(stream.toByteArray());
+            image.scaleAbsolute(300,200);
+            document.add(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         // Second parameter is the number of the chapter
         Chapter catPart = new Chapter(new Paragraph(anchor), 1);
@@ -289,6 +370,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
         subCatPart.add(new Paragraph("Paragraph 1"));
         subCatPart.add(new Paragraph("Paragraph 2"));
         subCatPart.add(new Paragraph("Paragraph 3"));
+
 
         // add a list
         createList(subCatPart);
@@ -365,6 +447,57 @@ public class RelatorioOptActivity extends AppCompatActivity {
         }
     }
 
+    /***
+    * Metodos do gráfico
+    */
+
+    private void setData() {
+
+
+        //definição de valores (trazer do firebase)
+        java.util.List<Entry> values = new ArrayList<Entry>();
+
+        for (int i = 0; i < 10; i++) {
+            float x = i + 2;
+            float y = i * 5;
+            values.add(new Entry(x, y));
+        }
+
+        LineDataSet dataSet = new LineDataSet(values, "Índice Glicêmico");
+        LineData lineData = new LineData(dataSet);
+
+        //formatando eixos
+        XAxis xAxis = relChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawLabels(false);
+        xAxis.setDrawGridLines(false);
+        xAxis.setAxisMinimum(1);
+        xAxis.setAxisMaximum(20);
+
+        YAxis yAxis = relChart.getAxisRight();
+        yAxis.setDrawLabels(false);
+        yAxis.setDrawGridLines(false);
+
+        YAxis y2Axis = relChart.getAxisLeft();
+        y2Axis.setDrawLabels(false);
+        y2Axis.setDrawGridLines(false);
+
+        //Limite entre hipo e hiperglicemia
+        LimitLine upperLimitLine = new LimitLine(70);
+        upperLimitLine.setLineColor(RelatorioOptActivity.this.getResources().getColor(R.color.colorRed));
+        yAxis.addLimitLine(upperLimitLine);
+
+        LimitLine lowerLimitLine = new LimitLine(100);
+        lowerLimitLine.setLineColor(RelatorioOptActivity.this.getResources().getColor(R.color.colorRed));
+        yAxis.addLimitLine(lowerLimitLine);
+
+        //colocando os dados
+        relChart.setData(lineData);
+
+
+    }
+
 
 
     @Override
@@ -382,3 +515,4 @@ public class RelatorioOptActivity extends AppCompatActivity {
         return true;
     }
 }
+

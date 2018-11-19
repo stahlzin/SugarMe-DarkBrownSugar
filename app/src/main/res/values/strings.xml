@@ -275,6 +275,7 @@ Essa aplicação encontra-se em fase experimental de desenvolvimento.
     <string name="app_name_Relatorio">Relatório</string>
     <string name="escolhaMês">Escolha um mês</string>
     <string name="escolhaAno">Escolha o ano</string>
+    <string name="detalharRel">Detalhar</string>
     <string name="gerarRel">Gerar Relatório</string>
     <string name="relIdentifica">Identificação</string>
     <string name="relOpts">Opções</string>

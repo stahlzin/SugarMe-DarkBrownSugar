@@ -106,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="1"
-            android:rowCount="1"
+            android:rowCount="2"
             android:useDefaultMargins="true"
             android:background="@color/colorBlank"
             android:layout_marginEnd="@dimen/fab_margin"
@@ -115,8 +115,20 @@
             android:layout_marginTop="0dp"
             android:elevation="10dp">
 
+            <Button
+                android:layout_margin="@dimen/fab_margin"
+                android:id="@+id/gerarRelButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gerarRel"
+                android:textColor="@color/colorBlank"
+                android:background="@color/colorGreen"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:padding="10dp"/>
+
 
         <TableLayout
+            android:id="@+id/relOptTL"
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

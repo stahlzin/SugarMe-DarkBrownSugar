@@ -56,6 +56,7 @@ import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtraAndUserId;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
 public class PacienteActivity extends AppCompatActivity
@@ -293,7 +294,8 @@ public class PacienteActivity extends AppCompatActivity
            SimpleNavigation(PacienteActivity.this, IntercorrenciaActivity.class);
 
         } else if (id == R.id.nav_relatorio) {
-            NavigationWithOnePutExtra(PacienteActivity.this, RelatorioActivity.class, "tipo", "paciente");
+            getUserId();
+            NavigationWithOnePutExtraAndUserId(PacienteActivity.this, RelatorioActivity.class, "tipo", "paciente", "userId", userId);
         } else if (id == R.id.nav_config) {
             NavigationWithOnePutExtra(PacienteActivity.this, ConfigurarActivity.class, "tipo", "paciente");
 

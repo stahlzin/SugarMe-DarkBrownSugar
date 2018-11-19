@@ -103,6 +103,7 @@
             android:layout_gravity="center"
             android:ems="5"
             android:maxLength="4"
+            android:gravity="center"
             android:inputType="number" />
     </GridLayout>
 
@@ -111,7 +112,7 @@
         android:id="@+id/gerarRelButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/gerarRel"
+        android:text="@string/detalharRel"
         android:textColor="@color/colorBlank"
         android:background="@color/colorGreen"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"

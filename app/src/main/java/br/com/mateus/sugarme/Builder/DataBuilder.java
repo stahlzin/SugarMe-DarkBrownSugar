@@ -81,6 +81,12 @@ public class DataBuilder {
         if(medicacao == 0 && insulina == 0 && alimentar == 0 && esporte == 1){
             return "Prática de Atividades Físicas";
         }
+        if(medicacao == 1 && insulina == 0 && alimentar == 1 && esporte == 1){
+            return "Medicação, Dieta Restritiva e Prática de Atividades Físicas";
+        }
+        if(medicacao == 0 && insulina == 0 && alimentar == 0 && esporte == 0){
+            return "Sem informações do tratamento";
+        }
         return "";
     }
 
