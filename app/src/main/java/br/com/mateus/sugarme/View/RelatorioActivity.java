@@ -56,7 +56,7 @@ public class RelatorioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!anoRelEditText.getText().toString().equals("") ){
                     if(anoRelEditText.length() == 4){
-                        NavigationToCreateReport(RelatorioActivity.this, RelatorioOptActivity.class, "tipo", "paciente", "mes", changeMouthToNumber(mesRelSpinner.getSelectedItem().toString()), "ano", anoRelEditText.getText().toString(), "id", userId );
+                        NavigationToCreateReport(RelatorioActivity.this, RelatorioOptActivity.class, "tipo", tipoUsuario, "mes", changeMouthToNumber(mesRelSpinner.getSelectedItem().toString()), "ano", anoRelEditText.getText().toString(), "id", userId );
                     }else{
                         Toast.makeText(RelatorioActivity.this, "Escolha um ano válido", Toast.LENGTH_SHORT).show();
                     }

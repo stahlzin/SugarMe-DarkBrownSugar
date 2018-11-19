@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.Manifest;
 import android.app.Activity;
@@ -35,6 +36,11 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -59,11 +65,22 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+
+import br.com.mateus.sugarme.Model.DiarioGlicemico;
+import br.com.mateus.sugarme.Model.Intercorrencia;
+import br.com.mateus.sugarme.Model.Paciente;
+import br.com.mateus.sugarme.Model.Perfil;
 import br.com.mateus.sugarme.R;
 
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtraAndUserId;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 
 public class RelatorioOptActivity extends AppCompatActivity {
     //Atributos do XML
@@ -72,6 +89,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
     private TextView limHipoRelTextView;
     private TextView limHiperRelTextView;
     private TextView idRelTextView;
+    private TextView resumoRelTextView;
     private GridLayout abrirRelGridLayout;
     private GridLayout shareRelGridLayout;
     private Bitmap chart;
@@ -82,6 +100,16 @@ public class RelatorioOptActivity extends AppCompatActivity {
     private String relMes;
     private String relAno;
 
+    //Parametros do relatorio
+    private String relDataIn;
+    private String relDataFim;
+    private java.util.List<DiarioGlicemico> diarioGlicemicoList = new ArrayList<>();
+    private java.util.List<Intercorrencia> intercorrenciaList = new ArrayList<>();
+    private DatabaseReference databaseReference;
+    Paciente pacienteRel = new Paciente();
+    Perfil perfilRel = new Perfil();
+    private int hiperglicemiaPad;
+    private int hipoglicemiaPad;
 
     //Atributos do iText
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
@@ -92,7 +120,6 @@ public class RelatorioOptActivity extends AppCompatActivity {
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -115,6 +142,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
         limHipoRelTextView = (TextView) findViewById(R.id.limHipoRelTextView);
         limHiperRelTextView = (TextView) findViewById(R.id.limHiperRelTextView);
         idRelTextView = (TextView) findViewById(R.id.idRelTextView);
+        resumoRelTextView = (TextView) findViewById(R.id.resumoRelTextView);
         abrirRelGridLayout = (GridLayout) findViewById(R.id.abrirRelGridLayout);
         shareRelGridLayout = (GridLayout) findViewById(R.id.shareRelGridLayout);
 
@@ -123,9 +151,6 @@ public class RelatorioOptActivity extends AppCompatActivity {
         relOptTL.setVisibility(View.GONE);
 
         gerarRelButton = (Button) findViewById(R.id.gerarRelButton);
-
-
-
         gerarRelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,19 +160,17 @@ public class RelatorioOptActivity extends AppCompatActivity {
             }
         });
 
-        setData();
-
-        abrirRelGridLayout.setOnClickListener(new View.OnClickListener() {
+       abrirRelGridLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //String path= Environment.getExternalStorageDirectory()+"/SugarMe/Relatorios/";
                 //relChart.saveToGallery("indice", path, "grafico", Bitmap.CompressFormat.PNG, 100);
-                saveGraficToGallery();
+                //saveGraficToGallery();
             }
         });
 
 
-
+        //Dados do Intent
         Intent it = getIntent();
         if(it != null && it.getExtras() != null){
             if(it.getStringExtra("tipo").equals("paciente")) {
@@ -160,8 +183,202 @@ public class RelatorioOptActivity extends AppCompatActivity {
             relMes = it.getStringExtra("mes");
             relAno = it.getStringExtra("ano");
         }
+        validateReport(relUserID, relMes, relAno);
 
     }
+
+    /***
+     * FACHADA para validar a existencia de dados no diário no período selecionada
+     * Devolve para a act anterior senão tiver dados.
+     * Se possuir, gerar a lista de intercorrências, recupera os dados do paciente e o perfil.
+     * Gera e atualiza o grafico com todos os dados disponíveis
+     */
+
+    private void validateReport(final String userId, String mes, String ano){
+        //data inicial e data final
+        relDataIn = tryParseDatetoTimeStamp("01/"+mes+"/"+ano, "00:00");
+        relDataFim = tryParseDatetoTimeStamp("31/"+mes+"/"+ano, "00:00");;
+
+        //criar a list do diário glicêmico
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("diario").orderByChild("gliTimestamp").startAt(relDataIn).endAt(relDataFim).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                diarioGlicemicoList.clear();
+                for (DataSnapshot json : dataSnapshot.getChildren()) {
+                    DiarioGlicemico todos = json.getValue(DiarioGlicemico.class);
+                    todos.setDiarioId(json.getKey());
+                    diarioGlicemicoList.add(todos);
+                }
+                //inverte a lista
+                Collections.reverse(diarioGlicemicoList);
+                if(diarioGlicemicoList.isEmpty()){
+                    NavigationWithOnePutExtraAndUserId(RelatorioOptActivity.this, RelatorioActivity.class, "tipo", tipoUsuario, "userId", userId);
+                    Toast.makeText(RelatorioOptActivity.this, "Não existem dados para o período selecionado", Toast.LENGTH_LONG).show();
+                }else{
+                    getHipoHiperPad(userId);
+                    getAllReportData(userId, relDataIn, relDataFim );
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getHipoHiperPad(String userId){
+        //Hiper e Hipoglicemia Padrão
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    if(dataSnapshot.child("hipoglicemiaPadrao").getValue() == null){
+                        hipoglicemiaPad = 70;
+                    }else{
+                        hipoglicemiaPad = tryParseInt(dataSnapshot.child("hipoglicemiaPadrao").getValue());
+                    }
+
+                    if(dataSnapshot.child("hiperglicemiaPadrao").getValue() == null){
+                        hiperglicemiaPad = 200;
+                    } else{
+                        hiperglicemiaPad = tryParseInt(dataSnapshot.child("hiperglicemiaPadrao").getValue());
+                    }
+                    limHipoRelTextView.setText(getString(R.string.hipoPad, String.valueOf(hipoglicemiaPad)));
+                    limHiperRelTextView.setText(getString(R.string.hiperPad, String.valueOf(hiperglicemiaPad)));
+                    setData ();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void getAllReportData(String userId, String relDataIn, String relDataFim) {
+        //intercorrencia
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("Intercorrencias").orderByChild("interTimestamp").startAt(relDataIn).endAt(relDataFim).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                intercorrenciaList.clear();
+                for (DataSnapshot json : dataSnapshot.getChildren()) {
+                    Intercorrencia todos = json.getValue(Intercorrencia.class);
+                    todos.setId(json.getKey());
+                    intercorrenciaList.add(todos);
+                }
+                //inverte a lista
+                Collections.reverse(intercorrenciaList);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //Dados paciente
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("dados").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    pacienteRel.setNome(String.valueOf(dataSnapshot.child("nome").getValue()));
+                    pacienteRel.setTelefone(String.valueOf(dataSnapshot.child("telefone").getValue()));
+                    pacienteRel.setDtNascimento(String.valueOf(dataSnapshot.child("dtNascimento").getValue()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //Perfil paciente
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("InfoMedicas").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    perfilRel.setAltura(String.valueOf(dataSnapshot.child("altura").getValue()));
+                    perfilRel.setPeso(String.valueOf(dataSnapshot.child("peso").getValue()));
+                    perfilRel.setTipoDiabetes(String.valueOf(dataSnapshot.child("tipoDiabetes").getValue()));
+                    fillReportTemplateActivity();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void fillReportTemplateActivity (){
+        StringBuilder idR = new StringBuilder();
+        idR.append(pacienteRel.getNome());
+        idR.append("\n");
+        idR.append("Diabetes Tipo: ");
+        idR.append(perfilRel.getTipoDiabetes());
+        idR.append("\n");
+        idR.append("Relatorio de: ");
+        idR.append(relMes);
+        idR.append("/");
+        idR.append(relAno);
+
+        idRelTextView.setText(idR.toString());
+
+        StringBuilder resR = new StringBuilder();
+        resR.append("Leituras Registradas: ");
+        resR.append(String.valueOf(diarioGlicemicoList.size()));
+        resR.append("\n");
+
+        int hipoCount = 0;
+        for (int i = 0; i < diarioGlicemicoList.size(); i ++){
+            if (diarioGlicemicoList.get(i).getCategoria().equals("Hipoglicemia"))
+                hipoCount ++;
+        }
+        resR.append("Episódios de Hipoglicemia: ");
+        resR.append(String.valueOf(hipoCount));
+        resR.append("\n");
+
+        int hiperCount = 0;
+        for (int i = 0; i < diarioGlicemicoList.size(); i ++){
+            if (diarioGlicemicoList.get(i).getCategoria().equals("Hipoglicemia"))
+                hiperCount ++;
+        }
+        resR.append("Episódios de Hiperglicemia: ");
+        resR.append(String.valueOf(hiperCount));
+        resR.append("\n\n");
+
+        resR.append("Intercorrências Registradas: ");
+        resR.append(String.valueOf(intercorrenciaList.size()));
+        resR.append("\n");
+
+        int intCount = 0;
+        for (int i = 0; i < intercorrenciaList.size(); i ++){
+            if (intercorrenciaList.get(i).getInternacao() == 1)
+                intCount ++;
+        }
+        resR.append("Internações no período: ");
+        resR.append(String.valueOf(intCount));
+
+        resumoRelTextView.setText(resR.toString());
+
+    }
+
+    //-------------------------------------------------------------------------------//
+    //***************************Fim da Fachada**************************************//
+    //-------------------------------------------------------------------------------//
+
+
 
     private void readFromExternalStorage(String filename){
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Relatorios/"+ filename + ".pdf");
@@ -447,19 +664,19 @@ public class RelatorioOptActivity extends AppCompatActivity {
         }
     }
 
+
     /***
     * Metodos do gráfico
     */
-
     private void setData() {
 
 
         //definição de valores (trazer do firebase)
         java.util.List<Entry> values = new ArrayList<Entry>();
 
-        for (int i = 0; i < 10; i++) {
-            float x = i + 2;
-            float y = i * 5;
+        for(int i = 0; i < diarioGlicemicoList.size(); i++){
+            float x = i + 1;
+            float y = diarioGlicemicoList.get(i).getGlicemia();
             values.add(new Entry(x, y));
         }
 
@@ -472,33 +689,33 @@ public class RelatorioOptActivity extends AppCompatActivity {
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawLabels(false);
         xAxis.setDrawGridLines(false);
-        xAxis.setAxisMinimum(1);
-        xAxis.setAxisMaximum(20);
 
         YAxis yAxis = relChart.getAxisRight();
         yAxis.setDrawLabels(false);
         yAxis.setDrawGridLines(false);
 
         YAxis y2Axis = relChart.getAxisLeft();
-        y2Axis.setDrawLabels(false);
+        y2Axis.setDrawLabels(true);
         y2Axis.setDrawGridLines(false);
 
         //Limite entre hipo e hiperglicemia
-        LimitLine upperLimitLine = new LimitLine(70);
+        LimitLine upperLimitLine = new LimitLine(hiperglicemiaPad);
         upperLimitLine.setLineColor(RelatorioOptActivity.this.getResources().getColor(R.color.colorRed));
         yAxis.addLimitLine(upperLimitLine);
 
-        LimitLine lowerLimitLine = new LimitLine(100);
+        LimitLine lowerLimitLine = new LimitLine(hipoglicemiaPad);
         lowerLimitLine.setLineColor(RelatorioOptActivity.this.getResources().getColor(R.color.colorRed));
         yAxis.addLimitLine(lowerLimitLine);
 
         //colocando os dados
         relChart.setData(lineData);
-
-
+        relChart.invalidate();
     }
 
 
+    /***
+     * Metodos de Navegação
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar

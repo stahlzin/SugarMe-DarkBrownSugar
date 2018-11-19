@@ -27,7 +27,7 @@
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="370dp"
         android:columnCount="1"
         android:rowCount="3"
         android:useDefaultMargins="true"
@@ -88,9 +88,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nome, tipo diabete e ano/mes relatorio"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@color/colorPrimary"
             android:layout_margin="@dimen/fab_margin"/>
 
     </GridLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/relResumo"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="0dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginTop="@dimen/fab_margin"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:rowCount="1"
+            android:useDefaultMargins="true"
+            android:background="@color/colorBlank"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginTop="0dp"
+            android:elevation="10dp">
+
+            <TextView
+                android:id="@+id/resumoRelTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome, tipo diabete e ano/mes relatorio"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textColor="@color/colorPrimary"
+                android:layout_margin="@dimen/fab_margin"/>
+
+        </GridLayout>
 
     <TextView
         android:layout_width="match_parent"

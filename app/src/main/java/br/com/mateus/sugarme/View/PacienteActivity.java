@@ -429,6 +429,7 @@ public class PacienteActivity extends AppCompatActivity
 
         //colocando os dados
         chart.setData(lineData);
+        chart.invalidate();
 
         //setando o marker para ler dados ao clicar
         IMarker marker = new MyMarkerView(PacienteActivity.this, R.layout.custom_marker_view_layout);

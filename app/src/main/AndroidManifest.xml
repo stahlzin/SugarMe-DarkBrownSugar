@@ -87,7 +87,8 @@
         <activity
             android:name=".View.VinculoChatMedicoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".View.PacientesVinculadosActivity" />
+        <activity android:name=".View.PacientesVinculadosActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".View.SobreActivity"
             android:theme="@style/AppTheme.NoActionBar" />

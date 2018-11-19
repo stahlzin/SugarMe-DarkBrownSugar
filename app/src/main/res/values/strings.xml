@@ -281,5 +281,6 @@ Essa aplicação encontra-se em fase experimental de desenvolvimento.
     <string name="relOpts">Opções</string>
     <string name="opt_rel_open">Abrir</string>
     <string name="opt_rel_share">Compartilhar</string>
+    <string name="relResumo">Resumo</string>
 
 </resources>

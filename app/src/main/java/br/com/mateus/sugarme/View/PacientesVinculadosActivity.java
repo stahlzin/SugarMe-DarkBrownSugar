@@ -29,6 +29,8 @@ import java.util.List;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
+import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtraAndUserId;
+
 public class PacientesVinculadosActivity extends AppCompatActivity {
     private ListView medicoDisplayListView; //Neste caso mantive o nome de "Medico" mas será carregado com dados do Paciente
     private List<Paciente> pacienteList = new ArrayList<>();
@@ -45,7 +47,7 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pacientes_vinculados);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
@@ -55,6 +57,14 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
         medicoDisplayListView = (ListView) findViewById(R.id.medicoDisplayListView);
         pacienteArrayAdapter = new VinculoActivity.PacienteArrayAdapter(this, pacienteList);
         medicoDisplayListView.setAdapter(pacienteArrayAdapter);
+
+        medicoDisplayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Paciente paciente = pacienteList.get(position);
+                NavigationWithOnePutExtraAndUserId(PacientesVinculadosActivity.this, RelatorioActivity.class, "tipo", "medico", "userId", paciente.getIdPaciente());
+            }
+        });
 
 
     }
