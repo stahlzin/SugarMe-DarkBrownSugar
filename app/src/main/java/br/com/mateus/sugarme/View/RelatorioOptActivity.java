@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.Manifest;
 import android.app.Activity;
@@ -70,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import br.com.mateus.sugarme.BuildConfig;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Intercorrencia;
 import br.com.mateus.sugarme.Model.Paciente;
@@ -157,17 +159,25 @@ public class RelatorioOptActivity extends AppCompatActivity {
                 relOptTL.setVisibility(View.VISIBLE);
                 gerarRelButton.setVisibility(View.INVISIBLE);
                 gerarRelButton.setVisibility(View.GONE);
+                startReportWithChartTransformation();
             }
         });
 
        abrirRelGridLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String path= Environment.getExternalStorageDirectory()+"/SugarMe/Relatorios/";
-                //relChart.saveToGallery("indice", path, "grafico", Bitmap.CompressFormat.PNG, 100);
-                //saveGraficToGallery();
+
+                readFromExternalStorage();
             }
+
         });
+
+       shareRelGridLayout.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               shareFileFromExternalStorage();
+           }
+       });
 
 
         //Dados do Intent
@@ -379,24 +389,32 @@ public class RelatorioOptActivity extends AppCompatActivity {
     //-------------------------------------------------------------------------------//
 
 
+    /***
+     * FACHADA do Relatorio em PDF
+     * Chamado pelo botão gerar Relatorio, armazena um arquivo temporário que pode ser compartilhado ou aberto
+     */
 
-    private void readFromExternalStorage(String filename){
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Relatorios/"+ filename + ".pdf");
+    private void readFromExternalStorage(){
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Relatorios/Relatorio.pdf");
         Intent target = new Intent(Intent.ACTION_VIEW);
-        target.setDataAndType(Uri.fromFile(file), "application/pdf");
-
-        Intent intent = Intent.createChooser(target, "Abrir arquivo");
-
+        final Uri fileUri = FileProvider.getUriForFile(
+                RelatorioOptActivity.this,
+                RelatorioOptActivity.this.getApplicationContext().getPackageName() + ".provider",
+                file);
+        target.setDataAndType(fileUri, "application/pdf");
+        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try {
-            startActivity(intent);
+            startActivity(Intent.createChooser(target, "Abrir com"));
         } catch (ActivityNotFoundException e) {
             //Caso o usuário não tenha um visualizador de PDF, instrua-o aqui a baixar
         }
     }
 
-    private void shareFileFromExternalStorage (String filename){
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Relatorios/"+ filename + ".pdf");
-        final Uri arquivo = Uri.fromFile(file);
+    private void shareFileFromExternalStorage (){
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/SugarMe/Relatorios/Relatorio.pdf");
+        final Uri arquivo = FileProvider.getUriForFile(RelatorioOptActivity.this,
+                BuildConfig.APPLICATION_ID + ".provider",
+                file);
         final Intent _intent = new Intent();
         _intent.setAction(Intent.ACTION_SEND);
         _intent.putExtra(Intent.EXTRA_STREAM,  arquivo);
@@ -408,8 +426,8 @@ public class RelatorioOptActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(_intent, "Compartilhar"));
     }
 
-
-    public void saveGraficToGallery(){
+    //Primeiro transformar o Gráfico em Bitmap
+    public void startReportWithChartTransformation(){
         chart = relChart.getChartBitmap();
         verifyStoragePermissions(RelatorioOptActivity.this);
     }
@@ -471,7 +489,6 @@ public class RelatorioOptActivity extends AppCompatActivity {
                 }
                 return;
             }
-
             // other 'case' lines to check for other
             // permissions this app might request
         }
@@ -498,7 +515,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
 
         //output file path
         //String outpath= Environment.getExternalStorageDirectory()+"/theBestPdf/PDF1.pdf";
-        String outpath= Environment.getExternalStorageDirectory()+"/SugarMe/Relatorios/Relatorio1.pdf";
+        String outpath= Environment.getExternalStorageDirectory()+"/SugarMe/Relatorios/Relatorio.pdf";
 
 
         try {
@@ -567,6 +584,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
             chart.compress(Bitmap.CompressFormat.PNG, 100, stream);
             Image image = Image.getInstance(stream.toByteArray());
             image.scaleAbsolute(300,200);
+            image.setAlignment(Image.MIDDLE);
             document.add(image);
         } catch (IOException e) {
             e.printStackTrace();
