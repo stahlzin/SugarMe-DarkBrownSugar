@@ -2,7 +2,13 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,23 +18,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
+import br.com.mateus.sugarme.Singleton.UserSingleton;
 
+import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtraAndUserId;
 
 public class PacientesVinculadosActivity extends AppCompatActivity {
@@ -40,8 +61,12 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
     private ListView pacienteBuscaListView;
     private FirebaseAuth firebaseAuth;
     private String userId;
+    private static String imageUrl;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceMedico;
+    private static Map<String, Bitmap> bitmaps = new HashMap<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,12 +180,13 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
             TextView nomePacienteTextView;
             TextView telefonePacienteTextView;
             TextView cpfPacienteTextView;
+            ImageView fotoPacienteImageView;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Paciente dgc = getItem(position);
-            PacientesVinculadosActivity.PacienteArrayAdapter.ViewHolder viewHolder;
+            final PacientesVinculadosActivity.PacienteArrayAdapter.ViewHolder viewHolder;
             if (convertView == null) {
                 viewHolder = new PacientesVinculadosActivity.PacienteArrayAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -168,19 +194,37 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
                 viewHolder.nomePacienteTextView = (TextView) convertView.findViewById(R.id.nomePacienteTextView);
                 viewHolder.telefonePacienteTextView = (TextView) convertView.findViewById(R.id.telefonePacienteTextView);
                 viewHolder.cpfPacienteTextView = (TextView) convertView.findViewById(R.id.cpfPacienteTextView);
+                viewHolder.fotoPacienteImageView = (ImageView) convertView.findViewById(R.id.fotoPacienteImageView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (PacientesVinculadosActivity.PacienteArrayAdapter.ViewHolder) convertView.getTag();
             }
 
-            Context context = getContext();
+            final Context context = getContext();
             viewHolder.nomePacienteTextView.setText(String.valueOf(dgc.getNome()));
             viewHolder.telefonePacienteTextView.setText(dgc.getTelefone());
             viewHolder.cpfPacienteTextView.setText(dgc.getCpf());
+
+            final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+           // Create a storage reference from our app
+            StorageReference storageRef = firebaseStorage.getReference();
+            storageRef.child("users").child("pacientes").child(dgc.getIdPaciente()).child("fotoPerfil/fotoPerfil.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    String urlFoto = uri.toString();
+                    Glide.with(context).load(urlFoto)
+                            .into(viewHolder.fotoPacienteImageView);
+                }
+            });
+
+
             return convertView;
 
         }
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
@@ -195,4 +239,5 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
         }
         return true;
     }
+
 }
