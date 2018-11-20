@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +51,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.mateus.sugarme.BuildConfig;
+import br.com.mateus.sugarme.Controller.ExameController;
 import br.com.mateus.sugarme.DAO.ExameDAO;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.Model.Exame;
@@ -64,7 +67,7 @@ public class ExameActivity extends AppCompatActivity {
     private ExameActivity.ExameArrayAdapter exameArrayAdapter;
     private ListView exameListView;
     private FirebaseAuth firebaseAuth;
-    private String userId;
+    private static String userId;
     private String exameId;
     private DatabaseReference databaseReference;
     FirebaseStorage firebaseStorage;
@@ -118,7 +121,7 @@ public class ExameActivity extends AppCompatActivity {
                 exameId = exame.getIdExame();
 //                Toast.makeText(ExameActivity.this, exameId, Toast.LENGTH_SHORT).show();
                 //verifyStoragePermissions(ExameActivity.this);
-                downloadFromStorage(exameId);
+                //downloadFromStorage(exameId);
 
                 //
                 // browseTo(exameId);
@@ -230,8 +233,7 @@ public class ExameActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             //Delete do database e do storage
                             ExameDAO exameDAO = new ExameDAO();
-                            exameDAO.excluir(viewHolder.exameId);
-                                                    }
+                            exameDAO.excluir(viewHolder.exameId);                                                    }
                     }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -251,7 +253,8 @@ public class ExameActivity extends AppCompatActivity {
                     dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            ExameController exameController = new ExameController();
+                            exameController.shareFileFromExternalStorage(viewHolder.exameId, userId, context);
                         }
                     }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
                         @Override
@@ -272,7 +275,8 @@ public class ExameActivity extends AppCompatActivity {
                     dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            ExameController exameController = new ExameController();
+                            exameController.downloadFromStorage(viewHolder.exameId, userId, context);
                         }
                     }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
                         @Override
@@ -317,7 +321,7 @@ public class ExameActivity extends AppCompatActivity {
 
 
         } else {
-            downloadFromStorage(exameId);
+            //downloadFromStorage(exameId);
         }
     }
 
@@ -333,7 +337,7 @@ public class ExameActivity extends AppCompatActivity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    downloadFromStorage(exameId);
+                    //downloadFromStorage(exameId);
 
                 } else {
 
@@ -365,37 +369,7 @@ public class ExameActivity extends AppCompatActivity {
         }
     }
 
-    private void downloadFromStorage (String fileName){
 
-        firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageRef = firebaseStorage.getReference();
-
-
-        storageRef.child("users").child("pacientes").child(userId).child("exames").child(fileName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
-                browseTo(uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-
-    }
-
-    public void browseTo(String url){
-
-        if (!url.startsWith("http://") && !url.startsWith("https://")){
-            url = "http://" + url;
-        }
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
-    }
 
 
 
