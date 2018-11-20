@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -57,7 +58,7 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
     private List<Paciente> pacienteList = new ArrayList<>();
     private List<Paciente> todosPacientesList = new ArrayList<>();
     private List<String> idPacientesList = new ArrayList<>();
-    private VinculoActivity.PacienteArrayAdapter pacienteArrayAdapter;
+    private PacientesVinculadosActivity.PacienteArrayAdapter pacienteArrayAdapter;
     private ListView pacienteBuscaListView;
     private FirebaseAuth firebaseAuth;
     private String userId;
@@ -80,7 +81,7 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
 
 
         medicoDisplayListView = (ListView) findViewById(R.id.medicoDisplayListView);
-        pacienteArrayAdapter = new VinculoActivity.PacienteArrayAdapter(this, pacienteList);
+        pacienteArrayAdapter = new PacientesVinculadosActivity.PacienteArrayAdapter(this, pacienteList);
         medicoDisplayListView.setAdapter(pacienteArrayAdapter);
 
         medicoDisplayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -209,15 +210,16 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
            // Create a storage reference from our app
             StorageReference storageRef = firebaseStorage.getReference();
             storageRef.child("users").child("pacientes").child(dgc.getIdPaciente()).child("fotoPerfil/fotoPerfil.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
+                    @Override
+                    public void onSuccess(Uri uri) {
+
                     String urlFoto = uri.toString();
                     Glide.with(context).load(urlFoto)
                             .into(viewHolder.fotoPacienteImageView);
-                }
-            });
 
-
+                    //Picasso.get().load(uri).into(viewHolder.fotoPacienteImageView);
+                    }
+                });
             return convertView;
 
         }

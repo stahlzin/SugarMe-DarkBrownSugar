@@ -3,6 +3,7 @@ package br.com.mateus.sugarme.View;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,16 +17,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,12 +197,13 @@ public class VinculoActivity extends AppCompatActivity {
             TextView nomeMedicoTextView;
             TextView especialidadeMedicoTextView;
             TextView crmMedicoTextView;
+            ImageView fotoMedicoImageView;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Medico dgc = getItem(position);
-            MedicoArrayAdapter.ViewHolder viewHolder;
+            final MedicoArrayAdapter.ViewHolder viewHolder;
             if (convertView == null) {
                 viewHolder = new MedicoArrayAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -204,15 +211,32 @@ public class VinculoActivity extends AppCompatActivity {
                 viewHolder.nomeMedicoTextView = (TextView) convertView.findViewById(R.id.nomeMedicoTextView);
                 viewHolder.especialidadeMedicoTextView = (TextView) convertView.findViewById(R.id.especialidadeMedicoTextView);
                 viewHolder.crmMedicoTextView = (TextView) convertView.findViewById(R.id.crmMedicoTextView);
+                viewHolder.fotoMedicoImageView = (ImageView) convertView.findViewById(R.id.fotoMedicoImageView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (MedicoArrayAdapter.ViewHolder) convertView.getTag();
             }
 
-            Context context = getContext();
+            final Context context = getContext();
             viewHolder.nomeMedicoTextView.setText(String.valueOf(dgc.getNome()));
             viewHolder.especialidadeMedicoTextView.setText(dgc.getEspecialidade());
             viewHolder.crmMedicoTextView.setText(dgc.getCrm());
+
+            final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            // Create a storage reference from our app
+            StorageReference storageRef = firebaseStorage.getReference();
+            storageRef.child("users").child("medicos").child(dgc.getIdMedico()).child("fotoPerfil/fotoPerfil.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                    String urlFoto = uri.toString();
+                    Glide.with(context).load(urlFoto)
+                            .into(viewHolder.fotoMedicoImageView);
+
+                    //Picasso.get().load(uri).into(viewHolder.fotoPacienteImageView);
+                }
+            });
+
             return convertView;
 
         }
@@ -250,6 +274,9 @@ public class VinculoActivity extends AppCompatActivity {
             viewHolder.nomePacienteTextView.setText(String.valueOf(dgc.getNome()));
             viewHolder.telefonePacienteTextView.setText(dgc.getTelefone());
             viewHolder.cpfPacienteTextView.setText(dgc.getCpf());
+
+
+
             return convertView;
 
         }
