@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Medico implements Serializable {
     private String idMedico;
     private String nome;
-    private String telefone;
+    private String telefone; //utilizar para notificar novas mensagens
     private String dtNascimento;
     private String cpf;
     private String crm;

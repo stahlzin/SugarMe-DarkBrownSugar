@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,6 +29,7 @@ import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 
 
 public class ChatActivity extends AppCompatActivity {
@@ -46,6 +49,13 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
+        getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
+        getSupportActionBar().setTitle(R.string.app_name_ChatVinculo);     //Titulo para ser exibido na sua Action Bar em frente à seta
+
+
 
         fab = (FloatingActionButton)findViewById(R.id.fabChat);
 
@@ -239,4 +249,21 @@ public class ChatActivity extends AppCompatActivity {
             ChatActivity.this.startActivity(intent);
         }
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
+        switch (item.getItemId()) {
+            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
+                if(activityQueChamou.equals("pacientes")){
+                    FinishNavigation(ChatActivity.this, VinculoChatActivity.class);
+                }else if (activityQueChamou.equals("medicos")){
+                    FinishNavigation(ChatActivity.this, VinculoChatMedicoActivity.class);
+                }
+                break;
+            default:break;
+        }
+        return true;
+    }
 }
+

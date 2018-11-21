@@ -3,6 +3,7 @@ package br.com.mateus.sugarme.View;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,9 +37,11 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mateus.sugarme.DAO.PacienteDAO;
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VinculoActivity extends AppCompatActivity {
 
@@ -78,7 +81,7 @@ public class VinculoActivity extends AppCompatActivity {
         medicoArrayAdapter = new MedicoArrayAdapter(this, medicoList);
         medicoDisplayListView.setAdapter(medicoArrayAdapter);
 
-        configuraObserverShortClick();
+        //configuraObserverShortClick();
 
     }
 
@@ -173,7 +176,9 @@ public class VinculoActivity extends AppCompatActivity {
                     for (int j = 0; j < idMedicosList.size(); j++){
                         if(todosMedicosList.get(i).getIdMedico().equals(idMedicosList.get(j))){
                             Medico add = todosMedicosList.get(i);
+                            add.setTelefone("vinculo");
                             medicoList.add(add);
+
                         }
                     }
                 }
@@ -197,12 +202,13 @@ public class VinculoActivity extends AppCompatActivity {
             TextView nomeMedicoTextView;
             TextView especialidadeMedicoTextView;
             TextView crmMedicoTextView;
-            ImageView fotoMedicoImageView;
+            CircleImageView fotoMedicoCircleImageView;
+            ImageView iconImageView;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Medico dgc = getItem(position);
+            final Medico dgc = getItem(position);
             final MedicoArrayAdapter.ViewHolder viewHolder;
             if (convertView == null) {
                 viewHolder = new MedicoArrayAdapter.ViewHolder();
@@ -211,7 +217,8 @@ public class VinculoActivity extends AppCompatActivity {
                 viewHolder.nomeMedicoTextView = (TextView) convertView.findViewById(R.id.nomeMedicoTextView);
                 viewHolder.especialidadeMedicoTextView = (TextView) convertView.findViewById(R.id.especialidadeMedicoTextView);
                 viewHolder.crmMedicoTextView = (TextView) convertView.findViewById(R.id.crmMedicoTextView);
-                viewHolder.fotoMedicoImageView = (ImageView) convertView.findViewById(R.id.fotoMedicoImageView);
+                viewHolder.fotoMedicoCircleImageView = (CircleImageView) convertView.findViewById(R.id.fotoMedicoCircleImageView);
+                viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (MedicoArrayAdapter.ViewHolder) convertView.getTag();
@@ -220,7 +227,7 @@ public class VinculoActivity extends AppCompatActivity {
             final Context context = getContext();
             viewHolder.nomeMedicoTextView.setText(String.valueOf(dgc.getNome()));
             viewHolder.especialidadeMedicoTextView.setText(dgc.getEspecialidade());
-            viewHolder.crmMedicoTextView.setText(dgc.getCrm());
+            viewHolder.crmMedicoTextView.setText("CRM: " + dgc.getCrm());
 
             final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
             // Create a storage reference from our app
@@ -231,12 +238,38 @@ public class VinculoActivity extends AppCompatActivity {
 
                     String urlFoto = uri.toString();
                     Glide.with(context).load(urlFoto)
-                            .into(viewHolder.fotoMedicoImageView);
-
-                    //Picasso.get().load(uri).into(viewHolder.fotoPacienteImageView);
+                            .into(viewHolder.fotoMedicoCircleImageView);
                 }
             });
 
+            //colocando o icone de mensagem no Vinculo Chat Activity
+            if(dgc.getTelefone().equals("mensagemNot")){
+                viewHolder.iconImageView.setBackgroundResource(R.drawable.message_icon);
+            }
+            if(dgc.getTelefone().equals("vinculo")){
+                viewHolder.iconImageView.setBackgroundResource(R.drawable.ic_delete_forever_black_24dp);
+                viewHolder.iconImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder dbuilder = new AlertDialog.Builder(context);
+                        dbuilder.setTitle(R.string.desvincularMedico);
+                        dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PacienteDAO pacienteDAO = new PacienteDAO();
+                                pacienteDAO.setDesvinculo(dgc.getIdMedico());
+                            }
+                        }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create();
+                        dbuilder.show();
+                    }
+                });
+
+            }
             return convertView;
 
         }

@@ -13,6 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 
+import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.View.CadastroActivity;
 import br.com.mateus.sugarme.View.PacienteActivity;
@@ -107,5 +108,13 @@ public class PacienteDAO {
         });
     }
 
+    public void setDesvinculo (String medicoID){
+            getUserId();
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.child("users").child("medicos").child(medicoID).child("vinculos").child(userId).removeValue();
+            databaseReference.child("users").child("pacientes").child(userId).child("vinculos").child(medicoID).removeValue();
+        }
 
-}
+
+    }
+

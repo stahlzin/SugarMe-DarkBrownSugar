@@ -3,6 +3,7 @@ package br.com.mateus.sugarme.View;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -20,18 +21,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VinculoAddActivity extends AppCompatActivity {
 
@@ -146,12 +152,13 @@ public class VinculoAddActivity extends AppCompatActivity {
             TextView nomeMedicoTextView;
             TextView especialidadeMedicoTextView;
             TextView crmMedicoTextView;
+            CircleImageView fotoMedicoCircleImageView;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Medico dgc = getItem(position);
-            MedicoArrayAdapter.ViewHolder viewHolder;
+            final MedicoArrayAdapter.ViewHolder viewHolder;
             if (convertView == null) {
                 viewHolder = new MedicoArrayAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -159,15 +166,30 @@ public class VinculoAddActivity extends AppCompatActivity {
                 viewHolder.nomeMedicoTextView = (TextView) convertView.findViewById(R.id.nomeMedicoTextView);
                 viewHolder.especialidadeMedicoTextView = (TextView) convertView.findViewById(R.id.especialidadeMedicoTextView);
                 viewHolder.crmMedicoTextView = (TextView) convertView.findViewById(R.id.crmMedicoTextView);
+                viewHolder.fotoMedicoCircleImageView = (CircleImageView) convertView.findViewById(R.id.fotoMedicoCircleImageView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (MedicoArrayAdapter.ViewHolder) convertView.getTag();
             }
 
-            Context context = getContext();
+            final Context context = getContext();
             viewHolder.nomeMedicoTextView.setText(String.valueOf(dgc.getNome()));
             viewHolder.especialidadeMedicoTextView.setText(dgc.getEspecialidade());
-            viewHolder.crmMedicoTextView.setText(dgc.getCrm());
+            viewHolder.crmMedicoTextView.setText("CRM: " + dgc.getCrm());
+
+            final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            // Create a storage reference from our app
+            StorageReference storageRef = firebaseStorage.getReference();
+            storageRef.child("users").child("medicos").child(dgc.getIdMedico()).child("fotoPerfil/fotoPerfil.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                    String urlFoto = uri.toString();
+                    Glide.with(context).load(urlFoto)
+                            .into(viewHolder.fotoMedicoCircleImageView);
+                }
+            });
+
             return convertView;
 
         }

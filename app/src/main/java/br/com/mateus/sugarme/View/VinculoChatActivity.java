@@ -60,11 +60,12 @@ public class VinculoChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vinculo_chat);Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_vinculo_chat);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
-        getSupportActionBar().setTitle(R.string.app_name_Vinculo);     //Titulo para ser exibido na sua Action Bar em frente à seta
+        getSupportActionBar().setTitle(R.string.app_name_ChatVinculo);     //Titulo para ser exibido na sua Action Bar em frente à seta
 
 
         medicoDisplayListView = (ListView) findViewById(R.id.medicoDisplayListView);
@@ -186,18 +187,19 @@ public class VinculoChatActivity extends AppCompatActivity {
                     todos.setIdMedico(json.getKey());
                     todosMedicosList.add(todos);
                 }
-
                 for (int i = 0; i < todosMedicosList.size(); i++){
                     for (int j = 0; j < idMedicosList.size(); j++){
                         if(todosMedicosList.get(i).getIdMedico().equals(idMedicosList.get(j))){
                             Medico add = todosMedicosList.get(i);
                             if(notificacoesMedicosList.contains(add.getIdMedico())){
-                                add.setNome(add.getNome() + " -> Nova(s) mensagens!");
+                                add.setTelefone("mensagemNot");
                             }
                             medicoList.add(add);
                         }
                     }
                 }
+
+
                 medicoArrayAdapter.notifyDataSetChanged();
             }
 
@@ -207,45 +209,6 @@ public class VinculoChatActivity extends AppCompatActivity {
             }
         });
     }
-
-    public static class MedicoArrayAdapter extends ArrayAdapter<Medico> {
-        public MedicoArrayAdapter(Context context, List<Medico> forecast) {
-            super(context, -1, forecast);
-        }
-
-        private static class ViewHolder {
-            TextView nomeMedicoTextView;
-            TextView especialidadeMedicoTextView;
-            TextView crmMedicoTextView;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Medico dgc = getItem(position);
-            VinculoChatActivity.MedicoArrayAdapter.ViewHolder viewHolder;
-            if (convertView == null) {
-                viewHolder = new VinculoChatActivity.MedicoArrayAdapter.ViewHolder();
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                convertView = inflater.inflate(R.layout.list_busca_medico, parent, false);
-                viewHolder.nomeMedicoTextView = (TextView) convertView.findViewById(R.id.nomeMedicoTextView);
-                viewHolder.especialidadeMedicoTextView = (TextView) convertView.findViewById(R.id.especialidadeMedicoTextView);
-                viewHolder.crmMedicoTextView = (TextView) convertView.findViewById(R.id.crmMedicoTextView);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (VinculoChatActivity.MedicoArrayAdapter.ViewHolder) convertView.getTag();
-            }
-
-            Context context = getContext();
-            viewHolder.nomeMedicoTextView.setText(String.valueOf(dgc.getNome()));
-            viewHolder.especialidadeMedicoTextView.setText(dgc.getEspecialidade());
-            viewHolder.crmMedicoTextView.setText(dgc.getCrm());
-            return convertView;
-
-        }
-    }
-
-
-
 
 
     @Override
