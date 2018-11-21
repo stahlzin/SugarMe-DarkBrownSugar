@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class VinculoAddActivity extends AppCompatActivity {
     private TextInputEditText buscaMedicoInputEditText;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,8 @@ public class VinculoAddActivity extends AppCompatActivity {
 
         medicoBuscaListView= (ListView) findViewById(R.id.medicoBuscaListView);
         buscaMedicoInputEditText = (TextInputEditText) findViewById(R.id.buscaMedicoInputEditText);
+
+
 
         medicoArrayAdapter = new MedicoArrayAdapter(this, medicoList);
         medicoBuscaListView.setAdapter(medicoArrayAdapter);

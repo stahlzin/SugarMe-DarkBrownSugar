@@ -55,6 +55,8 @@ public class VinculoActivity extends AppCompatActivity {
     private String userId;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceMedico;
+    private ImageView orientacaoImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,10 @@ public class VinculoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
         getSupportActionBar().setTitle(R.string.app_name_Vinculo);     //Titulo para ser exibido na sua Action Bar em frente à seta
+
+        orientacaoImageView =(ImageView) findViewById(R.id.orientacaoImageView);
+        orientacaoImageView.setVisibility(View.INVISIBLE);
+        orientacaoImageView.setVisibility(View.GONE);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -247,7 +253,7 @@ public class VinculoActivity extends AppCompatActivity {
                 viewHolder.iconImageView.setBackgroundResource(R.drawable.message_icon);
             }
             if(dgc.getTelefone().equals("vinculo")){
-                viewHolder.iconImageView.setBackgroundResource(R.drawable.ic_delete_forever_black_24dp);
+                viewHolder.iconImageView.setBackgroundResource(R.drawable.delete_icon);
                 viewHolder.iconImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

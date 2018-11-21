@@ -57,6 +57,7 @@ public class VinculoChatActivity extends AppCompatActivity {
     private String userId;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceMedico;
+    private ImageView orientacaoImageView;
 
 
     @Override
@@ -73,6 +74,11 @@ public class VinculoChatActivity extends AppCompatActivity {
         medicoDisplayListView = (ListView) findViewById(R.id.medicoDisplayListView);
         medicoArrayAdapter = new VinculoActivity.MedicoArrayAdapter(this, medicoList);
         medicoDisplayListView.setAdapter(medicoArrayAdapter);
+
+        orientacaoImageView =(ImageView) findViewById(R.id.orientacaoImageView);
+
+        orientacaoImageView.setVisibility(View.INVISIBLE);
+        orientacaoImageView.setVisibility(View.GONE);
 
         configuraObserverShortClick();
 
