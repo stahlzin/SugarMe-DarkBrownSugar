@@ -211,7 +211,7 @@ public class VinculoAddActivity extends AppCompatActivity {
     }
 
     public void paginaAnterior(){
-        Intent intent = new Intent(VinculoAddActivity.this, VinculoActivity.class);
+        Intent intent = new Intent(VinculoAddActivity.this, PacienteActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         VinculoAddActivity.this.startActivity(intent);
         finishAffinity();
