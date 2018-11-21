@@ -88,8 +88,25 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
         medicoDisplayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Paciente paciente = pacienteList.get(position);
-                NavigationWithOnePutExtraAndUserId(PacientesVinculadosActivity.this, RelatorioActivity.class, "tipo", "medico", "userId", paciente.getIdPaciente());
+                final Paciente paciente = pacienteList.get(position);
+                //consulta se o paciente aceita compartilhar o diário e redireciona
+                databaseReference.child("users").child("pacientes").child(pacienteList.get(position).getIdPaciente()).child("configurar").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            if(dataSnapshot.child("compartilharDiario").getValue().equals("nao")){
+                                Toast.makeText(PacientesVinculadosActivity.this, "O paciente selecionado optou por não compartilhar o diário glicêmico", Toast.LENGTH_LONG).show();
+                            }else{
+                                NavigationWithOnePutExtraAndUserId(PacientesVinculadosActivity.this, RelatorioActivity.class, "tipo", "medico", "userId", paciente.getIdPaciente());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
