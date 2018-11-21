@@ -1,6 +1,8 @@
 package br.com.mateus.sugarme.View;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -71,6 +73,7 @@ public class PacienteActivity extends AppCompatActivity
     private TextView statusUltimaTextView;
     private TextView dataUltimaTextView;
     private TextView horaUltimaTextView;
+    private TextView chatTextView;
     private GridLayout ultimaLeituraGridLayout;
     private GridLayout qteChatGridLayout;
     private List<DiarioGlicemico> diarioGlicemicoList;
@@ -84,6 +87,7 @@ public class PacienteActivity extends AppCompatActivity
     private TextView limHiperTextView;
     private int hiperglicemiaPad;
     private int hipoglicemiaPad;
+    private int chatFlag;
 
 
 
@@ -100,6 +104,7 @@ public class PacienteActivity extends AppCompatActivity
         statusUltimaTextView = (TextView) findViewById(R.id.statusUltimaTextView);
         dataUltimaTextView = (TextView) findViewById(R.id.dataUltimaTextView);
         horaUltimaTextView = (TextView) findViewById(R.id.horaUltimaTextView);
+        chatTextView = (TextView) findViewById(R.id.chatTextView);
         ultimaLeituraGridLayout = findViewById(R.id.ultimaLeituraGridLayout);
         qteChatGridLayout = findViewById(R.id.qteChatGridLayout);
         limHipoTextView = findViewById(R.id.limHipoTextView);
@@ -147,6 +152,27 @@ public class PacienteActivity extends AppCompatActivity
         //setData();
 
 
+        //alterar a view e o menu se não aceitar chat
+        databaseReference.child("users").child("pacientes").child(userId).child("configurar").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    if(dataSnapshot.child("aceitaChat").getValue().equals("nao")){
+                        qteChatGridLayout.setVisibility(View.INVISIBLE);
+                        chatTextView.setVisibility(View.INVISIBLE);
+                        qteChatGridLayout.setVisibility(View.GONE);
+                        chatTextView.setVisibility(View.GONE);
+                        chatFlag = 0;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -300,7 +326,25 @@ public class PacienteActivity extends AppCompatActivity
             NavigationWithOnePutExtra(PacienteActivity.this, ConfigurarActivity.class, "tipo", "paciente");
 
         } else if (id == R.id.nav_chat) {
-            SimpleNavigation(PacienteActivity.this, VinculoChatActivity.class);
+            if(chatFlag == 0){
+                AlertDialog.Builder dbuilder = new AlertDialog.Builder(PacienteActivity.this);
+                dbuilder.setTitle("Chat desabilitado");
+                dbuilder.setMessage("Deseja rever as opções de configuração?");
+                dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        NavigationWithOnePutExtra(PacienteActivity.this, ConfigurarActivity.class, "tipo", "paciente");
+                    }
+                }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+                dbuilder.show();
+            }else{
+                SimpleNavigation(PacienteActivity.this, VinculoChatActivity.class);
+            }
 
         } else if (id == R.id.nav_vincular) {
             SimpleNavigation(PacienteActivity.this, VinculoActivity.class);

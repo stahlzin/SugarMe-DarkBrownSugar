@@ -39,6 +39,7 @@ import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 public class MedicoActivity extends AppCompatActivity {
     private MedicoPresenter medicoPresenter;
     private GridLayout perfilMedicoGridLayout;
+    private GridLayout qteChatGridLayout;
     private GridLayout chatMedicoGridLayout;
     private GridLayout pacientesMedicoGridLayout;
     private GridLayout medicoConfiguracoesGridLayout;
@@ -46,6 +47,7 @@ public class MedicoActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private String userId;
+    private int chatFlag;
 
 
     public void getUserId() {
@@ -72,6 +74,7 @@ public class MedicoActivity extends AppCompatActivity {
         perfilMedicoGridLayout = (GridLayout) findViewById(R.id.perfilMedicoGridLayout);
         chatMedicoGridLayout = (GridLayout) findViewById(R.id.chatMedicoGridLayout);
         pacientesMedicoGridLayout = (GridLayout) findViewById(R.id.pacientesMedicoGridLayout);
+        qteChatGridLayout = (GridLayout) findViewById(R.id.qteChatGridLayout);
         medicoConfiguracoesGridLayout = (GridLayout) findViewById(R.id.medicoConfiguracoesGridLayout);
         final TextView qteSemLerChatTextView = (TextView) findViewById(R.id.qteSemLerChatTextView); //Qtde notificacoes
         final TextView qtdePacientesVinculadosTextView = (TextView) findViewById(R.id.qtePacientesVinculadosTextView);//Pacientes
@@ -90,6 +93,33 @@ public class MedicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Chamar o chat
+                if(chatFlag == 0){
+                    AlertDialog.Builder dbuilder = new AlertDialog.Builder(MedicoActivity.this);
+                    dbuilder.setTitle("Chat desabilitado");
+                    dbuilder.setMessage("Deseja rever as opções de configuração?");
+                    dbuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            NavigationWithOnePutExtra(MedicoActivity.this, ConfigurarActivity.class, "tipo", "medico");
+                        }
+                    }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+                    dbuilder.show();
+                }else{
+                    SimpleNavigation(MedicoActivity.this, VinculoChatMedicoActivity.class);
+                }
+
+            }
+        });
+
+
+        qteChatGridLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 SimpleNavigation(MedicoActivity.this, VinculoChatMedicoActivity.class);
             }
         });
@@ -110,11 +140,6 @@ public class MedicoActivity extends AppCompatActivity {
             }
         });
         //Fim da configuração do Menu
-
-
-
-
-
 
 
         //Ver conversas nao lidas
@@ -148,6 +173,25 @@ public class MedicoActivity extends AppCompatActivity {
             }
         });
 
+        //alterar a view e o menu se não aceitar chat
+        databaseReference.child("users").child("medicos").child(userId).child("configurar").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    if(dataSnapshot.child("aceitaChat").getValue().equals("nao")){
+                        qteChatGridLayout.setVisibility(View.INVISIBLE);
+                        qteChatGridLayout.setVisibility(View.GONE);
+                        chatFlag = 0;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
