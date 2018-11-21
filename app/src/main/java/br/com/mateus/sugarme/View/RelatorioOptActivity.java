@@ -361,7 +361,7 @@ public class RelatorioOptActivity extends AppCompatActivity {
 
         int hiperCount = 0;
         for (int i = 0; i < diarioGlicemicoList.size(); i ++){
-            if (diarioGlicemicoList.get(i).getCategoria().equals("Hipoglicemia"))
+            if (diarioGlicemicoList.get(i).getCategoria().equals("Hiperglicemia"))
                 hiperCount ++;
         }
         resR.append("Episódios de Hiperglicemia: ");
