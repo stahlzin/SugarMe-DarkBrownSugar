@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class VinculoChatActivity extends AppCompatActivity {
     private String userId;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceMedico;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

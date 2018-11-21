@@ -184,19 +184,8 @@ public class ChatActivity extends AppCompatActivity {
         listOfMessages.setAdapter(adapter);
     }
 
-    //onBackPressed
-    @Override
-    public void onBackPressed() {
 
-        /*
-        //TotalMSG
-        FirebaseDatabase.getInstance()
-                .getReference().child("users").child("pacientes").child(chavePaciente).
-                child("chats").child("totalLido ").setValue(size);
-         */
-
-
-        //Voltar a tela inicial
+    private void removeNotificacao(){
         if(activityQueChamou.equals("pacientes")){ //Paciente
 
             //Tirar notificacao
@@ -250,16 +239,20 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    //onBackPressed
+    @Override
+    public void onBackPressed() {
+
+        removeNotificacao();
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                if(activityQueChamou.equals("pacientes")){
-                    FinishNavigation(ChatActivity.this, VinculoChatActivity.class);
-                }else if (activityQueChamou.equals("medicos")){
-                    FinishNavigation(ChatActivity.this, VinculoChatMedicoActivity.class);
-                }
+                removeNotificacao();
                 break;
             default:break;
         }

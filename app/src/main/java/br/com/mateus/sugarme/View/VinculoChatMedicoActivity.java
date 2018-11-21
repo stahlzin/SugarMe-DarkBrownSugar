@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
     private String userId;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceMedico;
+    private ImageView orientacaoImageView;
 
 
     @Override
@@ -55,12 +57,17 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
-        getSupportActionBar().setTitle(R.string.app_name_Pacientes);     //Titulo para ser exibido na sua Action Bar em frente à seta
+        getSupportActionBar().setTitle(R.string.app_name_ChatVinculo);     //Titulo para ser exibido na sua Action Bar em frente à seta
 
 
         medicoDisplayListView = (ListView) findViewById(R.id.medicoDisplayListView);
         pacienteArrayAdapter = new VinculoActivity.PacienteArrayAdapter(this, pacienteList);
         medicoDisplayListView.setAdapter(pacienteArrayAdapter);
+        orientacaoImageView =(ImageView) findViewById(R.id.orientacaoImageView);
+
+        orientacaoImageView.setVisibility(View.INVISIBLE);
+        orientacaoImageView.setVisibility(View.GONE);
+
 
         configuraObserverShortClick();
 
@@ -181,7 +188,7 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
                         if(todosPacientesList.get(i).getIdPaciente().equals(idPacientesList.get(j))){
                             Paciente add = todosPacientesList.get(i);
                             if(notificacoesPacientesList.contains(idPacientesList.get(j))){
-                                add.setNome(add.getNome() + " -> Nova(s) mensagens!");
+                                add.setCpf("mensagemNot");
                             }
                             pacienteList.add(add);
                         }
@@ -195,44 +202,6 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    public static class PacienteArrayAdapter extends ArrayAdapter<Paciente> {
-        public PacienteArrayAdapter(Context context, List<Paciente> forecast) {
-            super(context, -1, forecast);
-        }
-
-
-        private static class ViewHolder {
-            TextView nomePacienteTextView;
-            TextView telefonePacienteTextView;
-            TextView cpfPacienteTextView;
-        }
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Paciente dgc = getItem(position);
-            VinculoChatMedicoActivity.PacienteArrayAdapter.ViewHolder viewHolder;
-            if (convertView == null) {
-                viewHolder = new VinculoChatMedicoActivity.PacienteArrayAdapter.ViewHolder();
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                convertView = inflater.inflate(R.layout.list_busca_paciente, parent, false);
-                viewHolder.nomePacienteTextView = (TextView) convertView.findViewById(R.id.nomePacienteTextView);
-                viewHolder.telefonePacienteTextView = (TextView) convertView.findViewById(R.id.telefonePacienteTextView);
-                viewHolder.cpfPacienteTextView = (TextView) convertView.findViewById(R.id.cpfPacienteTextView);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (VinculoChatMedicoActivity.PacienteArrayAdapter.ViewHolder) convertView.getTag();
-            }
-
-            Context context = getContext();
-            viewHolder.nomePacienteTextView.setText(String.valueOf(dgc.getNome()));
-            viewHolder.telefonePacienteTextView.setText(dgc.getTelefone());
-            viewHolder.cpfPacienteTextView.setText(dgc.getCpf());
-            return convertView;
-
-        }
     }
 
     @Override

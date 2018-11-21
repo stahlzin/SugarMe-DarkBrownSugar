@@ -284,29 +284,48 @@ public class VinculoActivity extends AppCompatActivity {
         private static class ViewHolder {
             TextView nomePacienteTextView;
             TextView telefonePacienteTextView;
-            TextView cpfPacienteTextView;
+            CircleImageView fotoPacienteCircleImageView;
+            ImageView iconImageView;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Paciente dgc = getItem(position);
-            PacienteArrayAdapter.ViewHolder viewHolder;
+            final PacienteArrayAdapter.ViewHolder viewHolder;
             if (convertView == null) {
                 viewHolder = new PacienteArrayAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(R.layout.list_busca_paciente, parent, false);
                 viewHolder.nomePacienteTextView = (TextView) convertView.findViewById(R.id.nomePacienteTextView);
                 viewHolder.telefonePacienteTextView = (TextView) convertView.findViewById(R.id.telefonePacienteTextView);
-                viewHolder.cpfPacienteTextView = (TextView) convertView.findViewById(R.id.cpfPacienteTextView);
+                viewHolder.fotoPacienteCircleImageView = (CircleImageView) convertView.findViewById(R.id.fotoPacienteCircleImageView);
+                viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (PacienteArrayAdapter.ViewHolder) convertView.getTag();
             }
 
-            Context context = getContext();
+            final Context context = getContext();
             viewHolder.nomePacienteTextView.setText(String.valueOf(dgc.getNome()));
             viewHolder.telefonePacienteTextView.setText(dgc.getTelefone());
-            viewHolder.cpfPacienteTextView.setText(dgc.getCpf());
+
+            final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            // Create a storage reference from our app
+            StorageReference storageRef = firebaseStorage.getReference();
+            storageRef.child("users").child("pacientes").child(dgc.getIdPaciente()).child("fotoPerfil/fotoPerfil.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                    String urlFoto = uri.toString();
+                    Glide.with(context).load(urlFoto)
+                            .into(viewHolder.fotoPacienteCircleImageView);
+
+                }
+            });
+
+            if(dgc.getCpf().equals("mensagemNot")){
+                viewHolder.iconImageView.setBackgroundResource(R.drawable.message_icon);
+            }
 
 
 

@@ -49,6 +49,7 @@ import java.util.Map;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 import br.com.mateus.sugarme.Singleton.UserSingleton;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.toBitmap;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtraAndUserId;
@@ -180,8 +181,7 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
         private static class ViewHolder {
             TextView nomePacienteTextView;
             TextView telefonePacienteTextView;
-            TextView cpfPacienteTextView;
-            ImageView fotoPacienteImageView;
+            CircleImageView fotoPacienteCircleImageView;
         }
 
         @Override
@@ -194,8 +194,7 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
                 convertView = inflater.inflate(R.layout.list_busca_paciente, parent, false);
                 viewHolder.nomePacienteTextView = (TextView) convertView.findViewById(R.id.nomePacienteTextView);
                 viewHolder.telefonePacienteTextView = (TextView) convertView.findViewById(R.id.telefonePacienteTextView);
-                viewHolder.cpfPacienteTextView = (TextView) convertView.findViewById(R.id.cpfPacienteTextView);
-                viewHolder.fotoPacienteImageView = (ImageView) convertView.findViewById(R.id.fotoPacienteImageView);
+                viewHolder.fotoPacienteCircleImageView = (CircleImageView) convertView.findViewById(R.id.fotoPacienteCircleImageView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (PacientesVinculadosActivity.PacienteArrayAdapter.ViewHolder) convertView.getTag();
@@ -204,7 +203,7 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
             final Context context = getContext();
             viewHolder.nomePacienteTextView.setText(String.valueOf(dgc.getNome()));
             viewHolder.telefonePacienteTextView.setText(dgc.getTelefone());
-            viewHolder.cpfPacienteTextView.setText(dgc.getCpf());
+
 
             final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
            // Create a storage reference from our app
@@ -215,9 +214,8 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
 
                     String urlFoto = uri.toString();
                     Glide.with(context).load(urlFoto)
-                            .into(viewHolder.fotoPacienteImageView);
+                            .into(viewHolder.fotoPacienteCircleImageView);
 
-                    //Picasso.get().load(uri).into(viewHolder.fotoPacienteImageView);
                     }
                 });
             return convertView;

@@ -241,7 +241,7 @@
     <string name="sair">Sair</string>
     <string name="iniciarChat">Confirma redirecionamento ao chat?</string>
     <string name="semVinculoChatMedico">Nenhum médico que aceita chat vinculado!</string>
-    <string name="welcomeMedico">Bem-vindo, Fulano!</string>
+    <string name="welcomeMedico">Bem-vindo!</string>
     <string name="medico_qte_chat">Você possui:</string>
     <string name="medico_qte_chat_cont">conversa(s) não lida(s)</string>
     <string name="medico_qte_vinculo">paciente(s) vinculado(s)</string>

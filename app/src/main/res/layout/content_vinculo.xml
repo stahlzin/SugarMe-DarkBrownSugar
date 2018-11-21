@@ -9,6 +9,14 @@
     tools:context=".View.VinculoActivity"
     tools:showIn="@layout/activity_vinculo">
 
+    <ImageView
+        android:id="@+id/orientacaoImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:srcCompat="@drawable/ac_activity"
+        />
+
     <ListView
     android:id="@+id/medicoDisplayListView"
     android:layout_width="match_parent"
