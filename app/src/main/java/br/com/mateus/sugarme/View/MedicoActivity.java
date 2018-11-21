@@ -78,6 +78,7 @@ public class MedicoActivity extends AppCompatActivity {
         medicoConfiguracoesGridLayout = (GridLayout) findViewById(R.id.medicoConfiguracoesGridLayout);
         final TextView qteSemLerChatTextView = (TextView) findViewById(R.id.qteSemLerChatTextView); //Qtde notificacoes
         final TextView qtdePacientesVinculadosTextView = (TextView) findViewById(R.id.qtePacientesVinculadosTextView);//Pacientes
+        chatFlag = 1;
 
         //Configuração do Menu em GridLayout
        perfilMedicoGridLayout.setOnClickListener(new View.OnClickListener() {

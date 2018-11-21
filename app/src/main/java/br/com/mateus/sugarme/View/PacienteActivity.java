@@ -111,6 +111,7 @@ public class PacienteActivity extends AppCompatActivity
         limHiperTextView = findViewById(R.id.limHiperTextView);
 
         chart = (LineChart) findViewById(R.id.chart);
+        chatFlag = 1;
         chart.getDescription().setEnabled(false);
         qteSemLerPChatTextView = (TextView) findViewById(R.id.qteSemLerPChatTextView);
 

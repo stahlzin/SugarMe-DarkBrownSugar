@@ -85,6 +85,7 @@ public class PacientesVinculadosActivity extends AppCompatActivity {
         pacienteArrayAdapter = new PacientesVinculadosActivity.PacienteArrayAdapter(this, pacienteList);
         medicoDisplayListView.setAdapter(pacienteArrayAdapter);
 
+
         medicoDisplayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
