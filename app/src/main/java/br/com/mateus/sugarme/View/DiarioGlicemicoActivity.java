@@ -58,6 +58,8 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
     private AlertDialog alerta;
     private IntercorrenciaDAO intercorrenciaDAO;
     private ImageView diarioHistoricoImageView;
+    private int hipoPad;
+    private int hiperPad;
 
 
     @Override
@@ -91,6 +93,7 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
             }
         });
 
+        getHipoHiperPad();
 
         diarioHistorioTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +102,9 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
 
             }
         });
+
+
+
 
 
         diarioGlicemicoList = new ArrayList<DiarioGlicemico>();
@@ -214,7 +220,8 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         diarioGlicemico.setGlicemia(tryParseInt(glicemiaDiarioEditText.getText().toString()));
         diarioGlicemico.setData(dataDiarioTextView.getText().toString());
         diarioGlicemico.setHora(horaDiarioTextView.getText().toString());
-        diarioGlicemico.setCategoria(createDiarioCat(tryParseInt(glicemiaDiarioEditText.getText().toString())));
+        diarioGlicemico.setCategoria(createDiarioCat(diarioGlicemico.getGlicemia(), hipoPad, hiperPad));
+
         diarioGlicemico.setGliTimestamp(tryParseDatetoTimeStamp(dataDiarioTextView.getText().toString(), horaDiarioTextView.getText().toString()));
         return diarioGlicemico;
     }
@@ -231,6 +238,7 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         horaDiarioTextView.setText(horaFormatada);
 
     }
+
 
 
     @Override
@@ -291,4 +299,34 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         alerta = builder.create();
         alerta.show();
     }
+
+    private void getHipoHiperPad(){
+        //Hiper e Hipoglicemia Padrão
+        userId = getUserId();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("users").child("pacientes").child(userId).child("configurar").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    if(dataSnapshot.child("hipoglicemiaPadrao").getValue() == null){
+                        hipoPad = 70;
+                    }else{
+                        hipoPad = tryParseInt(dataSnapshot.child("hipoglicemiaPadrao").getValue());
+                    }
+
+                    if(dataSnapshot.child("hiperglicemiaPadrao").getValue() == null){
+                        hiperPad = 200;
+                    } else{
+                        hiperPad = tryParseInt(dataSnapshot.child("hiperglicemiaPadrao").getValue());
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }

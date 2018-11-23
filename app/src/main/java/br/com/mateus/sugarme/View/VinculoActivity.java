@@ -243,7 +243,7 @@ public class VinculoActivity extends AppCompatActivity {
                 public void onSuccess(Uri uri) {
 
                     String urlFoto = uri.toString();
-                    Glide.with(context).load(urlFoto)
+                    Glide.with(viewHolder.fotoMedicoCircleImageView.getContext()).load(urlFoto)
                             .into(viewHolder.fotoMedicoCircleImageView);
                 }
             });
@@ -323,7 +323,7 @@ public class VinculoActivity extends AppCompatActivity {
                 public void onSuccess(Uri uri) {
 
                     String urlFoto = uri.toString();
-                    Glide.with(context).load(urlFoto)
+                    Glide.with(viewHolder.fotoPacienteCircleImageView.getContext()).load(urlFoto)
                             .into(viewHolder.fotoPacienteCircleImageView);
 
                 }

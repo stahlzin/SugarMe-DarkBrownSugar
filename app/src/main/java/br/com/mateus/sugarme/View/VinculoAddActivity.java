@@ -189,7 +189,7 @@ public class VinculoAddActivity extends AppCompatActivity {
                 public void onSuccess(Uri uri) {
 
                     String urlFoto = uri.toString();
-                    Glide.with(context).load(urlFoto)
+                    Glide.with(viewHolder.fotoMedicoCircleImageView.getContext()).load(urlFoto)
                             .into(viewHolder.fotoMedicoCircleImageView);
                 }
             });
