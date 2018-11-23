@@ -129,4 +129,13 @@ public class RelatorioActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if(tipoUsuario.equals("paciente")){
+            FinishNavigation(RelatorioActivity.this, PacienteActivity.class);
+        }else if (tipoUsuario.equals("medico")){
+            FinishNavigation(RelatorioActivity.this, MedicoActivity.class);
+        }
+    }
 }

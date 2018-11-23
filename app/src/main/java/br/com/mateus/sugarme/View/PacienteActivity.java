@@ -138,8 +138,7 @@ public class PacienteActivity extends AppCompatActivity
         ultimaLeituraGridLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SimpleNavigation(PacienteActivity.this, HistoricoDiarioActivity.class);
-
+                NavigationWithOnePutExtra(PacienteActivity.this, HistoricoDiarioActivity.class, "anterior", "pacienteAct");
             }
         });
         qteChatGridLayout.setOnClickListener(new View.OnClickListener() {

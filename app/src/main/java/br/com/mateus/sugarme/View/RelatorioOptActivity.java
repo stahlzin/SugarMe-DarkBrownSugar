@@ -742,12 +742,21 @@ public class RelatorioOptActivity extends AppCompatActivity {
                 if(tipoUsuario.equals("paciente")){
                     FinishNavigation(RelatorioOptActivity.this, PacienteActivity.class);
                 }else if (tipoUsuario.equals("medico")){
-                    FinishNavigation(RelatorioOptActivity.this, MedicoActivity.class);
+                    FinishNavigation(RelatorioOptActivity.this, PacientesVinculadosActivity.class);
                 }
                 break;
             default:break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(tipoUsuario.equals("paciente")){
+            FinishNavigation(RelatorioOptActivity.this, PacienteActivity.class);
+        }else if (tipoUsuario.equals("medico")){
+            FinishNavigation(RelatorioOptActivity.this, PacientesVinculadosActivity.class);
+        }
     }
 }
 

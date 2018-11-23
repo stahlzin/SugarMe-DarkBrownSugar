@@ -43,6 +43,8 @@ import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+
 public class VinculoActivity extends AppCompatActivity {
 
     private ListView medicoDisplayListView;
@@ -346,14 +348,16 @@ public class VinculoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(VinculoActivity.this, PacienteActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                VinculoActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(VinculoActivity.this, PacienteActivity.class);
                 break;
             default:break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        FinishNavigation(VinculoActivity.this, PacienteActivity.class);
     }
 
     private void setListUptadePaciente() {

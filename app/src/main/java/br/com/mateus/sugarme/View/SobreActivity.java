@@ -70,4 +70,13 @@ public class SobreActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if(tipoUsuario.equals("paciente")){
+            FinishNavigation(SobreActivity.this, PacienteActivity.class);
+        }else if (tipoUsuario.equals("medico")){
+            FinishNavigation(SobreActivity.this, MedicoActivity.class);
+        }
+    }
 }

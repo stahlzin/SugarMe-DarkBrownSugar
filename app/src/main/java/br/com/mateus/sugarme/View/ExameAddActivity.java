@@ -196,10 +196,7 @@ public class ExameAddActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 Toast.makeText(ExameAddActivity.this, "Arquivo do exame gravado com sucesso", Toast.LENGTH_SHORT).show();
                                 //volta para a Lista de Exame
-                                Intent intent = new Intent(ExameAddActivity.this, ExameActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                ExameAddActivity.this.startActivity(intent);
-                                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                                FinishNavigation(ExameAddActivity.this, ExameActivity.class);
                             }else{
                                 Toast.makeText(ExameAddActivity.this, "Falha ao salvar o arquivo", Toast.LENGTH_SHORT).show();
                             }
@@ -285,5 +282,10 @@ public class ExameAddActivity extends AppCompatActivity {
             default:break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        FinishNavigation(ExameAddActivity.this, ExameActivity.class);
     }
 }

@@ -19,6 +19,8 @@ import br.com.mateus.sugarme.Model.Perfil;
 import br.com.mateus.sugarme.DAO.PerfilDAO;
 import br.com.mateus.sugarme.Controller.PerfilController;
 
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+
 public class PerfilEditActivity extends AppCompatActivity {
 
     private TextInputEditText textInputPeso;
@@ -110,9 +112,7 @@ public class PerfilEditActivity extends AppCompatActivity {
     //OnBackPressed
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(PerfilEditActivity.this, PerfilActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PerfilEditActivity.this.startActivity(intent);
+        FinishNavigation(PerfilEditActivity.this, PerfilActivity.class);
     }
 
    private Perfil preencheInfoMedica(){
@@ -204,10 +204,7 @@ public class PerfilEditActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(PerfilEditActivity.this, PerfilActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PerfilEditActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(PerfilEditActivity.this, PerfilActivity.class);
                 break;
             default:break;
         }

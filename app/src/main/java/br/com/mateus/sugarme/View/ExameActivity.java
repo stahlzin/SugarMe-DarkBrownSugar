@@ -384,4 +384,8 @@ public class ExameActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        FinishNavigation(ExameActivity.this, PacienteActivity.class);
+    }
 }

@@ -121,6 +121,11 @@ public class PerfilActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        FinishNavigation(PerfilActivity.this, PacienteActivity.class);
+    }
+
     private void setEditProfileOpt() {
         //Lista de itens
         ArrayList<String> itens = new ArrayList<String>();

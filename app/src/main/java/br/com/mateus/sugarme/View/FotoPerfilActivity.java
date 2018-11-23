@@ -308,6 +308,11 @@ public class FotoPerfilActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
     private void getMedicalFoto(){
         final UserSingleton globalVariable = (UserSingleton) getApplicationContext();
         if(globalVariable.getFotoPerfil() == null){

@@ -37,6 +37,7 @@ import br.com.mateus.sugarme.Builder.MaskEditUtil;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseDatetoTimeStamp;
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtra;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
 import static br.com.mateus.sugarme.State.DiarioGlicemicoState.createDiarioCat;
 import static br.com.mateus.sugarme.State.DiarioGlicemicoState.getStateBackgroundColor;
@@ -98,11 +99,9 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         diarioHistorioTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SimpleNavigation(DiarioGlicemicoActivity.this, HistoricoDiarioActivity.class);
-
+                NavigationWithOnePutExtra(DiarioGlicemicoActivity.this, HistoricoDiarioActivity.class, "anterior", "diarioAct");
             }
         });
-
 
 
 
@@ -328,5 +327,8 @@ public class DiarioGlicemicoActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        FinishNavigation(DiarioGlicemicoActivity.this, PacienteActivity.class);
+    }
 }

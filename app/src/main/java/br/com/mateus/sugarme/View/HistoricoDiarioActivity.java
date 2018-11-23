@@ -2,6 +2,7 @@ package br.com.mateus.sugarme.View;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
 import br.com.mateus.sugarme.DAO.DiarioGlicemicoDAO;
+import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
 import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
@@ -44,6 +46,7 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
     private HistoricoDiarioArrayAdapter historicoDiarioArrayAdapter;
     private ListView diarioHistoricoListView;
     private String userId;
+    private String anterior;
     private DatabaseReference databaseReference;
 
 
@@ -61,6 +64,15 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
 
         historicoDiarioArrayAdapter = new HistoricoDiarioArrayAdapter(this, diarioGlicemicoList);
         diarioHistoricoListView.setAdapter(historicoDiarioArrayAdapter);
+
+        Intent it = getIntent();
+        if (it != null && it.getExtras() != null) {
+            if(it.getStringExtra("anterior").equals("pacienteAct")) {
+                anterior = "pacienteAct";
+            }else{
+                anterior = "diarioAct";
+            }
+        }
 
     }
 
@@ -167,7 +179,12 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                FinishNavigation(HistoricoDiarioActivity.this, PacienteActivity.class);
+                if(anterior.equals("pacienteAct")){
+                    FinishNavigation(HistoricoDiarioActivity.this, PacienteActivity.class);
+                }else{
+                    FinishNavigation(HistoricoDiarioActivity.this, DiarioGlicemicoActivity.class);
+                }
+
                 break;
             default:break;
         }
@@ -175,5 +192,12 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        if(anterior.equals("pacienteAct")){
+            FinishNavigation(HistoricoDiarioActivity.this, PacienteActivity.class);
+        }else{
+            FinishNavigation(HistoricoDiarioActivity.this, DiarioGlicemicoActivity.class);
+        }
+    }
 }

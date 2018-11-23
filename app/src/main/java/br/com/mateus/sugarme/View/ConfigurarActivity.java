@@ -232,4 +232,13 @@ public class ConfigurarActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if(tipoUsuario.equals("paciente")){
+            FinishNavigation(ConfigurarActivity.this, PacienteActivity.class);
+        }else if (tipoUsuario.equals("medico")){
+            FinishNavigation(ConfigurarActivity.this, MedicoActivity.class);
+        }
+    }
 }

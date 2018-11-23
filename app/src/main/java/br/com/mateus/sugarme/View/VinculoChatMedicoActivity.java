@@ -33,6 +33,8 @@ import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.Model.Paciente;
 import br.com.mateus.sugarme.R;
 
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+
 public class VinculoChatMedicoActivity extends AppCompatActivity {
     private ListView medicoDisplayListView; //Neste caso mantive o nome de "Medico" mas será carregado com dados do Paciente
     private List<Paciente> pacienteList = new ArrayList<>();
@@ -208,13 +210,15 @@ public class VinculoChatMedicoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                Intent intent = new Intent(VinculoChatMedicoActivity.this, MedicoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                VinculoChatMedicoActivity.this.startActivity(intent);
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                FinishNavigation(VinculoChatMedicoActivity.this, MedicoActivity.class);
                 break;
             default:break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        FinishNavigation(VinculoChatMedicoActivity.this, MedicoActivity.class);
     }
 }

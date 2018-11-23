@@ -40,6 +40,8 @@ import br.com.mateus.sugarme.Model.Medico;
 import br.com.mateus.sugarme.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
+
 public class VinculoAddActivity extends AppCompatActivity {
 
     private List<Medico> medicoList = new ArrayList<>();
@@ -94,7 +96,7 @@ public class VinculoAddActivity extends AppCompatActivity {
                         Medico medico = medicoList.get(position);
                         setVinculosEntrePacienteEMedico(medico);
                         Toast.makeText(VinculoAddActivity.this, R.string.sucessoVinculo, Toast.LENGTH_SHORT).show();
-                        paginaAnterior();
+                        FinishNavigation(VinculoAddActivity.this, VinculoActivity.class);
                     }
                 }).setNegativeButton(getString(R.string.naoVincular), new DialogInterface.OnClickListener() {
                     @Override
@@ -203,17 +205,15 @@ public class VinculoAddActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                paginaAnterior();
+                FinishNavigation(VinculoAddActivity.this, VinculoActivity.class);
                 break;
             default:break;
         }
         return true;
     }
 
-    public void paginaAnterior(){
-        Intent intent = new Intent(VinculoAddActivity.this, PacienteActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        VinculoAddActivity.this.startActivity(intent);
-        finishAffinity();
+    @Override
+    public void onBackPressed() {
+        FinishNavigation(VinculoAddActivity.this, VinculoActivity.class);
     }
 }

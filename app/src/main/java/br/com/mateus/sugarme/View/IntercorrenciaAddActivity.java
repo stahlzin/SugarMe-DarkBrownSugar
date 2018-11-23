@@ -86,9 +86,7 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
                     intercorrenciaDAO = new IntercorrenciaDAO();
                     intercorrenciaDAO.inserir(intercorrencia);
                     Toast.makeText(IntercorrenciaAddActivity.this, getString(R.string.inseridoSucesso), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(IntercorrenciaAddActivity.this, IntercorrenciaActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    IntercorrenciaAddActivity.this.startActivity(intent);
+                    FinishNavigation(IntercorrenciaAddActivity.this, IntercorrenciaActivity.class);
                 }
             }
         });
@@ -133,7 +131,7 @@ public class IntercorrenciaAddActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Voltar a tela inicial
-        FinishNavigation(IntercorrenciaAddActivity.this, PacienteActivity.class);
+        FinishNavigation(IntercorrenciaAddActivity.this, IntercorrenciaActivity.class);
     }
 
     @Override
