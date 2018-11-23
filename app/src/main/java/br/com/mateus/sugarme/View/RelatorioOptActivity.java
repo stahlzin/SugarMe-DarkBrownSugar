@@ -53,9 +53,11 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.List;
 import com.itextpdf.text.ListItem;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Section;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -67,9 +69,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 
 import br.com.mateus.sugarme.BuildConfig;
 import br.com.mateus.sugarme.Model.DiarioGlicemico;
@@ -83,6 +90,9 @@ import static br.com.mateus.sugarme.Builder.CoverterBuilder.tryParseInt;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.FinishNavigation;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.NavigationWithOnePutExtraAndUserId;
 import static br.com.mateus.sugarme.Factory.NavigationFactory.SimpleNavigation;
+import static br.com.mateus.sugarme.View.MainController.getUserId;
+import static com.itextpdf.text.Chunk.IMAGE;
+import static com.itextpdf.text.PageSize.A4;
 
 public class RelatorioOptActivity extends AppCompatActivity {
     //Atributos do XML
@@ -99,19 +109,24 @@ public class RelatorioOptActivity extends AppCompatActivity {
 
     //Intent get
     private String relUserID;
-    private String relMes;
-    private String relAno;
+    private static String relMes;
+    private static String relAno;
 
     //Parametros do relatorio
     private String relDataIn;
     private String relDataFim;
-    private java.util.List<DiarioGlicemico> diarioGlicemicoList = new ArrayList<>();
-    private java.util.List<Intercorrencia> intercorrenciaList = new ArrayList<>();
+    private static String nomeUser;
+    private String cUserId;
+    private static java.util.List<DiarioGlicemico> diarioGlicemicoList = new ArrayList<>();
+    private static java.util.List<Intercorrencia> intercorrenciaList = new ArrayList<>();
     private DatabaseReference databaseReference;
-    Paciente pacienteRel = new Paciente();
-    Perfil perfilRel = new Perfil();
+    static Paciente pacienteRel = new Paciente();
+    static Perfil perfilRel = new Perfil();
     private int hiperglicemiaPad;
     private int hipoglicemiaPad;
+    static int intCount = 0;
+    static int hiperCount = 0;
+    static int hipoCount = 0;
 
     //Atributos do iText
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
@@ -350,7 +365,6 @@ public class RelatorioOptActivity extends AppCompatActivity {
         resR.append(String.valueOf(diarioGlicemicoList.size()));
         resR.append("\n");
 
-        int hipoCount = 0;
         for (int i = 0; i < diarioGlicemicoList.size(); i ++){
             if (diarioGlicemicoList.get(i).getCategoria().equals("Hipoglicemia"))
                 hipoCount ++;
@@ -359,7 +373,6 @@ public class RelatorioOptActivity extends AppCompatActivity {
         resR.append(String.valueOf(hipoCount));
         resR.append("\n");
 
-        int hiperCount = 0;
         for (int i = 0; i < diarioGlicemicoList.size(); i ++){
             if (diarioGlicemicoList.get(i).getCategoria().equals("Hiperglicemia"))
                 hiperCount ++;
@@ -372,7 +385,6 @@ public class RelatorioOptActivity extends AppCompatActivity {
         resR.append(String.valueOf(intercorrenciaList.size()));
         resR.append("\n");
 
-        int intCount = 0;
         for (int i = 0; i < intercorrenciaList.size(); i ++){
             if (intercorrenciaList.get(i).getInternacao() == 1)
                 intCount ++;
@@ -513,17 +525,40 @@ public class RelatorioOptActivity extends AppCompatActivity {
         Document document=new Document();
         File dir = getDirFromSDCard();
 
+
         //output file path
         //String outpath= Environment.getExternalStorageDirectory()+"/theBestPdf/PDF1.pdf";
         String outpath= Environment.getExternalStorageDirectory()+"/SugarMe/Relatorios/Relatorio.pdf";
 
 
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(outpath));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(outpath));
             document.open();
+            document.setPageSize(PageSize.A4);
+/*
+            //bkg
+            PdfContentByte canvas = writer.getDirectContentUnder();
+            Drawable d = getResources().getDrawable(R.drawable.relback);
+            BitmapDrawable bitDw = ((BitmapDrawable) d);
+            Bitmap bmp = bitDw.getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Image image = Image.getInstance(stream.toByteArray());
+            image.scaleAbsolute(PageSize.A4);
+            image.setAbsolutePosition(0, 0);
+            canvas.addImage(image);
+*/
+            setBackground(writer);
+
             addMetaData(document);
             addTitlePage(document);
-            addContent(document);
+
+            setBackground(writer);
+            addGrafPage(document);
+
+            setBackground(writer);
+            addDiarioItens(document);
+
             document.close();
 
         } catch (FileNotFoundException e) {
@@ -532,6 +567,8 @@ public class RelatorioOptActivity extends AppCompatActivity {
         } catch (DocumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -539,12 +576,34 @@ public class RelatorioOptActivity extends AppCompatActivity {
     // Reader
     // under File -> Properties
     private static void addMetaData(Document document) {
-        document.addTitle("My first PDF");
-        document.addSubject("Using iText");
-        document.addKeywords("Java, PDF, iText");
-        document.addAuthor("Lars Vogel");
-        document.addCreator("Lars Vogel");
+        document.addTitle("Relatório de Acompanhamento");
+        document.addSubject("SugarMe");
     }
+
+    private void setBackground(PdfWriter writer){
+        //bkg
+        try {
+        PdfContentByte canvas = writer.getDirectContentUnder();
+        Drawable d = getResources().getDrawable(R.drawable.relback);
+        BitmapDrawable bitDw = ((BitmapDrawable) d);
+        Bitmap bmp = bitDw.getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Image image = Image.getInstance(stream.toByteArray());
+            image.scaleAbsolute(PageSize.A4);
+            image.setAbsolutePosition(0, 0);
+            canvas.addImage(image);
+        } catch (BadElementException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     private static void addTitlePage(Document document)
             throws DocumentException {
@@ -552,30 +611,53 @@ public class RelatorioOptActivity extends AppCompatActivity {
         // We add one empty line
         addEmptyLine(preface, 1);
         // Lets write a big header
-        preface.add(new Paragraph("Title of the document", catFont));
+        preface.add(new Paragraph("Relatório de Acompanhamento", catFont));
 
         addEmptyLine(preface, 1);
         // Will create: Report generated by: _name, _date
-        preface.add(new Paragraph("Report generated by: " + System.getProperty("user.name") + ", " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                smallBold));
+        String s;
+        Format formatter;
+        Date date = new Date();
+        DateFormat df = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm");
+        Locale BRAZIL = new Locale("pt","BR");
+        df = DateFormat.getDateInstance(DateFormat.FULL, BRAZIL);
+        //  formatter = new SimpleDateFormat("MMMM");
+        s = df.format(date);
+
+        preface.add(new Paragraph(s, smallBold));
         addEmptyLine(preface, 3);
-        preface.add(new Paragraph("This document describes something which is very important ",
+        preface.add(new Paragraph("Identificação ",
                 smallBold));
+        preface.add(new Paragraph("Paciente: " + pacienteRel.getNome()));
+        preface.add(new Paragraph("Diabetes Tipo: " + perfilRel.getTipoDiabetes()));
+        preface.add(new Paragraph("Relatorio de: " + relMes + "/"+ relAno));
 
-        addEmptyLine(preface, 8);
+        addEmptyLine(preface, 3);
+        preface.add(new Paragraph("Resumo do Mês",
+                smallBold));
+        preface.add(new Paragraph("Leituras Registradas:  " + String.valueOf(diarioGlicemicoList.size())));
+        preface.add(new Paragraph("Episódios de Hipoglicemia: " + String.valueOf(hipoCount)));
+        preface.add(new Paragraph("Episódios de Hiperglicemia: " + String.valueOf(hiperCount)));
+        preface.add(new Paragraph("Intercorrências Registradas: " + String.valueOf(intercorrenciaList.size())));
+        preface.add(new Paragraph("Internações no período: " + (String.valueOf(intCount))));
 
-        preface.add(new Paragraph("This document is a preliminary version and not subject to your license agreement or any other agreement with vogella.com ;-).",
-                redFont));
 
         document.add(preface);
         // Start a new page
         document.newPage();
     }
 
-    private void addContent(Document document) throws DocumentException {
-        Anchor anchor = new Anchor("First Chapter", catFont);
-        anchor.setName("First Chapter");
 
+    private void addGrafPage(Document document)
+            throws DocumentException {
+        Paragraph preface = new Paragraph();
+        // We add one empty line
+        addEmptyLine(preface, 1);
+        // Lets write a big header
+        preface.add(new Paragraph("Gráfico do Índice Glicêmico", catFont));
+        addEmptyLine(preface, 1);
+
+        document.add(preface);
         //add a grafic
 
         try {
@@ -583,97 +665,38 @@ public class RelatorioOptActivity extends AppCompatActivity {
 
             chart.compress(Bitmap.CompressFormat.PNG, 100, stream);
             Image image = Image.getInstance(stream.toByteArray());
-            image.scaleAbsolute(300,200);
+            image.scaleAbsolute(500,500);
             image.setAlignment(Image.MIDDLE);
             document.add(image);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        Paragraph pos = new Paragraph();
+        pos.add(new Paragraph("Limite Hipglicemia:  " + String.valueOf(hipoglicemiaPad)));
+        pos.add(new Paragraph("Limete Hiperglicemia:  " + String.valueOf(hiperglicemiaPad)));
 
+        document.add(pos);
+        document.newPage();
 
-
-        // Second parameter is the number of the chapter
-        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
-
-        Paragraph subPara = new Paragraph("Subcategory 1", subFont);
-        Section subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Hello"));
-
-        subPara = new Paragraph("Subcategory 2", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Paragraph 1"));
-        subCatPart.add(new Paragraph("Paragraph 2"));
-        subCatPart.add(new Paragraph("Paragraph 3"));
-
-
-        // add a list
-        createList(subCatPart);
-        Paragraph paragraph = new Paragraph();
-        addEmptyLine(paragraph, 5);
-        subCatPart.add(paragraph);
-
-        // add a table
-        createTable(subCatPart);
-
-        // now add all this to the document
-        document.add(catPart);
-
-        // Next section
-        anchor = new Anchor("Second Chapter", catFont);
-        anchor.setName("Second Chapter");
-
-        // Second parameter is the number of the chapter
-        catPart = new Chapter(new Paragraph(anchor), 1);
-
-        subPara = new Paragraph("Subcategory", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("This is a very important message"));
-
-        // now add all this to the document
-        document.add(catPart);
 
     }
 
-    private static void createTable(Section subCatPart)
-            throws BadElementException {
-        PdfPTable table = new PdfPTable(3);
+    private void addDiarioItens(Document document)    throws DocumentException {
+        Paragraph preface = new Paragraph();
+        // We add one empty line
+        addEmptyLine(preface, 1);
+        // Lets write a big header
+        preface.add(new Paragraph("Registros do Diário do Índice Glicêmico", catFont));
+        addEmptyLine(preface, 1);
 
-        // t.setBorderColor(BaseColor.GRAY);
-        // t.setPadding(4);
-        // t.setSpacing(4);
-        // t.setBorderWidth(1);
+        Collections.reverse(diarioGlicemicoList);
+        for(int i = 0; i < diarioGlicemicoList.size(); i++){
+            preface.add(new Paragraph("Data: " + diarioGlicemicoList.get(i).getData() + " - Hora: " + diarioGlicemicoList.get(i).getHora()+ " - Valor registrado: " + String.valueOf(diarioGlicemicoList.get(i).getGlicemia()) + " - Categoria: " + diarioGlicemicoList.get(i).getCategoria()));
+        }
 
-        PdfPCell c1 = new PdfPCell(new Phrase("Table Header 1"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Table Header 2"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Table Header 3"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-        table.setHeaderRows(1);
-
-        table.addCell("1.0");
-        table.addCell("1.1");
-        table.addCell("1.2");
-        table.addCell("2.1");
-        table.addCell("2.2");
-        table.addCell("2.3");
-
-        subCatPart.add(table);
-
-    }
-
-    private static void createList(Section subCatPart) {
-        List list = new List(true, false, 10);
-        list.add(new ListItem("First point"));
-        list.add(new ListItem("Second point"));
-        list.add(new ListItem("Third point"));
-        subCatPart.add(list);
+        document.add(preface);
+        document.newPage();
     }
 
     private static void addEmptyLine(Paragraph paragraph, int number) {
