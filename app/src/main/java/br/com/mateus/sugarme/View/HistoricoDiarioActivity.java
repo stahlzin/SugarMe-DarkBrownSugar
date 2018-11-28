@@ -179,7 +179,7 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                if(anterior != null) {
+                if(anterior != null) { //nullPointer
                     if (anterior.equals("pacienteAct")) {
                         FinishNavigation(HistoricoDiarioActivity.this, PacienteActivity.class);
                     } else {
