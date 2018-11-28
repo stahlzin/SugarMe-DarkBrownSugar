@@ -46,7 +46,7 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
     private HistoricoDiarioArrayAdapter historicoDiarioArrayAdapter;
     private ListView diarioHistoricoListView;
     private String userId;
-    private String anterior;
+    private String anterior = "";
     private DatabaseReference databaseReference;
 
 
@@ -179,12 +179,13 @@ public class HistoricoDiarioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                if(anterior.equals("pacienteAct")){
-                    FinishNavigation(HistoricoDiarioActivity.this, PacienteActivity.class);
-                }else{
-                    FinishNavigation(HistoricoDiarioActivity.this, DiarioGlicemicoActivity.class);
+                if(anterior != null) {
+                    if (anterior.equals("pacienteAct")) {
+                        FinishNavigation(HistoricoDiarioActivity.this, PacienteActivity.class);
+                    } else {
+                        FinishNavigation(HistoricoDiarioActivity.this, DiarioGlicemicoActivity.class);
+                    }
                 }
-
                 break;
             default:break;
         }
